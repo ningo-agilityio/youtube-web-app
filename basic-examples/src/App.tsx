@@ -6,6 +6,7 @@ import Header from './components/ComponentsAndProps';
 import Toggle from './components/HandlingEvents';
 import NumberList from './components/ListAndKeys';
 import SelectForm from './components/Forms';
+import Calculator from './components/LiftingStateUp';
 import WelcomeDialog from './components/CompositionVsInheritance';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <NumberList numbers={Value.numbers} />
       <SelectForm />
       <WelcomeDialog />
+      <Calculator />
     </div>
   );
 }
