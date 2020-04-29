@@ -3,7 +3,7 @@ import * as types from './buildTypes';
 
 function CreateElementTodo(props: types.Item) {
   return (
-    <li className='todo' id={props.id.toString()} key ={props.id.toString()}>
+    <li className='todo' id={props.id.toString()} key={props.id.toString()}>
       <input className='todo__checkbox' type='checkbox' />
       <label className='todo__text'>{props.title}</label>
       <button className='todo__delete'>x</button>
@@ -13,7 +13,7 @@ function CreateElementTodo(props: types.Item) {
 
 function CreateElementTodoChecked(props: types.Item) {
   return (
-    <li className='todo todo-checked' id={props.id.toString()} key = {props.id.toString()}>
+    <li className='todo todo-checked' id={props.id.toString()} key={props.id.toString()}>
       <input className='todo__checkbox' type='checkbox' />
       <label className='todo__text'>{props.title}</label>
       <button className='todo__delete'>x</button>
@@ -31,7 +31,7 @@ function CreateElementTitleDetail(props: types.Item) {
 
 function CreateElementGroup(props: types.Item) {
   return (
-    <li className='group filter' id={props.id.toString()} key = {props.id.toString()}>
+    <li className='group filter' id={props.id.toString()} key={props.id.toString()}>
       <label className='group__text' contentEditable='false'>{props.title}</label>
       <button className='group__delete'>x</button>
     </li>
@@ -66,7 +66,7 @@ export function GroupList(props: GroupList) {
   return (
     <>
       {groupList.map((group) =>
-        <CreateElementGroup id={group.id} key = {group.id.toString()} title={group.title} />
+        <CreateElementGroup id={group.id} key={group.id.toString()} title={group.title} />
       )}
     </>
   )
@@ -94,8 +94,8 @@ export function TodoList(props: TodoList) {
     <>
       {todoList.map((todo) =>
         todo.status === types.Status.Completed ?
-          <CreateElementTodo id={todo.id} key = {todo.id.toString()} title={todo.title} />
-          : <CreateElementTodoChecked id={todo.id} key = {todo.id.toString()} title={todo.title} />
+          <CreateElementTodo id={todo.id} key={todo.id.toString()} title={todo.title} />
+          : <CreateElementTodoChecked id={todo.id} key={todo.id.toString()} title={todo.title} />
       )}
     </>
   )
@@ -109,9 +109,8 @@ export function DetailTitle(props: Title) {
   const todo = props.todo;
   return (
     todo.status === types.Status.Completed ?
-    < CreateElementTitleDetail title={todo.title/>
-      // <CreateElementTodo id={todo.id} key = {todo.id.toString()} title={todo.title} />
-      : <CreateElementTodoChecked id={todo.id} key = {todo.id.toString()} title={todo.title} />
+      <CreateElementTodo id={todo.id} key={todo.id.toString()} title={todo.title} />
+      : <CreateElementTodoChecked id={todo.id} key={todo.id.toString()} title={todo.title} />
   )
 }
 interface DueDate {

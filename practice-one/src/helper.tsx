@@ -1,3 +1,4 @@
+import * as storage from './storage';
 import * as types from './buildTypes';
 
 /**
@@ -33,7 +34,7 @@ export function findItemById(list: (types.Item)[], id: number) {
  * @param  {string} value
  */
 export function filterItemByKey(list: types.Todo[], value: string) {
-  return list.filter((item) => item.key !== value);
+  return list.filter((item) => item.key === value);
 }
 
 /**
@@ -104,4 +105,21 @@ export function findElementId(elementClicked: Element, name: string) {
     return id;
   }
 }
+
+  /**
+   * Get list of todo data from local storage
+   * @param  {string} key
+   * @param  {types.ItemList} list
+   * @param  {types.ConstructList} typeConstruct
+   */
+  export function pushDataToList(
+    key: string,
+    list: types.ItemList,
+    typeConstruct: types.ConstructList
+  ) {
+    if (storage.getData(key)) {
+      let data = storage.getData(key);
+      pushItem(list, data, typeConstruct);
+    }
+  }
 

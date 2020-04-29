@@ -234,6 +234,11 @@ body {
   display: inline;
 }
 
+.todo-checked .todo__text {
+  color: #d9d9dd;
+  text-decoration: line-through;
+}
+
 /* Start confirm box */
 .confirm-box {
   display: none;
