@@ -1,24 +1,17 @@
 import React from 'react';
-import * as types from '../buildTypes';
-import * as helper from '../helper';
-
-let todoList: types.Todo[] = [];
-let todoDefault: types.Item = {
-  id: 0,
-  key: '',
-  title: '',
-  status: types.Status.Active,
-  subTask: [],
-};
-
-let data = todoList.map((item) => (Object).assign({}, item));
-helper.pushDataToList('todoList', data, types.Todo);
+import * as types from '../buildTypes/buildTypes';
+import * as helper from '../helper/helper';
 
 interface TodoProps {
-  todo: types.Todo,
-  todoList: types.Todo[],
-  name: string,
-  dataChange: Function
+  todo: types.Todo;
+  todoList: types.Todo[];
+  groupList: types.Group[];
+  name: string;
+  idFilter: string;
+  detailState: boolean;
+  changeTodoList: Function;
+  showDetail(todo: types.Item): Function;
+  showOptionPopUp(todo: types.Item): Function
 }
 
 class TodoItem extends React.Component<TodoProps> {
@@ -26,16 +19,20 @@ class TodoItem extends React.Component<TodoProps> {
     super(props);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickCheckBox = this.onClickCheckBox.bind(this);
+    this.onDoubleClick = this.onDoubleClick.bind(this);
+    this.onRightClick = this.onRightClick.bind(this);
   }
+
   onClickDelete(e: React.MouseEvent) {
     types.Todo.prototype.deleteTodo(
       this.props.todo.id,
       this.props.todoList,
-      this.props.name);
-    this.props.dataChange((e.target as HTMLLIElement).value);
+      this.props.name
+    );
+    this.props.changeTodoList((e.target as HTMLLIElement).value);
   }
+
   onClickCheckBox(e: React.MouseEvent) {
-    let idFilter = document.querySelector('.active')!.id;
     helper.checkStatus(this.props.todo);
     types.Todo.prototype.updateTodo(
       this.props.todo,
@@ -45,15 +42,28 @@ class TodoItem extends React.Component<TodoProps> {
       this.props.todo.status,
       'todoList',
       this.props.todo.dueDate!,
-      idFilter);
-    this.props.dataChange((e.target as HTMLLIElement).value);
+      this.props.todo.key
+    );
+    this.props.changeTodoList((e.target as HTMLLIElement).value);
+    if (this.props.detailState) {
+      this.props.showDetail(this.props.todo);
+    }
   }
+
+  onDoubleClick = (todo: types.Todo) => () => {
+    this.props.showDetail(todo);
+  }
+
+  onRightClick = (todo: types.Todo) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    this.props.showOptionPopUp(todo);
+  }
+
   render() {
-    let className = this.props.todo.status === types.Status.Active ? '' : 'todo-checked';
     return (
-      <li className={'todo ' + className} id={this.props.todo.id.toString()}>
+      <li className={`todo ${this.props.todo.status === types.Status.Active ? '' : 'todo-checked'}`} id={this.props.todo.id.toString()}>
         <input className='todo__checkbox' type='checkbox' onClick={this.onClickCheckBox} />
-        <label className='todo__text'>{this.props.todo.title}</label>
+        <label className='todo__text' onDoubleClick={this.onDoubleClick(this.props.todo)} onContextMenu={this.onRightClick(this.props.todo)}>{this.props.todo.title}</label>
         <button className='todo__delete' onClick={this.onClickDelete}>x</button>
       </li>
     );
@@ -61,36 +71,62 @@ class TodoItem extends React.Component<TodoProps> {
 }
 
 interface TodoListProps {
-  todoList: types.Todo[],
-  name: string
-  dataChange: Function
+  todoList: types.Todo[];
+  groupList: types.Group[];
+  name: string;
+  idFilter: string;
+  detailState: boolean;
+  changeTodoList: Function;
+  showDetail: Function;
+  showOptionPopUp: Function
 }
 class TodoList extends React.Component<TodoListProps> {
   render() {
-    let list = this.props.todoList.map((todo) => {
-      return (
-        <TodoItem todo={todo} key={todo.id.toString()} todoList={this.props.todoList} name={this.props.name} dataChange={this.props.dataChange} />
-      );
-    });
+    let dataTodo = this.props.todoList.map((todo) => Object.assign({}, todo));
+    let newTodoList: types.Todo[];
+    helper.pushDataToList('todoList', dataTodo, types.Todo);
+    newTodoList = this.props.idFilter === 'ALL' ? dataTodo
+      : this.props.idFilter === 'ACTIVE' ? helper.filterItemByProp(dataTodo, 'status', 'ACTIVE')
+        : this.props.idFilter === 'COMPLETED' ? helper.filterItemByProp(dataTodo, 'status', 'COMPLETED')
+          : helper.filterItemByProp(dataTodo, 'key', this.props.idFilter);
     return (
-      <ul className="app__content__todo" aria-label="List of todo">{list}</ul>
+      <ul className='app__content__todo' aria-label='List of todo'>
+        {newTodoList.map((todo) => (
+          <TodoItem
+            todo={todo}
+            key={todo.id.toString()}
+            todoList={dataTodo}
+            groupList={this.props.groupList}
+            name={this.props.name}
+            idFilter={this.props.idFilter}
+            detailState={this.props.detailState}
+            changeTodoList={this.props.changeTodoList}
+            showDetail={this.props.showDetail(todo)}
+            showOptionPopUp={this.props.showOptionPopUp(todo)}
+          />
+        ))}
+      </ul>
     );
   }
 }
 
 interface TodoFormProps {
-  todoList: types.Todo[],
-  dataChange: Function
+  todoDefault: types.Item;
+  todoList: types.Todo[];
+  idFilter: string;
+  changeTodoList: Function;
 }
 
 class TodoForm extends React.Component<TodoFormProps> {
   textInput = React.createRef<HTMLInputElement>();
   form = React.createRef<HTMLFormElement>();
+
   constructor(props: TodoFormProps) {
     super(props);
     this.form = React.createRef();
     this.onSubmit = this.onSubmit.bind(this);
   }
+
   componentDidMount() {
     this.textInput.current!.focus();
   }
@@ -100,62 +136,65 @@ class TodoForm extends React.Component<TodoFormProps> {
     let newValue = this.textInput.current!.value.trim();
 
     if (newValue.length) {
-      let idFilter = document.querySelector('.active')!.id;
       let id = Date.now();
       let todoObj: types.todoObj;
+      let dataTodo = this.props.todoList.map((todo) => Object.assign({}, todo));
+      helper.pushDataToList('todoList', dataTodo, types.Todo);
       todoObj = {
         newId: id,
         text: newValue,
-        item: todoDefault,
-        key: idFilter,
-        todoList: this.props.todoList,
+        item: this.props.todoDefault,
+        key: this.props.idFilter,
+        todoList: dataTodo,
         name: 'todoList',
       };
       types.Todo.prototype.addTodo(todoObj);
-      this.props.dataChange((e.target as HTMLFormElement).value);
+      this.props.changeTodoList((e.target as HTMLFormElement).value);
       this.form.current!.reset();
     }
   }
+
   render() {
     return (
-      <form className="app__content__form" onSubmit={this.onSubmit} ref={this.form} action="#">
-        <input className="main-input app-input" type="text" ref={this.textInput} placeholder="What do you need to do?"
-          aria-label="Enter to do text" />
+      <form className='app__content__form' onSubmit={this.onSubmit} ref={this.form} action='#'>
+        <input className='main-input app-input' type='text' ref={this.textInput} placeholder='What do you need to do?' aria-label='Enter to do text' />
       </form>
     );
   }
 }
 
-interface MainAppProps { selectedTodo: types.Todo[] }
-
-interface MainAppState {
-  todoList: types.Todo[],
-  selectedTodo: types.Todo[]
+interface MainAppProps {
+  todoDefault: types.Item;
+  todoList: types.Todo[];
+  groupList: types.Group[];
+  idFilter: string;
+  detailState: boolean;
+  changeTodoList: Function;
+  showDetail: Function;
+  showOptionPopUp: Function;
 }
 
-export default class MainApp extends React.Component<MainAppProps, MainAppState> {
-  constructor(props: MainAppProps) {
-    super(props);
-    this.state = {
-      todoList: data,
-      selectedTodo: this.props.selectedTodo
-    };
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleChangeData = this.handleChangeData.bind(this);
-  }
-
-  handleChangeData() {
-    this.setState({ todoList: data });
-  }
-
-  render() {
-    // let selectedTodo = 
-    return (
-      <div className="app__content">
-        <TodoForm todoList={data} dataChange={this.handleChangeData} />
-        <TodoList todoList={this.props.selectedTodo} name={'todoList'} dataChange={this.handleChangeData} />
-      </div>
-    )
-  }
+const MainApp = (props: MainAppProps) => {
+  return (
+    <div className='app__content'>
+      <TodoForm
+        todoDefault={props.todoDefault}
+        todoList={props.todoList}
+        idFilter={props.idFilter}
+        changeTodoList={props.changeTodoList}
+      />
+      <TodoList
+        todoList={props.todoList}
+        groupList={props.groupList}
+        name={'todoList'}
+        idFilter={props.idFilter}
+        detailState={props.detailState}
+        changeTodoList={props.changeTodoList}
+        showDetail={props.showDetail}
+        showOptionPopUp={props.showOptionPopUp}
+      />
+    </div>
+  );
 }
+
+export default MainApp

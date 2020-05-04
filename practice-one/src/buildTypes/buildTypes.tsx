@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import * as storage from './storage';
-import * as helper from './helper';
+import * as storage from '../storage/storage';
+import * as helper from '../helper/helper';
 
 export type ItemList = SubTodo[] | Todo[] | Group[];
 export type ConstructList = typeof SubTodo | typeof Todo | typeof Group;
@@ -21,8 +21,9 @@ export type todoObj = {
 export type subTodoObj = {
   text: string;
   item: Item;
+  key: string;
   subTodoList: Item[];
-  todoList: Todo[];
+  todoList: Item[];
   name: string;
 };
 
@@ -42,14 +43,15 @@ export interface Item {
 }
 
 export class SubTodo implements Item {
-  // @logType
   id: number;
   title: string;
+  key: string;
   status: Status;
 
   constructor(item: Item) {
     this.id = item.id;
     this.title = item.title;
+    this.key = item.key!;
     this.status = item.status!;
   }
 
@@ -61,9 +63,10 @@ export class SubTodo implements Item {
     let subTodo = new SubTodo(subTodoObj.item);
     subTodo.id = Date.now();
     subTodo.title = subTodoObj.text;
+    subTodo.key = subTodoObj.key;
     subTodo.status = Status.Active;
     subTodoObj.subTodoList.push(subTodo);
-    storage.setData(subTodoObj.name, subTodoObj.todoList);
+    storage.setData(subTodoObj.name, subTodoObj.subTodoList);
   }
 
   /**
@@ -76,14 +79,14 @@ export class SubTodo implements Item {
    */
   updateSubTodo(
     subTodo: Item,
-    todoList: Todo[],
+    subTodoList: SubTodo[],
     newContent: string,
     check: Status,
     name: string
   ) {
     subTodo.title = newContent;
     subTodo.status = check;
-    storage.setData(name, todoList);
+    storage.setData(name, subTodoList);
   }
 
   /**
@@ -96,16 +99,14 @@ export class SubTodo implements Item {
   deleteSubTodo(
     id: number,
     subTodoList: Item[],
-    todoList: Todo[],
     name: string
   ) {
     let newList = subTodoList.filter((item) => item.id !== id);
     helper.pushItem(subTodoList, newList, SubTodo);
-    storage.setData(name, todoList);
+    storage.setData(name, subTodoList);
   }
 }
 
-// @logClass
 export class Todo extends SubTodo {
   key: string;
   subTask?: Item[];
@@ -176,10 +177,8 @@ export class Todo extends SubTodo {
   }
 }
 
-// @logClass
 export class Group implements Item {
   id: number;
-  @logProperty
   title: string;
   subTask?: Item[];
 
@@ -231,31 +230,3 @@ export class Group implements Item {
     storage.setData(name, groupList);
   }
 }
-
-// function logClass(target: any) {
-//   // save a reference to the original constructor
-//   const original = target;
-
-//   let construct = (constructor, args) => {
-//     return new constructor(...args);
-//   };
-
-//   let newConstructor: any = (...args) => {
-//     console.log('New: ' + original.name);
-//     return construct(original, args);
-//   };
-
-//   newConstructor.prototype = original.prototype;
-
-//   // return new constructor (will override original)
-//   return newConstructor;
-// }
-
-function logProperty(target: any, key: string) {
-  console.log(key);
-}
-
-// function logType(target: any, key: string) {
-//   const type = Reflect.getMetadata('design:type', target, key);
-//   console.log(`${key} type: ${type.name}`);
-// }

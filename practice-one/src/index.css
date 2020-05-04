@@ -293,11 +293,9 @@ body {
 .option-box {
   min-width: 12.5rem;
   background: rgb(154, 209, 152);
-  padding: 0.625rem;
-  z-index: 100;
-  position: absolute;
-  top: 6.25rem;
-  margin: 0 auto;
+  margin: auto;
+  padding: 1.25rem;
+  max-width: 12.5rem;
 }
 
 .option-list {
@@ -310,6 +308,11 @@ body {
 .d-block {
   display: block;
 }
+
+.d-flex {
+  display: flex;
+}
+
 .d-detail {
   width: calc(100% - 41rem);
 }

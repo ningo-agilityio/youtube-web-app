@@ -1,27 +1,35 @@
 import React from 'react';
-import * as types from '../buildTypes';
-import * as helper from '../helper';
-import { selectedFilter } from '../constants/Constants';
+import * as storage from '../storage/storage';
+import * as types from '../buildTypes/buildTypes';
+import * as helper from '../helper/helper';
 
-let groupList: types.Group[] = [];
-let groupDefault = {
-  id: 0,
-  title: '',
-  subTask: [],
-};
-
-let data = groupList.map((item) => (Object).assign({}, item));
-helper.pushDataToList('groupList', data, types.Group);
+const filterList = [
+  {
+    id: 'ALL',
+    label: 'Show list of all todo',
+    text: 'All',
+  },
+  {
+    id: 'ACTIVE',
+    label: 'Show list of all todo',
+    text: 'Active',
+  },
+  {
+    id: 'COMPLETED',
+    label: 'Show list of all todo',
+    text: 'Completed',
+  },
+];
 
 interface GroupProps {
-  group: types.Group,
-  groupList: types.Group[],
-  todoList: types.Todo[],
-  name: string,
-  dataChange: Function,
-  selectedTodoChange: Function
+  group: types.Group;
+  groupList: types.Group[];
+  todoList: types.Todo[];
+  name: string;
+  selectedFilterId: string;
+  changeGroupList: Function;
+  changeSelectedFilterId(id: string): Function;
 }
-
 
 class GroupItem extends React.Component<GroupProps> {
   constructor(props: GroupProps) {
@@ -29,75 +37,71 @@ class GroupItem extends React.Component<GroupProps> {
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickText = this.onClickText.bind(this);
   }
-  onClickDelete(e: React.MouseEvent) {
-    types.Group.prototype.deleteGroup(this.props.group.id, this.props.groupList, this.props.name);
-    this.props.dataChange((e.target as HTMLLIElement).value);
+
+  onClickDelete = (id: string) => () => {
+    let dataTodo = this.props.todoList.map((todo) => Object.assign({}, todo));
+    let newTodoList: types.Todo[];
+    helper.pushDataToList('todoList', dataTodo, types.Todo);
+    newTodoList = helper.filterItemByKey(dataTodo, id)
+    storage.setData('todoList', newTodoList);
+    types.Group.prototype.deleteGroup(
+      this.props.group.id,
+      this.props.groupList,
+      this.props.name
+    );
+    this.props.changeGroupList(this.props.groupList);
   }
 
-  onClickText(e: React.MouseEvent) {}
+  onClickText = (id: string) => () => {
+    this.props.changeSelectedFilterId(id);
+  };
 
-  addClassName = (id: number) => {
-    let filterSelected = document.querySelectorAll('.filter');
-    filterSelected.forEach((filter) => {
-      helper.removeClassName(filter, 'active');
-    });
-    let groupElement = document.getElementById(id.toString());
-    helper.addClassName(groupElement!, 'active');
-    let newList = helper.filterItemByKey(this.props.todoList, id.toString())!;
-    // this.props.selectedTodo(selectedItem);
-    // if(selectedItem) {
-
-    // }
-    // let id = (e.target as HTMLLIElement).parentElement!.id;
-  }
-
-  abc = () => {
-    this.setState({
-      groupId: this.props.group.id
-    })
-    // this.addClassName(this.props.group.id) 
-  }
-  
   render() {
     return (
-      <li className={`group filter `} >
-        <label className='group__text' onClick={this.abc}>{this.props.group.title}</label>
-        <button className='group__delete' onClick={this.onClickDelete}>x</button>
+      <li
+        className={`group filter ${this.props.selectedFilterId === this.props.group.id.toString() ? 'active' : ''}`}>
+        <label className='group__text' onClick={this.onClickText(this.props.group.id.toString())}>
+          {this.props.group.title}
+        </label>
+        <button className='group__delete' onClick={this.onClickDelete(this.props.group.id.toString())}>x</button>
       </li>
     );
   }
 }
 
 interface GroupListProps {
-  groupList: types.Group[],
-  todoList: types.Todo[],
-  name: string,
-  dataChange: Function,
-  selectedTodo: Function
+  groupList: types.Group[];
+  todoList: types.Todo[];
+  name: string;
+  selectedFilter: string;
+  changeGroupList: Function;
+  changeSelectedFilterId: Function;
 }
 class GroupList extends React.Component<GroupListProps> {
   render() {
-    let list = this.props.groupList.map((group) => {
-      return (
-        <GroupItem
-          group={group}
-          key={group.id.toString()}
-          groupList={this.props.groupList}
-          todoList={this.props.todoList}
-          name={this.props.name}
-          dataChange={this.props.dataChange}
-          selectedTodo={this.props.selectedTodo} />
-      );
-    });
     return (
-      <ul id='navGroup' className='app__nav__filter' aria-label='List of groups'> {list} </ul>
+      <ul className='app__nav__filter' aria-label='List of groups'>
+        {this.props.groupList.map((group) => (
+          <GroupItem
+            group={group}
+            key={group.id.toString()}
+            groupList={this.props.groupList}
+            todoList={this.props.todoList}
+            name={this.props.name}
+            selectedFilterId={this.props.selectedFilter}
+            changeGroupList={this.props.changeGroupList}
+            changeSelectedFilterId={this.props.changeSelectedFilterId(group.id.toString())}
+          />
+        ))}
+      </ul>
     );
   }
 }
 
 interface GroupFormProps {
-  groupList: types.Group[],
-  dataChange: Function
+  groupDefault: types.Item;
+  groupList: types.Group[];
+  changeGroupList: Function;
 }
 
 class GroupForm extends React.Component<GroupFormProps> {
@@ -109,7 +113,7 @@ class GroupForm extends React.Component<GroupFormProps> {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    this.textInput.current!.focus();
+    // this.textInput.current!.focus();
   }
 
   onSubmit(e: React.FormEvent) {
@@ -120,84 +124,76 @@ class GroupForm extends React.Component<GroupFormProps> {
       let groupObj: types.groupObj;
       groupObj = {
         text: newValue,
-        item: groupDefault,
+        item: this.props.groupDefault,
         groupList: this.props.groupList,
         name: 'groupList',
       };
       types.Group.prototype.addGroup(groupObj);
-      this.props.dataChange((e.target as HTMLFormElement).value);
+      this.props.changeGroupList(this.props.groupList);
       this.form.current!.reset();
+      // this.textInput.current!.focus();
     }
   }
   render() {
     return (
-      <form className='app__nav__form' onSubmit={this.onSubmit} ref={this.form} action='#'>
-        <input className='app__nav__input app-input' type='text' ref={this.textInput} placeholder='Create list...' aria-label='Enter to do text' />
+      <form
+        className='app__nav__form'
+        onSubmit={this.onSubmit}
+        ref={this.form}
+        action='#'
+      >
+        <input
+          className='app__nav__input app-input'
+          type='text'
+          ref={this.textInput}
+          placeholder='Create list...'
+          aria-label='Enter to do text'
+        />
       </form>
     );
   }
 }
 
 interface NavAppProps {
-  todoList: types.Todo[],
-  selectedTodo: Function
+  groupDefault: types.Item;
+  todoList: types.Todo[];
+  groupList: types.Group[];
+  selectedFilterId: string;
+  changeGroupList: Function;
+  changeSelectedFilterId: Function;
 }
 
-interface NavAppState {
-  groupList: types.Group[],
-  selectedFilter: string
+const NavApp = (props: NavAppProps) => {
+  return (
+    <div className='app__nav'>
+      <ul className='app__nav__filter'>
+        {filterList.map((item) => (
+          <li
+            id={item.id}
+            key={item.id}
+            className={`filter ${props.selectedFilterId === item.id ? 'active' : ''}`}
+            onClick={props.changeSelectedFilterId(item.id)}
+            aria-label={item.label}
+          >
+            {item.text}
+          </li>
+        ))}
+      </ul>
+      <GroupList
+        groupList={props.groupList}
+        todoList={props.todoList}
+        name={'groupList'}
+        selectedFilter={props.selectedFilterId}
+        changeGroupList={props.changeGroupList}
+        changeSelectedFilterId={props.changeSelectedFilterId}
+      />
+      <GroupForm
+        groupDefault={props.groupDefault}
+        groupList={props.groupList}
+        changeGroupList={props.changeGroupList}
+      />
+    </div>
+  );
 }
 
-const filters = [{
-  id: "ALL",
-  label: "Show list of all todo",
-  text: "All",
-}]
-export default class NavApp extends React.Component<NavAppProps, NavAppState> {
-
-  constructor(props: NavAppProps) {
-    super(props);
-    this.state = {
-      groupList: data,
-      selectedFilter: 'ALL'
-    };
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleChangeData = this.handleChangeData.bind(this);
-    this.handleAddClass = this.handleAddClass.bind(this);
-  }
-
-  handleChangeData() {
-    this.setState({ groupList: data });
-  }
-
-  handleAddClass(e: React.MouseEvent) {
-    // let filterSelected = document.querySelectorAll('.filter');
-    // filterSelected.forEach((filter) => {
-    //   helper.removeClassName(filter, 'active');
-    // });
-    // helper.addClassName((e.target as HTMLLIElement), 'active');
-
-    let id = (e.target as HTMLLIElement).id;
-    this.setState({ selectedFilter: id });
-  }
-
-
-  render() {
-
-    return (
-      <div className='app__nav'>
-        <ul className='app__nav__filter'>
-          {
-            filters.map((item) => <li id={item.id} className={`filter ${this.state.selectedFilter == item.id ? 'active' : ''}`} onClick={this.handleAddClass} aria-label='Show list of all todo'>All</li>)
-          }
-          {/* <li id='ALL' className={'filter active'} onClick={this.handleAddClass} aria-label='Show list of all todo'>All</li>
-          <li id='ACTIVE' className={'filter '} onClick={this.handleAddClass} aria-label='Show list of active todo'>Active</li>
-          <li id='COMPLETED' className={'filter '} onClick={this.handleAddClass} aria-label='Show list of completed todo'>Completed</li> */}
-        </ul>
-        <GroupList groupList={data} todoList={this.props.todoList} name={'groupList'} dataChange={this.handleChangeData} selectedTodo={this.props.selectedTodo} />
-        <GroupForm groupList={data} dataChange={this.handleChangeData} />
-      </div>
-    )
-  }
-}
+export default NavApp

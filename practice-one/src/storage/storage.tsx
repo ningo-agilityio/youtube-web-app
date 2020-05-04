@@ -1,4 +1,4 @@
-import * as types from './buildTypes';
+import * as types from '../buildTypes/buildTypes';
 
 /**
  * sets the value of the specified Storage Object item

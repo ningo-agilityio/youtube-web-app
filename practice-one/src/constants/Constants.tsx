@@ -1,4 +1,4 @@
-import * as types from '../buildTypes';
+import * as types from '../buildTypes/buildTypes';
 
 export let todoList: types.Todo[] = [];
 export let groupList: types.Group[] = [];
