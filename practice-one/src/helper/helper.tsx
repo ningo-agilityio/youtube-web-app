@@ -19,7 +19,7 @@ export function filterItemByKey(list: types.Todo[], value: string) {
   return list.filter((item) => item.key !== value);
 }
 
-export function filterItemByProp(list: types.Todo[], prop: string, value: string) {
+export function filterItemByProp(list: types.Item[], prop: string, value: string) {
   return list.filter((item) => (item as any)[prop] === value);
 }
 
@@ -70,7 +70,7 @@ export function convertDate(dateInput: string) {
  * @param  {types.ItemList} list
  * @param  {types.ConstructList} typeConstruct
  */
-export function pushDataToList(
+export function pushDataLocalToList(
   key: string,
   list: types.ItemList,
   typeConstruct: types.ConstructList

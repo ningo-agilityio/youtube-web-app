@@ -79,7 +79,7 @@ export class SubTodo implements Item {
    */
   updateSubTodo(
     subTodo: Item,
-    subTodoList: SubTodo[],
+    subTodoList: Item[],
     newContent: string,
     check: Status,
     name: string
@@ -88,7 +88,7 @@ export class SubTodo implements Item {
     subTodo.status = check;
     storage.setData(name, subTodoList);
   }
-
+  
   /**
    * Delete sub todo
    * @param  {number} id
