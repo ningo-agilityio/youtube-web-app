@@ -33,6 +33,7 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
         // eslint-disable-next-line prefer-object-spread
         Object.assign({}, subTodo)
       );
+      
       helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
       // eslint-disable-next-line prefer-const
       subTodoObj = {

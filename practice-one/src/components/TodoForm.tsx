@@ -4,8 +4,8 @@ import * as constants from '../constants/Constants';
 
 interface TodoFormProps {
   todoList: types.Todo[];
-  idFilter: string;
-  changeTodoList: Function;
+  selectedFilterId: string;
+  changeTodoList: (list: types.Todo[]) => void;
 }
 
 interface TodoFormState {
@@ -31,12 +31,13 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         newId: id,
         text: this.state.inputValue,
         item: constants.todoDefault,
-        key: this.props.idFilter,
+        key: this.props.selectedFilterId,
         todoList: this.props.todoList,
         name: 'todoList',
       };
+
       types.Todo.prototype.addTodo(todoObj);
-      this.props.changeTodoList((e.target as HTMLFormElement).value);
+      this.props.changeTodoList(this.props.todoList);
       (e.target as HTMLFormElement).reset();
     }
   };

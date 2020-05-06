@@ -6,22 +6,19 @@ import GroupForm from './GroupForm';
 const filterList = [
   {
     id: 'ALL',
-    label: 'Show list of all todo',
     text: 'All',
   },
   {
     id: 'ACTIVE',
-    label: 'Show list of all todo',
     text: 'Active',
   },
   {
     id: 'COMPLETED',
-    label: 'Show list of all todo',
     text: 'Completed',
   },
 ];
 
-interface NavAppProps {
+interface NavFilterProps {
   groupList: types.Group[];
   selectedFilterId: string;
   changeGroupList: (dataGroup: types.Group[]) => void;
@@ -29,7 +26,19 @@ interface NavAppProps {
   changeSelectedFilterId: Function;
 }
 
-const NavApp = (props: NavAppProps) => {
+const NavFilter = (props: NavFilterProps) => {
+  const {
+    groupList,
+    selectedFilterId,
+    changeGroupList,
+    changeTodoList,
+    changeSelectedFilterId,
+  } = props;
+
+  const addClassName = (item: types.Filter) => {
+    return selectedFilterId === item.id.toString() ? 'active' : '';
+  };
+
   return (
     <div className="app__nav">
       <ul className="app__nav__filter">
@@ -37,20 +46,25 @@ const NavApp = (props: NavAppProps) => {
           <li
             id={item.id}
             key={item.id}
-            className={`filter ${
-              props.selectedFilterId === item.id ? 'active' : ''
-            }`}
-            onClick={props.changeSelectedFilterId(item.id)}
+            className={`filter ${addClassName(item)}`}
+            onClick={changeSelectedFilterId(item.id)}
             role="presentation"
           >
             {item.text}
           </li>
         ))}
       </ul>
-      <GroupList name="groupList" {...props} />
-      <GroupForm {...props} />
+      <GroupList
+        name="groupList"
+        groupList={groupList}
+        selectedFilterId={selectedFilterId}
+        changeGroupList={changeGroupList}
+        changeTodoList={changeTodoList}
+        changeSelectedFilterId={changeSelectedFilterId}
+      />
+      <GroupForm groupList={groupList} changeGroupList={changeGroupList} />
     </div>
   );
 };
 
-export default NavApp;
+export default NavFilter;

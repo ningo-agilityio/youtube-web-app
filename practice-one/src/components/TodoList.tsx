@@ -6,7 +6,7 @@ import TodoItem from './TodoItem';
 interface TodoListProps {
   name: string;
   todoList: types.Todo[];
-  idFilter: string;
+  selectedFilterId: string;
   detailState: boolean;
   changeTodoList: Function;
   showDetail: Function;
@@ -15,22 +15,26 @@ interface TodoListProps {
 
 const TodoList = (props: TodoListProps) => {
   const newTodoList =
-    props.idFilter === 'ALL'
+    props.selectedFilterId === 'ALL'
       ? props.todoList
-      : props.idFilter === 'ACTIVE'
-        ? helper.filterItemByProp(props.todoList, 'status', 'ACTIVE')
-        : props.idFilter === 'COMPLETED'
-          ? helper.filterItemByProp(props.todoList, 'status', 'COMPLETED')
-          : helper.filterItemByProp(props.todoList, 'key', props.idFilter);
+      : props.selectedFilterId === 'ACTIVE'
+      ? helper.filterItemByProp(props.todoList, 'status', 'ACTIVE')
+      : props.selectedFilterId === 'COMPLETED'
+      ? helper.filterItemByProp(props.todoList, 'status', 'COMPLETED')
+      : helper.filterItemByProp(props.todoList, 'key', props.selectedFilterId);
+      
   return (
     <ul className="app__content__todo" aria-label="List of todo">
       {newTodoList.map((todo) => (
         <TodoItem
-          {...props}
           todo={todo}
           key={todo.id.toString()}
           showDetail={props.showDetail(todo)}
           showOptionPopUp={props.showOptionPopUp(todo)}
+          todoList={props.todoList}
+          name={props.name}
+          detailState={props.detailState}
+          changeTodoList={props.changeTodoList}
         />
       ))}
     </ul>

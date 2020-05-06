@@ -6,20 +6,20 @@ import DueDate from './DueDate';
 import SubTodoList from './SubTodoList';
 import SubTodoForm from './SubTodoForm';
 
-interface DetailAppProps {
+interface DetailBoxProps {
   detailState: boolean;
   selectedTodo: types.Item;
   todoList: types.Todo[];
   changeTodoList: (dataTodo: types.Todo[]) => void;
 }
 
-interface DetailAppState {
+interface DetailBoxState {
   subTodoList: types.Item[];
   dueDateValue: string;
 }
 
-class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
-  constructor(props: DetailAppProps) {
+class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
+  constructor(props: DetailBoxProps) {
     super(props);
     this.state = { subTodoList: [], dueDateValue: '' };
   }
@@ -31,7 +31,7 @@ class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
 
   changeSubTodoList = () => {
     const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
-    helper.pushDataLocalToList('subTodoList', dataSubTodo!, types.SubTodo);
+    helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
     const newSubTodoList = helper.filterItemByProp(
       dataSubTodo,
       'key',
@@ -46,25 +46,21 @@ class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
 
   render() {
     const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
-    helper.pushDataLocalToList('subTodoList', dataSubTodo!, types.SubTodo);
+    helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
     const newSubTodoList = helper.filterItemByProp(
       dataSubTodo,
       'key',
       this.props.selectedTodo.id.toString()
     );
+    const displayBlock = this.props.detailState === true ? 'd-block' : '';
+    const todoChecked =
+      this.props.selectedTodo.status === types.Status.Active
+        ? ''
+        : 'todo-checked';
+
     return (
-      <ul
-        className={`app__detail ${
-          this.props.detailState === true ? 'd-block' : ''
-        }`}
-      >
-        <li
-          className={`todo ${
-            this.props.selectedTodo.status === types.Status.Active
-              ? ''
-              : 'todo-checked'
-          }`}
-        >
+      <ul className={`app__detail ${displayBlock}`}>
+        <li className={`todo ${todoChecked}`}>
           <input className="todo__checkbox" type="checkbox" />
           <label className="todo__text">{this.props.selectedTodo.title}</label>
         </li>
@@ -92,4 +88,4 @@ class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
   }
 }
 
-export default DetailApp;
+export default DetailBox;

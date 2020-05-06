@@ -16,9 +16,13 @@ const GroupList = (props: GroupListProps) => {
     <ul className="app__nav__filter" aria-label="List of groups">
       {props.groupList.map((group) => (
         <GroupItem
-          {...props}
+          name={props.name}
           group={group}
           key={group.id.toString()}
+          groupList={props.groupList}
+          selectedFilterId={props.selectedFilterId}
+          changeGroupList={props.changeGroupList}
+          changeTodoList={props.changeTodoList}
           changeSelectedFilterId={props.changeSelectedFilterId(
             group.id.toString()
           )}

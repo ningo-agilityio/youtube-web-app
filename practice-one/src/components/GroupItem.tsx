@@ -28,10 +28,12 @@ const GroupItem = (props: GroupItemProps) => {
   } = props;
 
   const deleteGroup = () => {
+    let newTodoList = [];
     // eslint-disable-next-line prefer-object-spread
     const dataTodo = constants.todoList.map((item) => Object.assign({}, item));
-    const newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
+
     helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
+    newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
     storage.setData('todoList', newTodoList);
     types.Group.prototype.deleteGroup(group.id, groupList, name);
     changeGroupList(groupList);
@@ -39,12 +41,10 @@ const GroupItem = (props: GroupItemProps) => {
     resetSelectedFilterId('ALL');
   };
 
+  const active = selectedFilterId === group.id.toString() ? 'active' : '';
+
   return (
-    <li
-      className={`group filter ${
-        selectedFilterId === group.id.toString() ? 'active' : ''
-      }`}
-    >
+    <li className={`group filter ${active}`}>
       <label
         className="group__text"
         onClick={() => changeSelectedFilterId(group.id.toString())}

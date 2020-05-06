@@ -13,13 +13,12 @@ interface TodoItemProps {
 }
 
 const TodoItem = (props: TodoItemProps) => {
-
-  const deleteTodo = (e: React.MouseEvent) => {
+  const deleteTodo = () => {
     types.Todo.prototype.deleteTodo(props.todo.id, props.todoList, props.name);
-    props.changeTodoList((e.target as HTMLLIElement).value);
+    props.changeTodoList(props.todoList);
   };
 
-  const changeTodoStatus = (e: React.MouseEvent) => {
+  const changeTodoStatus = () => {
     helper.checkStatus(props.todo);
     types.Todo.prototype.updateTodo(
       props.todo,
@@ -31,7 +30,7 @@ const TodoItem = (props: TodoItemProps) => {
       props.todo.dueDate!,
       props.todo.key
     );
-    props.changeTodoList((e.target as HTMLLIElement).value);
+    props.changeTodoList(props.todoList);
     if (props.detailState) {
       props.showDetail(props.todo);
     }
@@ -42,13 +41,11 @@ const TodoItem = (props: TodoItemProps) => {
     props.showOptionPopUp(todo);
   };
 
+  const todoChecked =
+    props.todo.status === types.Status.Active ? '' : 'todo-checked';
+
   return (
-    <li
-      className={`todo ${
-        props.todo.status === types.Status.Active ? '' : 'todo-checked'
-      }`}
-      id={props.todo.id.toString()}
-    >
+    <li className={`todo ${todoChecked}`} id={props.todo.id.toString()}>
       <input
         className="todo__checkbox"
         type="checkbox"

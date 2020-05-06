@@ -10,6 +10,7 @@ interface SubTodoListProps {
 
 const SubTodoList = (props: SubTodoListProps) => {
   const { subTodoList, name, changeSubTodoList } = props;
+
   return (
     <ul className="sub-todo" aria-label="List of sub todo">
       {subTodoList.map((subTodo) => (

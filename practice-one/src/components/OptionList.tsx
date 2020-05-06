@@ -6,7 +6,7 @@ interface OptionListProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  idFilter: string;
+  selectedFilterId: string;
   changeTodoList: Function;
   changeOptionPopUpState: Function;
 }
@@ -16,14 +16,19 @@ const OptionList = (props: OptionListProps) => {
     selectedTodo,
     selectedGroupList,
     todoList,
-    idFilter,
+    selectedFilterId,
     changeTodoList,
     changeOptionPopUpState,
   } = props;
 
   const moveTodo = (groupMoveIn: types.Group) => () => {
-    const newTodoList = helper.filterItemByProp(todoList, 'key', idFilter);
+    const newTodoList = helper.filterItemByProp(
+      todoList,
+      'key',
+      selectedFilterId
+    );
     const todo = helper.findItemById(todoList, selectedTodo.id)!;
+
     selectedTodo.key = groupMoveIn.id.toString();
     types.Todo.prototype.updateTodo(
       todo,

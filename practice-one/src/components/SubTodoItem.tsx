@@ -44,13 +44,11 @@ const SubTodoItem = (props: SubTodoProps) => {
     }
   };
 
+  const todoChecked =
+    subTodo.status === types.Status.Active ? '' : 'todo-checked';
+
   return (
-    <li
-      className={`todo ${
-        subTodo.status === types.Status.Active ? '' : 'todo-checked'
-      }`}
-      id={subTodo.id.toString()}
-    >
+    <li className={`todo ${todoChecked}`} id={subTodo.id.toString()}>
       <input
         className="todo__checkbox"
         type="checkbox"

@@ -4,6 +4,10 @@ import * as helper from '../helper/helper';
 
 export type ItemList = SubTodo[] | Todo[] | Group[];
 export type ConstructList = typeof SubTodo | typeof Todo | typeof Group;
+export type Filter = {
+  id: string;
+  text: string;
+}
 export type groupObj = {
   text: string;
   item: Item;
