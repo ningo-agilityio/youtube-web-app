@@ -1,9 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import * as constants from '../constants/Constants';
-import * as helper from '../helper/helper';
-import GroupList from '../components/GroupList';
-import GroupForm from '../components/GroupForm';
+import GroupList from './GroupList';
+import GroupForm from './GroupForm';
 
 const filterList = [
   {
@@ -24,40 +22,35 @@ const filterList = [
 ];
 
 interface NavAppProps {
-  selectedFilterId: string;
   groupList: types.Group[];
+  selectedFilterId: string;
+  changeGroupList: (dataGroup: types.Group[]) => void;
+  changeTodoList: (dataTodo: types.Todo[]) => void;
   changeSelectedFilterId: Function;
-  changeGroupList: Function;
 }
 
 const NavApp = (props: NavAppProps) => {
   return (
-    <div className='app__nav'>
-      <ul className='app__nav__filter'>
+    <div className="app__nav">
+      <ul className="app__nav__filter">
         {filterList.map((item) => (
           <li
             id={item.id}
             key={item.id}
-            className={`filter ${props.selectedFilterId === item.id ? 'active' : ''}`}
+            className={`filter ${
+              props.selectedFilterId === item.id ? 'active' : ''
+            }`}
             onClick={props.changeSelectedFilterId(item.id)}
+            role="presentation"
           >
             {item.text}
           </li>
         ))}
       </ul>
-      <GroupList
-        groupList={props.groupList}
-        name={'groupList'}
-        selectedFilter={props.selectedFilterId}
-        changeGroupList={props.changeGroupList}
-        changeSelectedFilterId={props.changeSelectedFilterId}
-      />
-      <GroupForm
-        groupList={props.groupList}
-        changeGroupList={props.changeGroupList}
-      />
+      <GroupList name="groupList" {...props} />
+      <GroupForm {...props} />
     </div>
   );
-}
+};
 
-export default NavApp
+export default NavApp;

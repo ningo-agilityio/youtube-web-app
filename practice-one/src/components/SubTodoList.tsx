@@ -1,32 +1,24 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import * as helper from '../helper/helper';
-import SubTodoItem from '../components/SubTodoItem';
+import SubTodoItem from './SubTodoItem';
 
 interface SubTodoListProps {
-  selectedTodo: types.Item;
-  todoList: types.Todo[];
   subTodoList: types.Item[];
   name: string;
   changeSubTodoList: Function;
 }
 
 const SubTodoList = (props: SubTodoListProps) => {
-  let newSubTodoList: types.Item[];
-  newSubTodoList = helper.filterItemByProp(
-    props.subTodoList,
-    'key',
-    props.selectedTodo.id.toString()
-  );
+  const { subTodoList, name, changeSubTodoList } = props;
   return (
-    <ul className='sub-todo' aria-label='List of sub todo'>
-      {newSubTodoList.map((subTodo) => (
+    <ul className="sub-todo" aria-label="List of sub todo">
+      {subTodoList.map((subTodo) => (
         <SubTodoItem
           subTodo={subTodo}
           key={subTodo.id.toString()}
-          subTodoList={newSubTodoList}
-          name={props.name}
-          changeSubTodoList={props.changeSubTodoList}
+          subTodoList={subTodoList}
+          name={name}
+          changeSubTodoList={changeSubTodoList}
         />
       ))}
     </ul>

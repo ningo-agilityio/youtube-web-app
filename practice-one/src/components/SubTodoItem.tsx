@@ -10,38 +10,36 @@ interface SubTodoProps {
 }
 
 const SubTodoItem = (props: SubTodoProps) => {
+  const { subTodo, subTodoList, name, changeSubTodoList } = props;
+
   const deleteSubTodo = () => {
-    types.SubTodo.prototype.deleteSubTodo(
-      props.subTodo.id,
-      props.subTodoList,
-      props.name
-    );
-    props.changeSubTodoList(props.subTodoList);
+    types.SubTodo.prototype.deleteSubTodo(subTodo.id, subTodoList, name);
+    changeSubTodoList(subTodoList);
   };
 
   const changeSubTodoStatus = () => {
-    helper.checkStatus(props.subTodo);
+    helper.checkStatus(subTodo);
     types.SubTodo.prototype.updateSubTodo(
-      props.subTodo,
-      props.subTodoList!,
-      props.subTodo.title,
-      props.subTodo.status!,
-      props.name
+      subTodo,
+      subTodoList!,
+      subTodo.title,
+      subTodo.status!,
+      name
     );
-    props.changeSubTodoList(props.subTodoList);
+    changeSubTodoList(subTodoList);
   };
 
   const changeSubTodoText = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
-      let newText = (e.target as HTMLLabelElement).textContent!.trim();
+      const newText = (e.target as HTMLLabelElement).textContent!.trim();
       types.SubTodo.prototype.updateSubTodo(
-        props.subTodo,
-        props.subTodoList!,
+        subTodo,
+        subTodoList!,
         newText!,
-        props.subTodo.status!,
-        props.name
+        subTodo.status!,
+        name
       );
-      props.changeSubTodoList(props.subTodoList);
+      changeSubTodoList(subTodoList);
       (e.target as HTMLLabelElement).blur();
     }
   };
@@ -49,24 +47,25 @@ const SubTodoItem = (props: SubTodoProps) => {
   return (
     <li
       className={`todo ${
-        props.subTodo.status === types.Status.Active ? '' : 'todo-checked'
+        subTodo.status === types.Status.Active ? '' : 'todo-checked'
       }`}
-      id={props.subTodo.id.toString()}
+      id={subTodo.id.toString()}
     >
       <input
-        className='todo__checkbox'
-        type='checkbox'
+        className="todo__checkbox"
+        type="checkbox"
         onClick={changeSubTodoStatus}
       />
       <label
-        className='todo__text'
-        contentEditable='true'
+        className="todo__text"
+        contentEditable="true"
         suppressContentEditableWarning={true}
         onKeyDown={changeSubTodoText}
+        role="presentation"
       >
-        {props.subTodo.title}
+        {subTodo.title}
       </label>
-      <button className='todo__delete' onClick={deleteSubTodo}>
+      <button type="button" className="todo__delete" onClick={deleteSubTodo}>
         x
       </button>
     </li>

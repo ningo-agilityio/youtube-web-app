@@ -16,8 +16,6 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
   constructor(props: TodoFormProps) {
     super(props);
     this.state = { inputValue: '' };
-    this.updateInputValue = this.updateInputValue.bind(this);
-    this.updateTodoList = this.updateTodoList.bind(this);
   }
 
   updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
@@ -26,11 +24,10 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
     });
   };
 
-  updateTodoList(e: React.FormEvent) {
+  updateTodoList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
-      let id = Date.now();
-      let todoObj: types.todoObj;
-      todoObj = {
+      const id = Date.now();
+      const todoObj = {
         newId: id,
         text: this.state.inputValue,
         item: constants.todoDefault,
@@ -42,20 +39,20 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
       this.props.changeTodoList((e.target as HTMLFormElement).value);
       (e.target as HTMLFormElement).reset();
     }
-  }
+  };
 
   render() {
     return (
       <form
-        className='app__content__form'
+        className="app__content__form"
         onSubmit={this.updateTodoList}
-        action='#'
+        action="#"
       >
         <input
-          className='main-input app-input'
-          type='text'
-          placeholder='What do you need to do?'
-          aria-label='Enter to do text'
+          className="main-input app-input"
+          type="text"
+          placeholder="What do you need to do?"
+          aria-label="Enter to do text"
           onInput={this.updateInputValue}
         />
       </form>

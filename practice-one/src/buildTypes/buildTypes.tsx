@@ -60,7 +60,7 @@ export class SubTodo implements Item {
    * @param  {subTodoObj} subTodoObj
    */
   addSubTodo(subTodoObj: subTodoObj) {
-    let subTodo = new SubTodo(subTodoObj.item);
+    const subTodo = new SubTodo(subTodoObj.item);
     subTodo.id = Date.now();
     subTodo.title = subTodoObj.text;
     subTodo.key = subTodoObj.key;
@@ -88,7 +88,7 @@ export class SubTodo implements Item {
     subTodo.status = check;
     storage.setData(name, subTodoList);
   }
-  
+
   /**
    * Delete sub todo
    * @param  {number} id
@@ -96,12 +96,8 @@ export class SubTodo implements Item {
    * @param  {Todo[]} todoList
    * @param  {string} name
    */
-  deleteSubTodo(
-    id: number,
-    subTodoList: Item[],
-    name: string
-  ) {
-    let newList = subTodoList.filter((item) => item.id !== id);
+  deleteSubTodo(id: number, subTodoList: Item[], name: string) {
+    const newList = subTodoList.filter((item) => item.id !== id);
     helper.pushItem(subTodoList, newList, SubTodo);
     storage.setData(name, subTodoList);
   }

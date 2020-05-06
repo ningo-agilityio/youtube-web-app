@@ -4,7 +4,7 @@ import * as constants from '../constants/Constants';
 
 interface GroupFormProps {
   groupList: types.Group[];
-  changeGroupList: Function;
+  changeGroupList: (list: types.Group[]) => void;
 }
 
 interface GroupFormState {
@@ -15,8 +15,6 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
   constructor(props: GroupFormProps) {
     super(props);
     this.state = { inputValue: '' };
-    this.updateInputValue = this.updateInputValue.bind(this);
-    this.updateGroupList = this.updateGroupList.bind(this);
   }
 
   updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
@@ -27,8 +25,7 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
 
   updateGroupList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
-      let groupObj: types.groupObj;
-      groupObj = {
+      const groupObj = {
         text: this.state.inputValue,
         item: constants.groupDefault,
         groupList: this.props.groupList,
@@ -43,15 +40,15 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
   render() {
     return (
       <form
-        className='app__nav__form'
+        className="app__nav__form"
         onSubmit={this.updateGroupList}
-        action='#'
+        action="#"
       >
         <input
-          className='app__nav__input app-input'
-          type='text'
-          placeholder='Create list...'
-          aria-label='Enter to do text'
+          className="app__nav__input app-input"
+          type="text"
+          placeholder="Create list..."
+          aria-label="Enter to do text"
           onInput={this.updateInputValue}
         />
       </form>

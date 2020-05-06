@@ -6,7 +6,7 @@ import * as types from '../buildTypes/buildTypes';
  * @param  {(types.Item)[]} list
  * @param  {number} id
  */
-export function findItemById(list: (types.Item)[], id: number) {
+export function findItemById(list: types.Item[], id: number) {
   return list.find((item) => item.id === id);
 }
 
@@ -19,7 +19,11 @@ export function filterItemByKey(list: types.Todo[], value: string) {
   return list.filter((item) => item.key !== value);
 }
 
-export function filterItemByProp(list: types.Item[], prop: string, value: string) {
+export function filterItemByProp(
+  list: types.Item[],
+  prop: string,
+  value: string
+) {
   return list.filter((item) => (item as any)[prop] === value);
 }
 
@@ -34,9 +38,10 @@ export function pushItem(
   data: types.Item[],
   constructor: types.ConstructList
 ) {
+  // eslint-disable-next-line no-param-reassign
   list.length = 0;
   for (let i = 0; i < data.length; i++) {
-    let newList = new constructor(data[i]);
+    const newList = new constructor(data[i]);
     list.push(newList);
   }
 }
@@ -46,6 +51,7 @@ export function pushItem(
  * @param  {types.Item} item
  */
 export function checkStatus(item: types.Item): types.Status {
+  // eslint-disable-next-line no-param-reassign
   item.status =
     item.status === types.Status.Active
       ? types.Status.Completed
@@ -57,11 +63,11 @@ export function checkStatus(item: types.Item): types.Status {
  * @param  {string} dateInput
  */
 export function convertDate(dateInput: string) {
-  let input = dateInput;
-  let now = new Date(input);
-  let day = ('0' + now.getDate()).slice(-2);
-  let month = ('0' + (now.getMonth() + 1)).slice(-2);
-  return day + '-' + month + '-' + now.getFullYear();
+  const input = dateInput;
+  const now = new Date(input);
+  const day = (`0${  now.getDate()}`).slice(-2);
+  const month = (`0${  now.getMonth() + 1}`).slice(-2);
+  return `${day  }-${  month  }-${  now.getFullYear()}`;
 }
 
 /**
@@ -72,12 +78,11 @@ export function convertDate(dateInput: string) {
  */
 export function pushDataLocalToList(
   key: string,
-  list: types.ItemList,
+  list: types.Item[],
   typeConstruct: types.ConstructList
 ) {
   if (storage.getData(key)) {
-    let data = storage.getData(key);
+    const data = storage.getData(key);
     pushItem(list, data, typeConstruct);
   }
 }
-

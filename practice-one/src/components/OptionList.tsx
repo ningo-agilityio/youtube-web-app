@@ -12,39 +12,46 @@ interface OptionListProps {
 }
 
 const OptionList = (props: OptionListProps) => {
+  const {
+    selectedTodo,
+    selectedGroupList,
+    todoList,
+    idFilter,
+    changeTodoList,
+    changeOptionPopUpState,
+  } = props;
+
   const moveTodo = (groupMoveIn: types.Group) => () => {
-    let todo: types.Item;
-    let newTodoList: types.Item[];
-    todo = helper.findItemById(props.todoList, props.selectedTodo.id)!;
-    props.selectedTodo.key = groupMoveIn.id.toString();
+    const newTodoList = helper.filterItemByProp(todoList, 'key', idFilter);
+    const todo = helper.findItemById(todoList, selectedTodo.id)!;
+    selectedTodo.key = groupMoveIn.id.toString();
     types.Todo.prototype.updateTodo(
       todo,
-      props.todoList,
+      todoList,
       todo.title,
       todo.subTask!,
       todo.status!,
       'todoList',
       todo.dueDate,
-      props.selectedTodo.key
+      selectedTodo.key
     );
-    newTodoList = helper.filterItemByProp(
-      props.todoList,
-      'key',
-      props.idFilter
-    );
-    props.changeTodoList(newTodoList);
-    props.changeOptionPopUpState(false);
+    changeTodoList(newTodoList);
+    changeOptionPopUpState(false);
   };
 
   return (
-    <ul className='app__nav__filter' aria-label='List of groups'>
-      {props.selectedGroupList.map((group) => (
+    <ul className="app__nav__filter" aria-label="List of groups">
+      {selectedGroupList.map((group) => (
         <li
-          className='option'
+          className="option"
           id={group.id.toString()}
           key={group.id.toString()}
         >
-          <label className='option__text' onClick={moveTodo(group)}>
+          <label
+            className="option__text"
+            onClick={moveTodo(group)}
+            role="presentation"
+          >
             {group.title}
           </label>
         </li>

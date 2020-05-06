@@ -1,5 +1,8 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
+import * as helper from '../helper/helper';
+import * as storage from '../storage/storage';
+import * as constants from '../constants/Constants';
 
 interface GroupItemProps {
   group: types.Group;
@@ -7,32 +10,49 @@ interface GroupItemProps {
   name: string;
   selectedFilterId: string;
   changeGroupList: Function;
-  changeSelectedFilterId(id: string): Function;
+  changeTodoList: Function;
+  changeSelectedFilterId: Function;
+  resetSelectedFilterId: Function;
 }
 
 const GroupItem = (props: GroupItemProps) => {
+  const {
+    group,
+    groupList,
+    name,
+    selectedFilterId,
+    changeGroupList,
+    changeTodoList,
+    changeSelectedFilterId,
+    resetSelectedFilterId,
+  } = props;
+
   const deleteGroup = () => {
-    types.Group.prototype.deleteGroup(
-      props.group.id,
-      props.groupList,
-      props.name
-    );
-    props.changeGroupList(props.groupList);
+    // eslint-disable-next-line prefer-object-spread
+    const dataTodo = constants.todoList.map((item) => Object.assign({}, item));
+    const newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
+    helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
+    storage.setData('todoList', newTodoList);
+    types.Group.prototype.deleteGroup(group.id, groupList, name);
+    changeGroupList(groupList);
+    changeTodoList(newTodoList);
+    resetSelectedFilterId('ALL');
   };
 
   return (
     <li
       className={`group filter ${
-        props.selectedFilterId === props.group.id.toString() ? 'active' : ''
+        selectedFilterId === group.id.toString() ? 'active' : ''
       }`}
     >
       <label
-        className='group__text'
-        onClick={(e) => props.changeSelectedFilterId(props.group.id.toString())}
+        className="group__text"
+        onClick={() => changeSelectedFilterId(group.id.toString())}
+        role="presentation"
       >
-        {props.group.title}
+        {group.title}
       </label>
-      <button className='group__delete' onClick={deleteGroup}>
+      <button className="group__delete" type="button" onClick={deleteGroup}>
         x
       </button>
     </li>

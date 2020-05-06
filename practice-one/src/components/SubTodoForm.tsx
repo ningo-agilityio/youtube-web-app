@@ -4,7 +4,7 @@ import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
 
 interface SubTodoFormProps {
-  subTodoList: types.SubTodo[];
+  subTodoList: types.Item[];
   selectedTodo: types.Item;
   changeSubTodoList: Function;
   changeTodoList: Function;
@@ -18,8 +18,6 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
   constructor(props: SubTodoFormProps) {
     super(props);
     this.state = { inputValue: '' };
-    this.updateInputValue = this.updateInputValue.bind(this);
-    this.updateSubTodoList = this.updateSubTodoList.bind(this);
   }
 
   updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
@@ -31,10 +29,12 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
   updateSubTodoList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
       let subTodoObj: types.subTodoObj;
-      let dataSubTodo = this.props.subTodoList.map((subTodo) =>
+      const dataSubTodo = this.props.subTodoList.map((subTodo) =>
+        // eslint-disable-next-line prefer-object-spread
         Object.assign({}, subTodo)
       );
       helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
+      // eslint-disable-next-line prefer-const
       subTodoObj = {
         text: this.state.inputValue,
         item: constants.todoDefault,
@@ -51,12 +51,12 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
 
   render() {
     return (
-      <form className='sub-form' onSubmit={this.updateSubTodoList} action='#'>
+      <form className="sub-form" onSubmit={this.updateSubTodoList} action="#">
         <input
-          className='detail-input app-input'
-          type='text'
-          placeholder='Add a subtask'
-          aria-label='Enter to do text'
+          className="detail-input app-input"
+          type="text"
+          placeholder="Add a subtask"
+          aria-label="Enter to do text"
           onInput={this.updateInputValue}
         />
       </form>

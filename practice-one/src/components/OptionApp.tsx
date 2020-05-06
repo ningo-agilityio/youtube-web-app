@@ -1,6 +1,6 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import OptionList from '../components/OptionList';
+import OptionList from './OptionList';
 
 interface OptionProps {
   optionState: boolean;
@@ -17,16 +17,9 @@ const OptionApp = (props: OptionProps) => {
     <div
       className={`wrapper-option ${props.optionState === true ? 'd-flex' : ''}`}
     >
-      <div className='option-box'>
+      <div className="option-box">
         <p>Move to-do to...</p>
-        <OptionList
-          selectedTodo={props.selectedTodo}
-          selectedGroupList={props.selectedGroupList}
-          todoList={props.todoList}
-          idFilter={props.idFilter}
-          changeTodoList={props.changeTodoList}
-          changeOptionPopUpState={props.changeOptionPopUpState}
-        />
+        <OptionList {...props} />
       </div>
     </div>
   );

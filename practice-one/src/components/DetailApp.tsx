@@ -2,35 +2,56 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
-import DueDate from '../components/DueDate';
-import SubTodoList from '../components/SubTodoList';
-import SubTodoForm from '../components/SubTodoForm';
+import DueDate from './DueDate';
+import SubTodoList from './SubTodoList';
+import SubTodoForm from './SubTodoForm';
 
 interface DetailAppProps {
   detailState: boolean;
   selectedTodo: types.Item;
   todoList: types.Todo[];
-  changeTodoList: Function;
+  changeTodoList: (dataTodo: types.Todo[]) => void;
 }
 
 interface DetailAppState {
-  subTodoList: types.SubTodo[];
+  subTodoList: types.Item[];
+  dueDateValue: string;
 }
 
 class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
   constructor(props: DetailAppProps) {
     super(props);
-    this.state = { subTodoList: [] };
-    this.changeSubTodoList = this.changeSubTodoList.bind(this);
+    this.state = { subTodoList: [], dueDateValue: '' };
   }
 
-  changeSubTodoList() {
-    let dataSubTodo = constants.todoList.map((item) => Object.assign({}, item));
-    helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
-    this.setState({ subTodoList: dataSubTodo });
+  componentDidMount() {
+    this.changeSubTodoList();
+    this.changeDueDate();
   }
+
+  changeSubTodoList = () => {
+    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
+    helper.pushDataLocalToList('subTodoList', dataSubTodo!, types.SubTodo);
+    const newSubTodoList = helper.filterItemByProp(
+      dataSubTodo,
+      'key',
+      this.props.selectedTodo.id.toString()
+    );
+    this.setState({ subTodoList: newSubTodoList });
+  };
+
+  changeDueDate = () => {
+    this.setState({ dueDateValue: this.props.selectedTodo.dueDate! });
+  };
 
   render() {
+    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
+    helper.pushDataLocalToList('subTodoList', dataSubTodo!, types.SubTodo);
+    const newSubTodoList = helper.filterItemByProp(
+      dataSubTodo,
+      'key',
+      this.props.selectedTodo.id.toString()
+    );
     return (
       <ul
         className={`app__detail ${
@@ -44,21 +65,19 @@ class DetailApp extends React.Component<DetailAppProps, DetailAppState> {
               : 'todo-checked'
           }`}
         >
-          <input className='todo__checkbox' type='checkbox' />
-          <label className='todo__text'>{this.props.selectedTodo.title}</label>
+          <input className="todo__checkbox" type="checkbox" />
+          <label className="todo__text">{this.props.selectedTodo.title}</label>
         </li>
-        <li className='todo-date'>
+        <li className="todo-date">
           <DueDate
-            selectedTodo={this.props.selectedTodo}
-            todoList={this.props.todoList}
+            dueDateValue={this.state.dueDateValue}
+            changeDueDate={this.changeDueDate}
           />
         </li>
         <li>
           <SubTodoList
-            selectedTodo={this.props.selectedTodo}
-            todoList={this.props.todoList}
-            subTodoList={this.state.subTodoList}
-            name={'subTodoList'}
+            subTodoList={newSubTodoList}
+            name="subTodoList"
             changeSubTodoList={this.changeSubTodoList}
           />
         </li>

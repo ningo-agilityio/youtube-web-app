@@ -6,7 +6,6 @@ interface TodoItemProps {
   todo: types.Item;
   todoList: types.Todo[];
   name: string;
-  idFilter: string;
   detailState: boolean;
   changeTodoList: Function;
   showDetail(todo: types.Item): Function;
@@ -14,6 +13,7 @@ interface TodoItemProps {
 }
 
 const TodoItem = (props: TodoItemProps) => {
+
   const deleteTodo = (e: React.MouseEvent) => {
     types.Todo.prototype.deleteTodo(props.todo.id, props.todoList, props.name);
     props.changeTodoList((e.target as HTMLLIElement).value);
@@ -37,7 +37,7 @@ const TodoItem = (props: TodoItemProps) => {
     }
   };
 
-  const showOptionPopUp = (todo: types.Item) => (e: React.MouseEvent) => {
+  const onShowOptionPopUp = (todo: types.Item) => (e: React.MouseEvent) => {
     e.preventDefault();
     props.showOptionPopUp(todo);
   };
@@ -50,18 +50,19 @@ const TodoItem = (props: TodoItemProps) => {
       id={props.todo.id.toString()}
     >
       <input
-        className='todo__checkbox'
-        type='checkbox'
+        className="todo__checkbox"
+        type="checkbox"
         onClick={changeTodoStatus}
       />
       <label
-        className='todo__text'
+        className="todo__text"
         onClick={(e) => props.showDetail(props.todo)}
-        onContextMenu={showOptionPopUp(props.todo)}
+        onContextMenu={onShowOptionPopUp(props.todo)}
+        role="presentation"
       >
         {props.todo.title}
       </label>
-      <button className='todo__delete' onClick={deleteTodo}>
+      <button className="todo__delete" type="button" onClick={deleteTodo}>
         x
       </button>
     </li>
