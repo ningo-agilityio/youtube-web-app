@@ -8,8 +8,10 @@ interface MainContentProps {
   selectedFilterId: string;
   detailState: boolean;
   changeTodoList: (dataTodo: types.Todo[]) => void;
-  showDetail: Function;
-  showOptionPopUp: Function;
+  updateSelectedTodo: (todo: types.Todo) => void;
+  changeDetailBoxState: Function;
+  changeOptionList: Function;
+  changeOptionPopUpState: Function;
 }
 
 const MainContent = (props: MainContentProps) => {
@@ -18,8 +20,10 @@ const MainContent = (props: MainContentProps) => {
     selectedFilterId,
     detailState,
     changeTodoList,
-    showDetail,
-    showOptionPopUp,
+    updateSelectedTodo,
+    changeDetailBoxState,
+    changeOptionList,
+    changeOptionPopUpState,
   } = props;
 
   return (
@@ -35,8 +39,10 @@ const MainContent = (props: MainContentProps) => {
         selectedFilterId={selectedFilterId}
         detailState={detailState}
         changeTodoList={changeTodoList}
-        showDetail={showDetail}
-        showOptionPopUp={showOptionPopUp}
+        updateSelectedTodo={updateSelectedTodo}
+        changeDetailBoxState={changeDetailBoxState}
+        changeOptionList={changeOptionList}
+        changeOptionPopUpState={changeOptionPopUpState}
       />
     </div>
   );

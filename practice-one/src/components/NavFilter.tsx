@@ -23,7 +23,8 @@ interface NavFilterProps {
   selectedFilterId: string;
   changeGroupList: (dataGroup: types.Group[]) => void;
   changeTodoList: (dataTodo: types.Todo[]) => void;
-  changeSelectedFilterId: Function;
+  changeSelectedFilterId: (id: string) => void;
+  changeDetailBoxState: Function;
 }
 
 const NavFilter = (props: NavFilterProps) => {
@@ -33,10 +34,15 @@ const NavFilter = (props: NavFilterProps) => {
     changeGroupList,
     changeTodoList,
     changeSelectedFilterId,
+    changeDetailBoxState,
   } = props;
 
   const addClassName = (item: types.Filter) => {
     return selectedFilterId === item.id.toString() ? 'active' : '';
+  };
+
+  const onChangeSelectedFilterId = (id: string) => () => {
+    changeSelectedFilterId(id);
   };
 
   return (
@@ -47,7 +53,7 @@ const NavFilter = (props: NavFilterProps) => {
             id={item.id}
             key={item.id}
             className={`filter ${addClassName(item)}`}
-            onClick={changeSelectedFilterId(item.id)}
+            onClick={onChangeSelectedFilterId(item.id)}
             role="presentation"
           >
             {item.text}
@@ -61,6 +67,7 @@ const NavFilter = (props: NavFilterProps) => {
         changeGroupList={changeGroupList}
         changeTodoList={changeTodoList}
         changeSelectedFilterId={changeSelectedFilterId}
+        changeDetailBoxState={changeDetailBoxState}
       />
       <GroupForm groupList={groupList} changeGroupList={changeGroupList} />
     </div>

@@ -29,61 +29,57 @@ class App extends React.Component<{}, AppState> {
       detailState: false,
       optionState: false,
     };
-    this.changeTodoList = this.changeTodoList.bind(this);
-    this.changeGroupList = this.changeGroupList.bind(this);
-    this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
-    this.showDetail = this.showDetail.bind(this);
-    this.changeOptionPopUpState = this.changeOptionPopUpState.bind(this);
   }
 
   componentDidMount() {
-    // eslint-disable-next-line prefer-object-spread
-    const dataTodo = constants.todoList.map((item) => Object.assign({}, item));
-    const dataGroup = constants.groupList.map((item) =>
-      // eslint-disable-next-line prefer-object-spread
-      Object.assign({}, item)
-    );
+    const dataTodo = constants.todoList.map((item) => ({
+      ...item,
+    })) as types.Todo[];
+    const dataGroup = constants.groupList.map((item) => ({
+      ...item,
+    })) as types.Group[];
+
     helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
     helper.pushDataLocalToList('groupList', dataGroup!, types.Group);
-    this.changeTodoList(dataTodo);
-    this.changeGroupList(dataGroup);
+    this.updateState<types.Todo[]>('todoList', dataTodo);
+    this.updateState<types.Group[]>('groupList', dataGroup);
   }
 
-  // eslint-disable-next-line react/sort-comp
-  changeTodoList = (dataTodo: types.Todo[]) => {
-    this.setState({ todoList: dataTodo });
+  updateState = <T,>(key: string, value: T) => {
+    this.setState<never>({ [key]: value });
   };
 
-  // eslint-disable-next-line react/sort-comp
-  changeGroupList = (dataGroup: types.Group[]) => {
-    this.setState({ groupList: dataGroup });
+  changeTodoList = (dataTodo: types.Todo[]) =>
+    this.updateState<types.Todo[]>('todoList', dataTodo);
+
+  changeGroupList = (dataGroup: types.Group[]) =>
+    this.updateState<types.Group[]>('groupList', dataGroup);
+
+  changeSelectedFilterId = (id: string) => {
+    this.updateState<string>('selectedFilterId', id);
   };
 
-  changeSelectedFilter = (id: string) => () => {
-    this.setState({ selectedFilterId: id, detailState: false });
+  updateSelectedTodo = (todo: types.Item) => {
+    this.updateState<types.Item>('selectedTodo', todo);
   };
 
-  showDetail = (todo: types.Item) => () => {
-    this.setState({ selectedTodo: todo, detailState: true });
+  changeOptionPopUpState = (state: boolean) => {
+    this.updateState<boolean>('optionState', state);
   };
 
-  showOptionPopUp = (todo: types.Item) => () => {
+  changeDetailBoxState = (state: boolean) => {
+    this.updateState<boolean>('detailState', state);
+  };
+
+  changeOptionList = (todo: types.Item) => {
     const groupListFiltered = this.state.groupList.filter(
       (item) => item.id !== parseInt(todo.key!, 10)
     );
-    const selectedGroupList =
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      todo.key === 'ALL' ? this.state.groupList : groupListFiltered;
-    this.setState({
-      selectedTodo: todo,
-      optionList: selectedGroupList,
-      optionState: true,
-    });
-  };
+    const allGroup = this.state.groupList;
+    const selectedGroupList = todo.key === 'ALL' ? allGroup : groupListFiltered;
 
-  changeOptionPopUpState() {
-    this.setState({ optionState: false });
-  }
+    this.setState({ optionList: selectedGroupList });
+  };
 
   render() {
     return (
@@ -94,15 +90,18 @@ class App extends React.Component<{}, AppState> {
             groupList={this.state.groupList}
             changeGroupList={this.changeGroupList}
             changeTodoList={this.changeTodoList}
-            changeSelectedFilterId={this.changeSelectedFilter}
+            changeSelectedFilterId={this.changeSelectedFilterId}
+            changeDetailBoxState={this.changeDetailBoxState}
           />
           <MainContent
             todoList={this.state.todoList}
             selectedFilterId={this.state.selectedFilterId}
             detailState={this.state.detailState}
             changeTodoList={this.changeTodoList}
-            showDetail={this.showDetail}
-            showOptionPopUp={this.showOptionPopUp}
+            updateSelectedTodo={this.updateSelectedTodo}
+            changeDetailBoxState={this.changeDetailBoxState}
+            changeOptionList={this.changeOptionList}
+            changeOptionPopUpState={this.changeOptionPopUpState}
           />
           <DetailBox
             detailState={this.state.detailState}

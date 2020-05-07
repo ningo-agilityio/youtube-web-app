@@ -11,6 +11,8 @@ interface SubTodoProps {
 
 const SubTodoItem = (props: SubTodoProps) => {
   const { subTodo, subTodoList, name, changeSubTodoList } = props;
+  const item = {} as types.Item;
+  const SubTodo = new types.SubTodo(item);
 
   const deleteSubTodo = () => {
     types.SubTodo.prototype.deleteSubTodo(subTodo.id, subTodoList, name);
@@ -19,7 +21,7 @@ const SubTodoItem = (props: SubTodoProps) => {
 
   const changeSubTodoStatus = () => {
     helper.checkStatus(subTodo);
-    types.SubTodo.prototype.updateSubTodo(
+    SubTodo.updateSubTodo(
       subTodo,
       subTodoList!,
       subTodo.title,
@@ -32,7 +34,8 @@ const SubTodoItem = (props: SubTodoProps) => {
   const changeSubTodoText = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       const newText = (e.target as HTMLLabelElement).textContent!.trim();
-      types.SubTodo.prototype.updateSubTodo(
+      
+      SubTodo.updateSubTodo(
         subTodo,
         subTodoList!,
         newText!,

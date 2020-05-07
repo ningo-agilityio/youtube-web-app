@@ -15,43 +15,32 @@ interface DetailBoxProps {
 
 interface DetailBoxState {
   subTodoList: types.Item[];
-  dueDateValue: string;
 }
 
 class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   constructor(props: DetailBoxProps) {
     super(props);
-    this.state = { subTodoList: [], dueDateValue: '' };
+    this.state = { subTodoList: [] };
   }
 
   componentDidMount() {
-    this.changeSubTodoList();
-    this.changeDueDate();
-  }
-
-  changeSubTodoList = () => {
     const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
+    let subTodoList = [] as types.Item[];
+
     helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
-    const newSubTodoList = helper.filterItemByProp(
+    subTodoList = helper.filterItemByProp(
       dataSubTodo,
       'key',
       this.props.selectedTodo.id.toString()
     );
+    this.changeSubTodoList(subTodoList);
+  }
+
+  changeSubTodoList = (newSubTodoList: types.Item[]) => {
     this.setState({ subTodoList: newSubTodoList });
   };
 
-  changeDueDate = () => {
-    this.setState({ dueDateValue: this.props.selectedTodo.dueDate! });
-  };
-
   render() {
-    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
-    helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
-    const newSubTodoList = helper.filterItemByProp(
-      dataSubTodo,
-      'key',
-      this.props.selectedTodo.id.toString()
-    );
     const displayBlock = this.props.detailState === true ? 'd-block' : '';
     const todoChecked =
       this.props.selectedTodo.status === types.Status.Active
@@ -66,13 +55,13 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
         </li>
         <li className="todo-date">
           <DueDate
-            dueDateValue={this.state.dueDateValue}
-            changeDueDate={this.changeDueDate}
+            selectedTodo={this.props.selectedTodo}
+            dueDateValue={this.props.selectedTodo.dueDate!}
           />
         </li>
         <li>
           <SubTodoList
-            subTodoList={newSubTodoList}
+            selectedTodo={this.props.selectedTodo}
             name="subTodoList"
             changeSubTodoList={this.changeSubTodoList}
           />

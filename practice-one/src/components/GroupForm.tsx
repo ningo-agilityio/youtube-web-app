@@ -31,7 +31,10 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
         groupList: this.props.groupList,
         name: 'groupList',
       };
-      types.Group.prototype.addGroup(groupObj);
+      const item = {} as types.Item;
+      const Group = new types.Group(item);
+
+      Group.addGroup(groupObj);
       this.props.changeGroupList(this.props.groupList);
       (e.target as HTMLFormElement).reset();
     }

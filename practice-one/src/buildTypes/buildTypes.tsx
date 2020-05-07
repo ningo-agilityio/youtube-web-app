@@ -4,6 +4,7 @@ import * as helper from '../helper/helper';
 
 export type ItemList = SubTodo[] | Todo[] | Group[];
 export type ConstructList = typeof SubTodo | typeof Todo | typeof Group;
+export type a = SubTodo | Todo | Group;
 export type Filter = {
   id: string;
   text: string;
@@ -110,12 +111,12 @@ export class SubTodo implements Item {
 export class Todo extends SubTodo {
   key: string;
   subTask?: Item[];
-  dueDate?: string;
+  dueDate: string;
 
   constructor(item: Item) {
     super(item);
     this.key = item.key!;
-    this.dueDate = item.dueDate;
+    this.dueDate = item.dueDate!;
     this.subTask = item.subTask;
   }
 

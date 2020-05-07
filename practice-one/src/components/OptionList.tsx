@@ -28,9 +28,10 @@ const OptionList = (props: OptionListProps) => {
       selectedFilterId
     );
     const todo = helper.findItemById(todoList, selectedTodo.id)!;
+    const Todo = new types.Todo(todo);
 
     selectedTodo.key = groupMoveIn.id.toString();
-    types.Todo.prototype.updateTodo(
+    Todo.updateTodo(
       todo,
       todoList,
       todo.title,

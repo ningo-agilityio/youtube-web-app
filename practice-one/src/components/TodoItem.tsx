@@ -8,19 +8,24 @@ interface TodoItemProps {
   name: string;
   detailState: boolean;
   changeTodoList: Function;
-  showDetail(todo: types.Item): Function;
-  showOptionPopUp(todo: types.Item): Function;
+  updateSelectedTodo: Function;
+  changeDetailBoxState: Function;
+  changeOptionList: Function;
+  changeOptionPopUpState: Function;
 }
 
 const TodoItem = (props: TodoItemProps) => {
+  const item = {} as types.Item;
+  const Todo = new types.Todo(item);
+
   const deleteTodo = () => {
-    types.Todo.prototype.deleteTodo(props.todo.id, props.todoList, props.name);
+    Todo.deleteTodo(props.todo.id, props.todoList, props.name);
     props.changeTodoList(props.todoList);
   };
 
   const changeTodoStatus = () => {
     helper.checkStatus(props.todo);
-    types.Todo.prototype.updateTodo(
+    Todo.updateTodo(
       props.todo,
       props.todoList,
       props.todo.title,
@@ -32,13 +37,20 @@ const TodoItem = (props: TodoItemProps) => {
     );
     props.changeTodoList(props.todoList);
     if (props.detailState) {
-      props.showDetail(props.todo);
+      props.changeDetailBoxState(false);
     }
+  };
+
+  const onShowDetailBox = (todo: types.Item) => (e: React.MouseEvent) => {
+    props.updateSelectedTodo(todo);
+    props.changeDetailBoxState(true);
   };
 
   const onShowOptionPopUp = (todo: types.Item) => (e: React.MouseEvent) => {
     e.preventDefault();
-    props.showOptionPopUp(todo);
+    props.updateSelectedTodo(todo);
+    props.changeOptionList(todo);
+    props.changeOptionPopUpState(true);
   };
 
   const todoChecked =
@@ -53,7 +65,7 @@ const TodoItem = (props: TodoItemProps) => {
       />
       <label
         className="todo__text"
-        onClick={(e) => props.showDetail(props.todo)}
+        onClick={onShowDetailBox(props.todo)}
         onContextMenu={onShowOptionPopUp(props.todo)}
         role="presentation"
       >

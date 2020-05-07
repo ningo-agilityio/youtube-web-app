@@ -35,8 +35,10 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         todoList: this.props.todoList,
         name: 'todoList',
       };
+      const item = {} as types.Item;
+      const Todo = new types.Todo(item);
 
-      types.Todo.prototype.addTodo(todoObj);
+      Todo.addTodo(todoObj);
       this.props.changeTodoList(this.props.todoList);
       (e.target as HTMLFormElement).reset();
     }

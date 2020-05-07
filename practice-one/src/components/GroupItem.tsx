@@ -12,6 +12,7 @@ interface GroupItemProps {
   changeGroupList: Function;
   changeTodoList: Function;
   changeSelectedFilterId: Function;
+  changeDetailBoxState: Function;
   resetSelectedFilterId: Function;
 }
 
@@ -24,13 +25,15 @@ const GroupItem = (props: GroupItemProps) => {
     changeGroupList,
     changeTodoList,
     changeSelectedFilterId,
+    changeDetailBoxState,
     resetSelectedFilterId,
   } = props;
 
   const deleteGroup = () => {
+    const dataTodo = constants.todoList.map((item) => ({
+      ...item,
+    })) as types.Todo[];
     let newTodoList = [];
-    // eslint-disable-next-line prefer-object-spread
-    const dataTodo = constants.todoList.map((item) => Object.assign({}, item));
 
     helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
     newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
@@ -41,13 +44,18 @@ const GroupItem = (props: GroupItemProps) => {
     resetSelectedFilterId('ALL');
   };
 
+  const onChangeSelectedFilterId = (id: string) => {
+    changeSelectedFilterId(id);
+    changeDetailBoxState(false);
+  };
+
   const active = selectedFilterId === group.id.toString() ? 'active' : '';
 
   return (
     <li className={`group filter ${active}`}>
       <label
         className="group__text"
-        onClick={() => changeSelectedFilterId(group.id.toString())}
+        onClick={(e) => onChangeSelectedFilterId(group.id.toString())}
         role="presentation"
       >
         {group.title}

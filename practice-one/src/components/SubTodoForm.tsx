@@ -28,14 +28,14 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
 
   updateSubTodoList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
-      let subTodoObj: types.subTodoObj;
-      const dataSubTodo = this.props.subTodoList.map((subTodo) =>
-        // eslint-disable-next-line prefer-object-spread
-        Object.assign({}, subTodo)
-      );
-      
+      let subTodoObj = {} as types.subTodoObj;
+      const dataSubTodo = this.props.subTodoList.map((subTodo) => ({
+        ...subTodo,
+      }));
+      const item = {} as types.Item;
+      const SubTodo = new types.SubTodo(item);
+
       helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
-      // eslint-disable-next-line prefer-const
       subTodoObj = {
         text: this.state.inputValue,
         item: constants.todoDefault,
@@ -44,7 +44,7 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
         todoList: this.props.selectedTodo.subTask!,
         name: 'subTodoList',
       };
-      types.SubTodo.prototype.addSubTodo(subTodoObj);
+      SubTodo.addSubTodo(subTodoObj);
       this.props.changeSubTodoList(this.props.selectedTodo.subTask!);
       (e.target as HTMLFormElement).reset();
     }
