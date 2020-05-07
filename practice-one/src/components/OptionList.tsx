@@ -23,25 +23,27 @@ const OptionList = (props: OptionListProps) => {
   } = props;
 
   const moveTodo = (groupMoveIn: types.Group) => () => {
+    const todo = helper.findItemById(todoList, selectedTodo.id)!;
+    const Todo = new types.Todo(todo);
+    let todoObj = {} as types.updateTodoObj;
     const newTodoList = helper.filterItemByProp(
       todoList,
       'key',
       selectedFilterId
     );
-    const todo = helper.findItemById(todoList, selectedTodo.id)!;
-    const Todo = new types.Todo(todo);
 
     selectedTodo.key = groupMoveIn.id.toString();
-    Todo.updateTodo(
+    todoObj = {
       todo,
       todoList,
-      todo.title,
-      todo.subTask!,
-      todo.status!,
-      constants.todoListName,
-      todo.dueDate,
-      selectedTodo.key
-    );
+      newContent: todo.title,
+      newSubTask: todo.subTask!,
+      check: todo.status!,
+      name: constants.todoListName,
+      newDate: todo.dueDate,
+      newKey: selectedTodo.key,
+    };
+    Todo.updateTodo(todoObj);
     changeTodoList(newTodoList);
     changeOptionPopUpState(false);
   };

@@ -28,12 +28,12 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
 
   updateSubTodoList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
+      const item = {} as types.Item;
+      const SubTodo = new types.SubTodo(item);
       let subTodoObj = {} as types.subTodoObj;
       const dataSubTodo = this.props.subTodoList.map((subTodo) => ({
         ...subTodo,
       }));
-      const item = {} as types.Item;
-      const SubTodo = new types.SubTodo(item);
 
       helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
       subTodoObj = {

@@ -25,14 +25,14 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
 
   updateGroupList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
+      const item = {} as types.Item;
+      const Group = new types.Group(item);
       const groupObj = {
         text: this.state.inputValue,
         item: constants.groupDefault,
         groupList: this.props.groupList,
         name: constants.groupListName,
       };
-      const item = {} as types.Item;
-      const Group = new types.Group(item);
 
       Group.addGroup(groupObj);
       this.props.changeGroupList(this.props.groupList);

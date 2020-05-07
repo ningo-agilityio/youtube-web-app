@@ -20,28 +20,31 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
 
   componentDidMount() {
     const newDueDate = this.props.selectedTodo.dueDate!;
+
     this.setState({ dueDateValue: newDueDate });
   }
 
   changeDueDate = (e: React.FormEvent<HTMLInputElement>) => {
     const { selectedTodo } = this.props;
+    let todo = {} as types.Item;
+    let todoObj = {} as types.updateTodoObj;
+    const Todo = new types.Todo(todo);
     const newDueDate = helper.convertDate((e.target as HTMLInputElement).value);
     const dataTodo = constants.todoList.map((item) => ({ ...item }));
-    let todo = {} as types.Item;
-    const Todo = new types.Todo(todo);
 
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     todo = helper.findItemById(dataTodo, selectedTodo.id)!;
-    Todo.updateTodo(
+    todoObj = {
       todo,
-      dataTodo,
-      todo.title,
-      todo.subTask!,
-      todo.status!,
-      constants.todoListName,
-      newDueDate,
-      todo.key
-    );
+      todoList: dataTodo,
+      newContent: todo.title,
+      newSubTask: todo.subTask!,
+      check: todo.status!,
+      name: constants.todoListName,
+      newDate: newDueDate,
+      newKey: todo.key,
+    };
+    Todo.updateTodo(todoObj);
     this.setState({ dueDateValue: newDueDate });
   };
 

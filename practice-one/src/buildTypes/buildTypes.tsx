@@ -23,6 +23,12 @@ export type groupUpdateObj = {
   name: string;
 };
 
+export type deleteGroupObj = {
+  id: number;
+  groupList: Group[];
+  name: string;
+};
+
 export type todoObj = {
   newId: number;
   text: string;
@@ -31,12 +37,44 @@ export type todoObj = {
   todoList: Item[];
   name: string;
 };
+
+export type updateTodoObj = {
+  todo: Item;
+  todoList: Item[];
+  newContent: string;
+  newSubTask: Item[];
+  check: Status;
+  name: string;
+  newDate?: string;
+  newKey?: string;
+};
+
+export type deleteTodoObj = {
+  id: number;
+  todoList: Item[];
+  name: string;
+};
+
 export type subTodoObj = {
   text: string;
   item: Item;
   key: string;
   subTodoList: Item[];
   todoList: Item[];
+  name: string;
+};
+
+export type updateSubTodoObj = {
+  subTodo: Item;
+  subTodoList: Item[];
+  newContent: string;
+  check: Status;
+  name: string;
+};
+
+export type deleteSubTodoObj = {
+  id: number;
+  subTodoList: Item[];
   name: string;
 };
 
@@ -84,35 +122,22 @@ export class SubTodo implements Item {
 
   /**
    * Update sub todo
-   * @param  {Item} subTodo
-   * @param  {Todo[]} todoList
-   * @param  {string} newContent
-   * @param  {Status} check
-   * @param  {string} name
+   * @param  {newObj} updateSubTodoObj
    */
-  updateSubTodo(
-    subTodo: Item,
-    subTodoList: Item[],
-    newContent: string,
-    check: Status,
-    name: string
-  ) {
-    subTodo.title = newContent;
-    subTodo.status = check;
-    storage.setData(name, subTodoList);
+  updateSubTodo(newObj: updateSubTodoObj) {
+    newObj.subTodo.title = newObj.newContent;
+    newObj.subTodo.status = newObj.check;
+    storage.setData(newObj.name, newObj.subTodoList);
   }
 
   /**
    * Delete sub todo
-   * @param  {number} id
-   * @param  {Item[]} subTodoList
-   * @param  {Todo[]} todoList
-   * @param  {string} name
+   * @param  {newObj} deleteSubTodoObj
    */
-  deleteSubTodo(id: number, subTodoList: Item[], name: string) {
-    const newList = subTodoList.filter((item) => item.id !== id);
-    helper.pushItem(subTodoList, newList, SubTodo);
-    storage.setData(name, subTodoList);
+  deleteSubTodo(newObj: deleteSubTodoObj) {
+    const newList = newObj.subTodoList.filter((item) => item.id !== newObj.id);
+    helper.pushItem(newObj.subTodoList, newList, SubTodo);
+    storage.setData(newObj.name, newObj.subTodoList);
   }
 }
 
@@ -146,43 +171,25 @@ export class Todo extends SubTodo {
 
   /**
    * Update todo
-   * @param  {Item} todo
-   * @param  {Item[]} todoList
-   * @param  {string} newContent
-   * @param  {Item[]} newSubTask
-   * @param  {Status} check
-   * @param  {string} name
-   * @param  {string} newDate?
-   * @param  {string} newKey?
+   * @param  {newObj} updateTodoObj
    */
-  updateTodo(
-    todo: Item,
-    todoList: Item[],
-    newContent: string,
-    newSubTask: Item[],
-    check: Status,
-    name: string,
-    newDate?: string,
-    newKey?: string
-  ) {
-    todo.title = newContent;
-    todo.subTask = newSubTask;
-    todo.status = check;
-    todo.dueDate = newDate;
-    todo.key = newKey;
-    storage.setData(name, todoList);
+  updateTodo(newObj: updateTodoObj) {
+    newObj.todo.title = newObj.newContent;
+    newObj.todo.subTask = newObj.newSubTask;
+    newObj.todo.status = newObj.check;
+    newObj.todo.dueDate = newObj.newDate;
+    newObj.todo.key = newObj.newKey;
+    storage.setData(newObj.name, newObj.todoList);
   }
 
   /**
    * Delete todo
-   * @param  {number} id
-   * @param  {Item[]} todoList
-   * @param  {string} name
+   * @param  {newObj} deleteTodoObj
    */
-  deleteTodo(id: number, todoList: Item[], name: string) {
-    let newList = todoList.filter((item) => item.id !== id);
-    helper.pushItem(todoList, newList, Todo);
-    storage.setData(name, todoList);
+  deleteTodo(newObj: deleteTodoObj) {
+    let newList = newObj.todoList.filter((item) => item.id !== newObj.id);
+    helper.pushItem(newObj.todoList, newList, Todo);
+    storage.setData(newObj.name, newObj.todoList);
   }
 }
 
@@ -221,13 +228,11 @@ export class Group implements Item {
 
   /**
    * Delete group
-   * @param  {number} id
-   * @param  {Group[]} groupList
-   * @param  {string} name
+   * @param  {newObj} deleteGroupObj
    */
-  deleteGroup(id: number, groupList: Group[], name: string) {
-    let newList = groupList.filter((item) => item.id !== id);
-    helper.pushItem(groupList, newList, Group);
-    storage.setData(name, groupList);
+  deleteGroup(newObj: deleteGroupObj) {
+    let newList = newObj.groupList.filter((item) => item.id !== newObj.id);
+    helper.pushItem(newObj.groupList, newList, Group);
+    storage.setData(newObj.name, newObj.groupList);
   }
 }

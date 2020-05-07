@@ -30,15 +30,22 @@ const GroupItem = (props: GroupItemProps) => {
   } = props;
 
   const deleteGroup = () => {
+    let newTodoList = [];
+    const itemGroup = {} as types.Item;
+    const Group = new types.Group(itemGroup);
     const dataTodo = constants.todoList.map((item) => ({
       ...item,
     })) as types.Todo[];
-    let newTodoList = [];
+    const groupObj = {
+      id: group.id,
+      groupList,
+      name,
+    };
 
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
     storage.setData(constants.todoListName, newTodoList);
-    types.Group.prototype.deleteGroup(group.id, groupList, name);
+    Group.deleteGroup(groupObj);
     changeGroupList(groupList);
     changeTodoList(newTodoList);
     resetSelectedFilterId(types.Status.All);
@@ -49,7 +56,8 @@ const GroupItem = (props: GroupItemProps) => {
     changeDetailBoxState(false);
   };
 
-  const active = selectedFilterId === group.id.toString() ? constants.ACTIVE : '';
+  const active =
+    selectedFilterId === group.id.toString() ? constants.ACTIVE : '';
 
   return (
     <li className={`group filter ${active}`}>

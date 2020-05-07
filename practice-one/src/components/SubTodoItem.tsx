@@ -16,33 +16,43 @@ const SubTodoItem = (props: SubTodoProps) => {
   const SubTodo = new types.SubTodo(item);
 
   const deleteSubTodo = () => {
-    types.SubTodo.prototype.deleteSubTodo(subTodo.id, subTodoList, name);
+    const subTodoObj = {
+      id: subTodo.id,
+      subTodoList,
+      name,
+    };
+
+    SubTodo.deleteSubTodo(subTodoObj);
     changeSubTodoList(subTodoList);
   };
 
   const changeSubTodoStatus = () => {
+    let subTodoObj = {} as types.updateSubTodoObj;
+
     helper.checkStatus(subTodo);
-    SubTodo.updateSubTodo(
+    subTodoObj = {
       subTodo,
-      subTodoList!,
-      subTodo.title,
-      subTodo.status!,
-      name
-    );
+      subTodoList,
+      newContent: subTodo.title,
+      check: subTodo.status!,
+      name,
+    };
+    SubTodo.updateSubTodo(subTodoObj);
     changeSubTodoList(subTodoList);
   };
 
   const changeSubTodoText = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       const newText = (e.target as HTMLLabelElement).textContent!.trim();
-      
-      SubTodo.updateSubTodo(
+      const subTodoObj = {
         subTodo,
-        subTodoList!,
-        newText!,
-        subTodo.status!,
-        name
-      );
+        subTodoList,
+        newContent: newText,
+        check: subTodo.status!,
+        name,
+      };
+
+      SubTodo.updateSubTodo(subTodoObj);
       changeSubTodoList(subTodoList);
       (e.target as HTMLLabelElement).blur();
     }

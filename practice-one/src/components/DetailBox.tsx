@@ -24,8 +24,8 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   }
 
   componentDidMount() {
-    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
     let subTodoList = [] as types.Item[];
+    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
 
     helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
     subTodoList = helper.filterItemByProp(

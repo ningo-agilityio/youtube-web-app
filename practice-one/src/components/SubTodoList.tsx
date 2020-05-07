@@ -12,8 +12,8 @@ interface SubTodoListProps {
 
 const SubTodoList = (props: SubTodoListProps) => {
   const { selectedTodo, name, changeSubTodoList } = props;
-  const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
   let subTodoList = [] as types.Item[];
+  const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
 
   helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
   subTodoList = helper.filterItemByProp(

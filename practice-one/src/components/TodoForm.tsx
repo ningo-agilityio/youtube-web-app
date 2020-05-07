@@ -27,6 +27,8 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
   updateTodoList = (e: React.FormEvent) => {
     if (this.state.inputValue.length) {
       const id = Date.now();
+      const item = {} as types.Item;
+      const Todo = new types.Todo(item);
       const todoObj = {
         newId: id,
         text: this.state.inputValue,
@@ -35,8 +37,6 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         todoList: this.props.todoList,
         name: constants.todoListName,
       };
-      const item = {} as types.Item;
-      const Todo = new types.Todo(item);
 
       Todo.addTodo(todoObj);
       this.props.changeTodoList(this.props.todoList);

@@ -29,24 +29,32 @@ const TodoItem = (props: TodoItemProps) => {
   } = props;
   const item = {} as types.Item;
   const Todo = new types.Todo(item);
-
   const deleteTodo = () => {
-    Todo.deleteTodo(todo.id, todoList, name);
+    const todoObj = {
+      id: todo.id,
+      todoList,
+      name,
+    };
+
+    Todo.deleteTodo(todoObj);
     changeTodoList(todoList);
   };
 
   const changeTodoStatus = () => {
+    let todoObj = {} as types.updateTodoObj;
+
     helper.checkStatus(todo);
-    Todo.updateTodo(
+    todoObj = {
       todo,
       todoList,
-      todo.title,
-      todo.subTask!,
-      todo.status!,
-      constants.todoListName,
-      todo.dueDate!,
-      todo.key
-    );
+      newContent: todo.title,
+      newSubTask: todo.subTask!,
+      check: todo.status!,
+      name: constants.todoListName,
+      newDate: todo.dueDate!,
+      newKey: todo.key,
+    };
+    Todo.updateTodo(todoObj);
     changeTodoList(todoList);
     if (detailState) {
       changeDetailBoxState(false);
@@ -65,7 +73,8 @@ const TodoItem = (props: TodoItemProps) => {
     changeOptionPopUpState(true);
   };
 
-  const todoChecked = todo.status === types.Status.Active ? '' : constants.CHECKED;
+  const todoChecked =
+    todo.status === types.Status.Active ? '' : constants.CHECKED;
 
   return (
     <li className={`todo ${todoChecked}`} id={todo.id.toString()}>
