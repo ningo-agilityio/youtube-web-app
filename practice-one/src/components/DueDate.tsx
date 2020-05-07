@@ -30,7 +30,7 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
     let todo = {} as types.Item;
     const Todo = new types.Todo(todo);
 
-    helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
+    helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     todo = helper.findItemById(dataTodo, selectedTodo.id)!;
     Todo.updateTodo(
       todo,
@@ -38,7 +38,7 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
       todo.title,
       todo.subTask!,
       todo.status!,
-      'todoList',
+      constants.todoListName,
       newDueDate,
       todo.key
     );

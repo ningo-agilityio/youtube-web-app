@@ -22,17 +22,20 @@ const SubTodoList = (props: SubTodoListProps) => {
     selectedTodo.id.toString()
   );
 
+  const renderSubTodoList = (list: types.Item[]) =>
+    list.map((subTodo) => (
+      <SubTodoItem
+        subTodo={subTodo}
+        key={subTodo.id.toString()}
+        subTodoList={subTodoList}
+        name={name}
+        changeSubTodoList={changeSubTodoList}
+      />
+    ));
+
   return (
     <ul className="sub-todo" aria-label="List of sub todo">
-      {subTodoList.map((subTodo) => (
-        <SubTodoItem
-          subTodo={subTodo}
-          key={subTodo.id.toString()}
-          subTodoList={subTodoList}
-          name={name}
-          changeSubTodoList={changeSubTodoList}
-        />
-      ))}
+      {renderSubTodoList(subTodoList)}
     </ul>
   );
 };

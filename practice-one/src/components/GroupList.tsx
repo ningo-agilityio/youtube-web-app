@@ -13,22 +13,35 @@ interface GroupListProps {
 }
 
 const GroupList = (props: GroupListProps) => {
+  const {
+    name,
+    groupList,
+    selectedFilterId,
+    changeGroupList,
+    changeTodoList,
+    changeSelectedFilterId,
+    changeDetailBoxState,
+  } = props;
+
+  const renderGroupList = (list: types.Group[]) =>
+    list.map((group) => (
+      <GroupItem
+        group={group}
+        key={group.id.toString()}
+        name={name}
+        groupList={groupList}
+        selectedFilterId={selectedFilterId}
+        changeGroupList={changeGroupList}
+        changeTodoList={changeTodoList}
+        changeSelectedFilterId={changeSelectedFilterId}
+        changeDetailBoxState={changeDetailBoxState}
+        resetSelectedFilterId={changeSelectedFilterId}
+      />
+    ));
+
   return (
     <ul className="app__nav__filter" aria-label="List of groups">
-      {props.groupList.map((group) => (
-        <GroupItem
-          name={props.name}
-          group={group}
-          key={group.id.toString()}
-          groupList={props.groupList}
-          selectedFilterId={props.selectedFilterId}
-          changeGroupList={props.changeGroupList}
-          changeTodoList={props.changeTodoList}
-          changeSelectedFilterId={props.changeSelectedFilterId}
-          changeDetailBoxState={props.changeDetailBoxState}
-          resetSelectedFilterId={props.changeSelectedFilterId}
-        />
-      ))}
+      {renderGroupList(groupList)}
     </ul>
   );
 };

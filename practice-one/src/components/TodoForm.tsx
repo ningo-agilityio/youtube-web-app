@@ -33,7 +33,7 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         item: constants.todoDefault,
         key: this.props.selectedFilterId,
         todoList: this.props.todoList,
-        name: 'todoList',
+        name: constants.todoListName,
       };
       const item = {} as types.Item;
       const Todo = new types.Todo(item);

@@ -21,7 +21,7 @@ class App extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      selectedFilterId: 'ALL',
+      selectedFilterId: types.Status.All,
       todoList: [],
       groupList: [],
       selectedTodo: constants.todoDefault,
@@ -39,36 +39,34 @@ class App extends React.Component<{}, AppState> {
       ...item,
     })) as types.Group[];
 
-    helper.pushDataLocalToList('todoList', dataTodo, types.Todo);
-    helper.pushDataLocalToList('groupList', dataGroup!, types.Group);
-    this.updateState<types.Todo[]>('todoList', dataTodo);
-    this.updateState<types.Group[]>('groupList', dataGroup);
+    helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
+    helper.pushDataLocalToList(constants.groupListName, dataGroup!, types.Group);
+    this.changeTodoList(dataTodo);
+    this.changeGroupList(dataGroup);
   }
 
-  updateState = <T,>(key: string, value: T) => {
-    this.setState<never>({ [key]: value });
+  changeTodoList = (dataTodo: types.Todo[]) => {
+    this.setState({ todoList: dataTodo });
   };
 
-  changeTodoList = (dataTodo: types.Todo[]) =>
-    this.updateState<types.Todo[]>('todoList', dataTodo);
-
-  changeGroupList = (dataGroup: types.Group[]) =>
-    this.updateState<types.Group[]>('groupList', dataGroup);
+  changeGroupList = (dataGroup: types.Group[]) => {
+    this.setState({ groupList: dataGroup });
+  };
 
   changeSelectedFilterId = (id: string) => {
-    this.updateState<string>('selectedFilterId', id);
+    this.setState({ selectedFilterId: id });
   };
 
   updateSelectedTodo = (todo: types.Item) => {
-    this.updateState<types.Item>('selectedTodo', todo);
+    this.setState({ selectedTodo: todo });
   };
 
-  changeOptionPopUpState = (state: boolean) => {
-    this.updateState<boolean>('optionState', state);
+  changeOptionPopUpState = (displayState: boolean) => {
+    this.setState({ optionState: displayState });
   };
 
-  changeDetailBoxState = (state: boolean) => {
-    this.updateState<boolean>('detailState', state);
+  changeDetailBoxState = (displayState: boolean) => {
+    this.setState({ detailState: displayState });
   };
 
   changeOptionList = (todo: types.Item) => {
@@ -76,27 +74,37 @@ class App extends React.Component<{}, AppState> {
       (item) => item.id !== parseInt(todo.key!, 10)
     );
     const allGroup = this.state.groupList;
-    const selectedGroupList = todo.key === 'ALL' ? allGroup : groupListFiltered;
+    const selectedGroupList = todo.key === types.Status.All ? allGroup : groupListFiltered;
 
     this.setState({ optionList: selectedGroupList });
   };
 
   render() {
+    const {
+      selectedFilterId,
+      todoList,
+      groupList,
+      selectedTodo,
+      optionList,
+      detailState,
+      optionState,
+    } = this.state;
+
     return (
       <div className="todo-app">
         <div className="wrapper-app">
           <NavFilter
-            selectedFilterId={this.state.selectedFilterId}
-            groupList={this.state.groupList}
+            selectedFilterId={selectedFilterId}
+            groupList={groupList}
             changeGroupList={this.changeGroupList}
             changeTodoList={this.changeTodoList}
             changeSelectedFilterId={this.changeSelectedFilterId}
             changeDetailBoxState={this.changeDetailBoxState}
           />
           <MainContent
-            todoList={this.state.todoList}
-            selectedFilterId={this.state.selectedFilterId}
-            detailState={this.state.detailState}
+            todoList={todoList}
+            selectedFilterId={selectedFilterId}
+            detailState={detailState}
             changeTodoList={this.changeTodoList}
             updateSelectedTodo={this.updateSelectedTodo}
             changeDetailBoxState={this.changeDetailBoxState}
@@ -104,18 +112,18 @@ class App extends React.Component<{}, AppState> {
             changeOptionPopUpState={this.changeOptionPopUpState}
           />
           <DetailBox
-            detailState={this.state.detailState}
-            selectedTodo={this.state.selectedTodo}
-            todoList={this.state.todoList}
+            detailState={detailState}
+            selectedTodo={selectedTodo}
+            todoList={todoList}
             changeTodoList={this.changeTodoList}
           />
         </div>
         <OptionPopUp
-          optionState={this.state.optionState}
-          selectedTodo={this.state.selectedTodo}
-          selectedGroupList={this.state.optionList}
-          todoList={this.state.todoList}
-          selectedFilterId={this.state.selectedFilterId}
+          optionState={optionState}
+          selectedTodo={selectedTodo}
+          selectedGroupList={optionList}
+          todoList={todoList}
+          selectedFilterId={selectedFilterId}
           changeTodoList={this.changeTodoList}
           changeOptionPopUpState={this.changeOptionPopUpState}
         />

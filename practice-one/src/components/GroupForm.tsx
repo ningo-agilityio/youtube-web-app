@@ -29,7 +29,7 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
         text: this.state.inputValue,
         item: constants.groupDefault,
         groupList: this.props.groupList,
-        name: 'groupList',
+        name: constants.groupListName,
       };
       const item = {} as types.Item;
       const Group = new types.Group(item);

@@ -1,6 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
+import * as constants from '../constants/Constants';
 
 interface TodoItemProps {
   todo: types.Item;
@@ -15,49 +16,59 @@ interface TodoItemProps {
 }
 
 const TodoItem = (props: TodoItemProps) => {
+  const {
+    todo,
+    todoList,
+    name,
+    detailState,
+    changeTodoList,
+    updateSelectedTodo,
+    changeDetailBoxState,
+    changeOptionList,
+    changeOptionPopUpState,
+  } = props;
   const item = {} as types.Item;
   const Todo = new types.Todo(item);
 
   const deleteTodo = () => {
-    Todo.deleteTodo(props.todo.id, props.todoList, props.name);
-    props.changeTodoList(props.todoList);
+    Todo.deleteTodo(todo.id, todoList, name);
+    changeTodoList(todoList);
   };
 
   const changeTodoStatus = () => {
-    helper.checkStatus(props.todo);
+    helper.checkStatus(todo);
     Todo.updateTodo(
-      props.todo,
-      props.todoList,
-      props.todo.title,
-      props.todo.subTask!,
-      props.todo.status!,
-      'todoList',
-      props.todo.dueDate!,
-      props.todo.key
+      todo,
+      todoList,
+      todo.title,
+      todo.subTask!,
+      todo.status!,
+      constants.todoListName,
+      todo.dueDate!,
+      todo.key
     );
-    props.changeTodoList(props.todoList);
-    if (props.detailState) {
-      props.changeDetailBoxState(false);
+    changeTodoList(todoList);
+    if (detailState) {
+      changeDetailBoxState(false);
     }
   };
 
-  const onShowDetailBox = (todo: types.Item) => (e: React.MouseEvent) => {
-    props.updateSelectedTodo(todo);
-    props.changeDetailBoxState(true);
+  const onShowDetailBox = (todoItem: types.Item) => () => {
+    updateSelectedTodo(todoItem);
+    changeDetailBoxState(true);
   };
 
-  const onShowOptionPopUp = (todo: types.Item) => (e: React.MouseEvent) => {
+  const onShowOptionPopUp = (todoItem: types.Item) => (e: React.MouseEvent) => {
     e.preventDefault();
-    props.updateSelectedTodo(todo);
-    props.changeOptionList(todo);
-    props.changeOptionPopUpState(true);
+    updateSelectedTodo(todoItem);
+    changeOptionList(todoItem);
+    changeOptionPopUpState(true);
   };
 
-  const todoChecked =
-    props.todo.status === types.Status.Active ? '' : 'todo-checked';
+  const todoChecked = todo.status === types.Status.Active ? '' : constants.CHECKED;
 
   return (
-    <li className={`todo ${todoChecked}`} id={props.todo.id.toString()}>
+    <li className={`todo ${todoChecked}`} id={todo.id.toString()}>
       <input
         className="todo__checkbox"
         type="checkbox"
@@ -65,11 +76,11 @@ const TodoItem = (props: TodoItemProps) => {
       />
       <label
         className="todo__text"
-        onClick={onShowDetailBox(props.todo)}
-        onContextMenu={onShowOptionPopUp(props.todo)}
+        onClick={onShowDetailBox(todo)}
+        onContextMenu={onShowOptionPopUp(todo)}
         role="presentation"
       >
-        {props.todo.title}
+        {todo.title}
       </label>
       <button className="todo__delete" type="button" onClick={deleteTodo}>
         x

@@ -16,41 +16,56 @@ interface TodoListProps {
 }
 
 const TodoList = (props: TodoListProps) => {
+  const {
+    name,
+    todoList,
+    selectedFilterId,
+    detailState,
+    changeTodoList,
+    updateSelectedTodo,
+    changeDetailBoxState,
+    changeOptionList,
+    changeOptionPopUpState,
+  } = props;
+
   const filterTodoList = () => {
-    switch (props.selectedFilterId) {
-      case 'ALL':
-        return props.todoList;
-      case 'ACTIVE':
-        return helper.filterItemByProp(props.todoList, 'status', 'ACTIVE');
-      case 'COMPLETED':
-        return helper.filterItemByProp(props.todoList, 'status', 'COMPLETED');
-      default:
+    switch (selectedFilterId) {
+      case types.Status.All:
+        return todoList;
+      case types.Status.Active:
+        return helper.filterItemByProp(todoList, 'status', types.Status.Active);
+      case types.Status.Completed:
         return helper.filterItemByProp(
-          props.todoList,
-          'key',
-          props.selectedFilterId
+          todoList,
+          'status',
+          types.Status.Completed
         );
+      default:
+        return helper.filterItemByProp(todoList, 'key', selectedFilterId);
     }
   };
 
   const newTodoList = filterTodoList();
 
+  const renderTodoList = (list: types.Item[]) =>
+    list.map((todo) => (
+      <TodoItem
+        todo={todo}
+        key={todo.id.toString()}
+        todoList={todoList}
+        name={name}
+        detailState={detailState}
+        changeTodoList={changeTodoList}
+        changeDetailBoxState={changeDetailBoxState}
+        changeOptionList={changeOptionList}
+        changeOptionPopUpState={changeOptionPopUpState}
+        updateSelectedTodo={updateSelectedTodo}
+      />
+    ));
+
   return (
     <ul className="app__content__todo" aria-label="List of todo">
-      {newTodoList.map((todo) => (
-        <TodoItem
-          todo={todo}
-          key={todo.id.toString()}
-          todoList={props.todoList}
-          name={props.name}
-          detailState={props.detailState}
-          changeTodoList={props.changeTodoList}
-          changeDetailBoxState={props.changeDetailBoxState}
-          changeOptionList={props.changeOptionList}
-          changeOptionPopUpState={props.changeOptionPopUpState}
-          updateSelectedTodo={props.updateSelectedTodo}
-        />
-      ))}
+      {renderTodoList(newTodoList)}
     </ul>
   );
 };

@@ -8,13 +8,21 @@ export type a = SubTodo | Todo | Group;
 export type Filter = {
   id: string;
   text: string;
-}
+};
 export type groupObj = {
   text: string;
   item: Item;
   groupList: Group[];
   name: string;
 };
+
+export type groupUpdateObj = {
+  filterItem: Item;
+  newTitle: string;
+  groupList: Group[];
+  name: string;
+};
+
 export type todoObj = {
   newId: number;
   text: string;
@@ -204,19 +212,11 @@ export class Group implements Item {
 
   /**
    * Update group
-   * @param  {Item} filterItem
-   * @param  {string} newTitle
-   * @param  {Group[]} groupList
-   * @param  {string} name
+   * @param  {newObj} groupUpdateObj
    */
-  updateGroup(
-    filterItem: Item,
-    newTitle: string,
-    groupList: Group[],
-    name: string
-  ) {
-    filterItem.title = newTitle;
-    storage.setData(name, groupList);
+  updateGroup(newObj: groupUpdateObj) {
+    newObj.filterItem.title = newObj.newTitle;
+    storage.setData(newObj.name, newObj.groupList);
   }
 
   /**

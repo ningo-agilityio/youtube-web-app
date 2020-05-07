@@ -41,36 +41,35 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   };
 
   render() {
-    const displayBlock = this.props.detailState === true ? 'd-block' : '';
+    const { detailState, selectedTodo, changeTodoList } = this.props;
+    const displayBlock = detailState === true ? constants.displayBlock : '';
     const todoChecked =
-      this.props.selectedTodo.status === types.Status.Active
-        ? ''
-        : 'todo-checked';
+      selectedTodo.status === types.Status.Active ? '' : constants.CHECKED;
 
     return (
       <ul className={`app__detail ${displayBlock}`}>
         <li className={`todo ${todoChecked}`}>
           <input className="todo__checkbox" type="checkbox" />
-          <label className="todo__text">{this.props.selectedTodo.title}</label>
+          <label className="todo__text">{selectedTodo.title}</label>
         </li>
         <li className="todo-date">
           <DueDate
-            selectedTodo={this.props.selectedTodo}
-            dueDateValue={this.props.selectedTodo.dueDate!}
+            selectedTodo={selectedTodo}
+            dueDateValue={selectedTodo.dueDate!}
           />
         </li>
         <li>
           <SubTodoList
-            selectedTodo={this.props.selectedTodo}
+            selectedTodo={selectedTodo}
             name="subTodoList"
             changeSubTodoList={this.changeSubTodoList}
           />
         </li>
         <SubTodoForm
           subTodoList={this.state.subTodoList}
-          selectedTodo={this.props.selectedTodo}
+          selectedTodo={selectedTodo}
           changeSubTodoList={this.changeSubTodoList}
-          changeTodoList={this.props.changeTodoList}
+          changeTodoList={changeTodoList}
         />
       </ul>
     );

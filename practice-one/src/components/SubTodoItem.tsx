@@ -1,6 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
+import * as constants from '../constants/Constants';
 
 interface SubTodoProps {
   subTodo: types.Item;
@@ -48,7 +49,7 @@ const SubTodoItem = (props: SubTodoProps) => {
   };
 
   const todoChecked =
-    subTodo.status === types.Status.Active ? '' : 'todo-checked';
+    subTodo.status === types.Status.Active ? '' : constants.CHECKED;
 
   return (
     <li className={`todo ${todoChecked}`} id={subTodo.id.toString()}>

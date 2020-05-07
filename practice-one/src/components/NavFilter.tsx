@@ -2,6 +2,7 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import GroupList from './GroupList';
 import GroupForm from './GroupForm';
+import * as constants from '../constants/Constants';
 
 const filterList = [
   {
@@ -38,28 +39,29 @@ const NavFilter = (props: NavFilterProps) => {
   } = props;
 
   const addClassName = (item: types.Filter) => {
-    return selectedFilterId === item.id.toString() ? 'active' : '';
+    return selectedFilterId === item.id.toString() ? constants.ACTIVE : '';
   };
 
   const onChangeSelectedFilterId = (id: string) => () => {
     changeSelectedFilterId(id);
   };
 
+  const renderFilterList = (list: types.Filter[]) =>
+    list.map((item) => (
+      <li
+        id={item.id}
+        key={item.id}
+        className={`filter ${addClassName(item)}`}
+        onClick={onChangeSelectedFilterId(item.id)}
+        role="presentation"
+      >
+        {item.text}
+      </li>
+    ));
+
   return (
     <div className="app__nav">
-      <ul className="app__nav__filter">
-        {filterList.map((item) => (
-          <li
-            id={item.id}
-            key={item.id}
-            className={`filter ${addClassName(item)}`}
-            onClick={onChangeSelectedFilterId(item.id)}
-            role="presentation"
-          >
-            {item.text}
-          </li>
-        ))}
-      </ul>
+      <ul className="app__nav__filter">{renderFilterList(filterList)}</ul>
       <GroupList
         name="groupList"
         groupList={groupList}

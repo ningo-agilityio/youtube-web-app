@@ -1,6 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
+import * as constants from '../constants/Constants';
 
 interface OptionListProps {
   selectedTodo: types.Item;
@@ -37,7 +38,7 @@ const OptionList = (props: OptionListProps) => {
       todo.title,
       todo.subTask!,
       todo.status!,
-      'todoList',
+      constants.todoListName,
       todo.dueDate,
       selectedTodo.key
     );
@@ -45,23 +46,22 @@ const OptionList = (props: OptionListProps) => {
     changeOptionPopUpState(false);
   };
 
+  const renderOptionList = (list: types.Group[]) =>
+    list.map((group) => (
+      <li className="option" id={group.id.toString()} key={group.id.toString()}>
+        <label
+          className="option__text"
+          onClick={moveTodo(group)}
+          role="presentation"
+        >
+          {group.title}
+        </label>
+      </li>
+    ));
+
   return (
     <ul className="app__nav__filter" aria-label="List of groups">
-      {selectedGroupList.map((group) => (
-        <li
-          className="option"
-          id={group.id.toString()}
-          key={group.id.toString()}
-        >
-          <label
-            className="option__text"
-            onClick={moveTodo(group)}
-            role="presentation"
-          >
-            {group.title}
-          </label>
-        </li>
-      ))}
+      {renderOptionList(selectedGroupList)}
     </ul>
   );
 };

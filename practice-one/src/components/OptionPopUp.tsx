@@ -1,5 +1,6 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
+import * as constants from '../constants/Constants';
 import OptionList from './OptionList';
 
 interface OptionProps {
@@ -13,19 +14,28 @@ interface OptionProps {
 }
 
 const OptionPopUp = (props: OptionProps) => {
-  const displayFlex = props.optionState === true ? 'd-flex' : '';
+  const {
+    optionState,
+    selectedTodo,
+    selectedGroupList,
+    todoList,
+    selectedFilterId,
+    changeTodoList,
+    changeOptionPopUpState,
+  } = props;
+  const displayFlex = optionState === true ? constants.displayFlex : '';
 
   return (
     <div className={`wrapper-option ${displayFlex}`}>
       <div className="option-box">
         <p>Move to-do to...</p>
         <OptionList
-          selectedTodo={props.selectedTodo}
-          selectedGroupList={props.selectedGroupList}
-          todoList={props.todoList}
-          selectedFilterId={props.selectedFilterId}
-          changeTodoList={props.changeTodoList}
-          changeOptionPopUpState={props.changeOptionPopUpState}
+          selectedTodo={selectedTodo}
+          selectedGroupList={selectedGroupList}
+          todoList={todoList}
+          selectedFilterId={selectedFilterId}
+          changeTodoList={changeTodoList}
+          changeOptionPopUpState={changeOptionPopUpState}
         />
       </div>
     </div>
