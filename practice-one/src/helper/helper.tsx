@@ -22,7 +22,7 @@ export function filterItemByKey(list: types.Todo[], value: string) {
 export function filterItemByProp(
   list: types.Item[],
   prop: string,
-  value: string
+  value: string | boolean
 ) {
   return list.filter((item) => (item as any)[prop] === value);
 }
@@ -44,19 +44,6 @@ export function pushItem(
     const newList = new constructor(data[i]);
     list.push(newList);
   }
-}
-
-/**
- * check status todo: if active then change completed and vice versa
- * @param  {types.Item} item
- */
-export function checkStatus(item: types.Item): types.Status {
-  // eslint-disable-next-line no-param-reassign
-  item.status =
-    item.status === types.Status.Active
-      ? types.Status.Completed
-      : types.Status.Active;
-  return item.status;
 }
 
 /** convert date input to dd-mm-yyyy format

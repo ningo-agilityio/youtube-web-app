@@ -8,7 +8,7 @@ import DetailBox from './components/DetailBox';
 import OptionPopUp from './components/OptionPopUp';
 
 interface AppState {
-  selectedFilterId: string;
+  selectedFilter: string;
   todoList: types.Todo[];
   groupList: types.Group[];
   selectedTodo: types.Item;
@@ -21,7 +21,7 @@ class App extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      selectedFilterId: types.Status.All,
+      selectedFilter: types.Status.All,
       todoList: [],
       groupList: [],
       selectedTodo: constants.todoDefault,
@@ -33,43 +33,43 @@ class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     const dataTodo = constants.todoList.map((item) => ({
-      ...item,
+      ...(item as object),
     })) as types.Todo[];
     const dataGroup = constants.groupList.map((item) => ({
-      ...item,
+      ...(item as object),
     })) as types.Group[];
 
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     helper.pushDataLocalToList(constants.groupListName, dataGroup!, types.Group);
-    this.changeTodoList(dataTodo);
-    this.changeGroupList(dataGroup);
+    this.handleUpdateTodo(dataTodo);
+    this.handleUpdateGroup(dataGroup);
   }
 
-  changeTodoList = (dataTodo: types.Todo[]) => {
+  handleUpdateTodo = (dataTodo: types.Todo[]) => {
     this.setState({ todoList: dataTodo });
   };
 
-  changeGroupList = (dataGroup: types.Group[]) => {
+  handleUpdateGroup = (dataGroup: types.Group[]) => {
     this.setState({ groupList: dataGroup });
   };
 
-  changeSelectedFilterId = (id: string) => {
-    this.setState({ selectedFilterId: id });
+  handleChangeSelectedFilter = (id: string) => {
+    this.setState({ selectedFilter: id });
   };
 
-  updateSelectedTodo = (todo: types.Item) => {
+  handleChangeSelectedTodo = (todo: types.Item) => {
     this.setState({ selectedTodo: todo });
   };
 
-  changeOptionPopUpState = (displayState: boolean) => {
+  handleUpdateOptionPopUp = (displayState: boolean) => {
     this.setState({ optionState: displayState });
   };
 
-  changeDetailBoxState = (displayState: boolean) => {
+  handleUpdateDetailBox = (displayState: boolean) => {
     this.setState({ detailState: displayState });
   };
 
-  changeOptionList = (todo: types.Item) => {
+  handleUpdateOptionList = (todo: types.Item) => {
     const groupListFiltered = this.state.groupList.filter(
       (item) => item.id !== parseInt(todo.key!, 10)
     );
@@ -81,7 +81,7 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     const {
-      selectedFilterId,
+      selectedFilter,
       todoList,
       groupList,
       selectedTodo,
@@ -94,28 +94,27 @@ class App extends React.Component<{}, AppState> {
       <div className="todo-app">
         <div className="wrapper-app">
           <NavFilter
-            selectedFilterId={selectedFilterId}
+            selectedFilter={selectedFilter}
             groupList={groupList}
-            changeGroupList={this.changeGroupList}
-            changeTodoList={this.changeTodoList}
-            changeSelectedFilterId={this.changeSelectedFilterId}
-            changeDetailBoxState={this.changeDetailBoxState}
+            handleUpdateGroup={this.handleUpdateGroup}
+            handleUpdateTodo={this.handleUpdateTodo}
+            handleChangeSelectedFilter={this.handleChangeSelectedFilter}
+            handleUpdateDetailBox={this.handleUpdateDetailBox}
           />
           <MainContent
             todoList={todoList}
-            selectedFilterId={selectedFilterId}
+            selectedFilter={selectedFilter}
             detailState={detailState}
-            changeTodoList={this.changeTodoList}
-            updateSelectedTodo={this.updateSelectedTodo}
-            changeDetailBoxState={this.changeDetailBoxState}
-            changeOptionList={this.changeOptionList}
-            changeOptionPopUpState={this.changeOptionPopUpState}
+            handleUpdateTodo={this.handleUpdateTodo}
+            handleChangeSelectedTodo={this.handleChangeSelectedTodo}
+            handleUpdateDetailBox={this.handleUpdateDetailBox}
+            handleUpdateOptionList={this.handleUpdateOptionList}
+            handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
           />
           <DetailBox
             detailState={detailState}
             selectedTodo={selectedTodo}
             todoList={todoList}
-            changeTodoList={this.changeTodoList}
           />
         </div>
         <OptionPopUp
@@ -123,9 +122,9 @@ class App extends React.Component<{}, AppState> {
           selectedTodo={selectedTodo}
           selectedGroupList={optionList}
           todoList={todoList}
-          selectedFilterId={selectedFilterId}
-          changeTodoList={this.changeTodoList}
-          changeOptionPopUpState={this.changeOptionPopUpState}
+          selectedFilter={selectedFilter}
+          handleUpdateTodo={this.handleUpdateTodo}
+          handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
         />
       </div>
     );

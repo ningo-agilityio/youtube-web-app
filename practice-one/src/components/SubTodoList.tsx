@@ -7,15 +7,21 @@ import SubTodoItem from './SubTodoItem';
 interface SubTodoListProps {
   selectedTodo: types.Item;
   name: string;
-  changeSubTodoList: Function;
+  handleUpdateSubTodo: Function;
 }
 
 const SubTodoList = (props: SubTodoListProps) => {
-  const { selectedTodo, name, changeSubTodoList } = props;
+  const { selectedTodo, name, handleUpdateSubTodo } = props;
   let subTodoList = [] as types.Item[];
-  const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
+  const dataSubTodo = constants.todoList.map((item) => ({
+    ...(item as object),
+  })) as types.Item[];
 
-  helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
+  helper.pushDataLocalToList(
+    constants.subTodoListName,
+    dataSubTodo,
+    types.SubTodo
+  );
   subTodoList = helper.filterItemByProp(
     dataSubTodo,
     'key',
@@ -29,7 +35,7 @@ const SubTodoList = (props: SubTodoListProps) => {
         key={subTodo.id.toString()}
         subTodoList={subTodoList}
         name={name}
-        changeSubTodoList={changeSubTodoList}
+        handleUpdateSubTodo={handleUpdateSubTodo}
       />
     ));
 

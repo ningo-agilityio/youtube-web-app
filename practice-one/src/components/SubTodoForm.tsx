@@ -2,12 +2,12 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
+import { Form } from './common/Form';
 
 interface SubTodoFormProps {
   subTodoList: types.Item[];
   selectedTodo: types.Item;
-  changeSubTodoList: Function;
-  changeTodoList: Function;
+  handleUpdateSubTodo: Function;
 }
 
 interface SubTodoFormState {
@@ -20,13 +20,13 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
     this.state = { inputValue: '' };
   }
 
-  updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
+  handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
       inputValue: (e.target as HTMLInputElement).value.trim(),
     });
   };
 
-  updateSubTodoList = (e: React.FormEvent) => {
+  handleOnSubmit = () => {
     if (this.state.inputValue.length) {
       const item = {} as types.Item;
       const SubTodo = new types.SubTodo(item);
@@ -35,32 +35,38 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
         ...subTodo,
       }));
 
-      helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
+      helper.pushDataLocalToList(
+        constants.subTodoListName,
+        dataSubTodo,
+        types.SubTodo
+      );
       subTodoObj = {
         text: this.state.inputValue,
         item: constants.todoDefault,
         key: this.props.selectedTodo.id.toString(),
         subTodoList: dataSubTodo,
         todoList: this.props.selectedTodo.subTask!,
-        name: 'subTodoList',
+        name: constants.subTodoListName,
       };
       SubTodo.addSubTodo(subTodoObj);
-      this.props.changeSubTodoList(this.props.selectedTodo.subTask!);
-      (e.target as HTMLFormElement).reset();
+      this.props.handleUpdateSubTodo(this.props.selectedTodo.subTask!);
+      this.setState({ inputValue: '' });
     }
   };
 
   render() {
     return (
-      <form className="sub-form" onSubmit={this.updateSubTodoList} action="#">
-        <input
-          className="detail-input app-input"
-          type="text"
-          placeholder="Add a subtask"
-          aria-label="Enter to do text"
-          onInput={this.updateInputValue}
-        />
-      </form>
+      <Form
+        nameForm="sub-form"
+        nameInput="detail-input app-input"
+        value={this.state.inputValue}
+        type="text"
+        placeholder="Create subtask..."
+        ariaLabel="Enter to do text"
+        action="#"
+        handleOnChange={this.handleOnChange}
+        handleOnSubmit={this.handleOnSubmit}
+      />
     );
   }
 }

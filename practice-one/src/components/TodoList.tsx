@@ -6,42 +6,38 @@ import TodoItem from './TodoItem';
 interface TodoListProps {
   name: string;
   todoList: types.Todo[];
-  selectedFilterId: string;
+  selectedFilter: string;
   detailState: boolean;
-  changeTodoList: Function;
-  updateSelectedTodo: Function;
-  changeDetailBoxState: Function;
-  changeOptionList: Function;
-  changeOptionPopUpState: Function;
+  handleUpdateTodo: Function;
+  handleChangeSelectedTodo: Function;
+  handleUpdateDetailBox: Function;
+  handleUpdateOptionList: Function;
+  handleUpdateOptionPopUp: Function;
 }
 
 const TodoList = (props: TodoListProps) => {
   const {
     name,
     todoList,
-    selectedFilterId,
+    selectedFilter,
     detailState,
-    changeTodoList,
-    updateSelectedTodo,
-    changeDetailBoxState,
-    changeOptionList,
-    changeOptionPopUpState,
+    handleUpdateTodo,
+    handleChangeSelectedTodo,
+    handleUpdateDetailBox,
+    handleUpdateOptionList,
+    handleUpdateOptionPopUp,
   } = props;
 
   const filterTodoList = () => {
-    switch (selectedFilterId) {
+    switch (selectedFilter) {
       case types.Status.All:
         return todoList;
       case types.Status.Active:
-        return helper.filterItemByProp(todoList, 'status', types.Status.Active);
+        return helper.filterItemByProp(todoList, 'status', false);
       case types.Status.Completed:
-        return helper.filterItemByProp(
-          todoList,
-          'status',
-          types.Status.Completed
-        );
+        return helper.filterItemByProp(todoList, 'status', true);
       default:
-        return helper.filterItemByProp(todoList, 'key', selectedFilterId);
+        return helper.filterItemByProp(todoList, 'key', selectedFilter);
     }
   };
 
@@ -55,11 +51,11 @@ const TodoList = (props: TodoListProps) => {
         todoList={todoList}
         name={name}
         detailState={detailState}
-        changeTodoList={changeTodoList}
-        changeDetailBoxState={changeDetailBoxState}
-        changeOptionList={changeOptionList}
-        changeOptionPopUpState={changeOptionPopUpState}
-        updateSelectedTodo={updateSelectedTodo}
+        handleUpdateTodo={handleUpdateTodo}
+        handleUpdateDetailBox={handleUpdateDetailBox}
+        handleUpdateOptionList={handleUpdateOptionList}
+        handleUpdateOptionPopUp={handleUpdateOptionPopUp}
+        handleChangeSelectedTodo={handleChangeSelectedTodo}
       />
     ));
 

@@ -3,17 +3,18 @@ import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as storage from '../storage/storage';
 import * as constants from '../constants/Constants';
+import { Label } from './common/Label';
+import { Button } from './common/Button';
 
 interface GroupItemProps {
   group: types.Group;
   groupList: types.Group[];
   name: string;
-  selectedFilterId: string;
-  changeGroupList: Function;
-  changeTodoList: Function;
-  changeSelectedFilterId: Function;
-  changeDetailBoxState: Function;
-  resetSelectedFilterId: Function;
+  selectedFilter: string;
+  handleUpdateGroup: Function;
+  handleUpdateTodo: Function;
+  handleChangeSelectedFilter: Function;
+  handleUpdateDetailBox: Function;
 }
 
 const GroupItem = (props: GroupItemProps) => {
@@ -21,20 +22,19 @@ const GroupItem = (props: GroupItemProps) => {
     group,
     groupList,
     name,
-    selectedFilterId,
-    changeGroupList,
-    changeTodoList,
-    changeSelectedFilterId,
-    changeDetailBoxState,
-    resetSelectedFilterId,
+    selectedFilter,
+    handleUpdateGroup,
+    handleUpdateTodo,
+    handleChangeSelectedFilter,
+    handleUpdateDetailBox
   } = props;
 
-  const deleteGroup = () => {
+  const handleOnClickDelete = () => {
     let newTodoList = [];
     const itemGroup = {} as types.Item;
     const Group = new types.Group(itemGroup);
     const dataTodo = constants.todoList.map((item) => ({
-      ...item,
+      ...(item as object),
     })) as types.Todo[];
     const groupObj = {
       id: group.id,
@@ -46,31 +46,27 @@ const GroupItem = (props: GroupItemProps) => {
     newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
     storage.setData(constants.todoListName, newTodoList);
     Group.deleteGroup(groupObj);
-    changeGroupList(groupList);
-    changeTodoList(newTodoList);
-    resetSelectedFilterId(types.Status.All);
+    handleUpdateGroup(groupList);
+    handleUpdateTodo(newTodoList);
+    handleChangeSelectedFilter(types.Status.All);
   };
 
-  const onChangeSelectedFilterId = (id: string) => {
-    changeSelectedFilterId(id);
-    changeDetailBoxState(false);
+  const handleOnClickText = (id: string) => {
+    handleChangeSelectedFilter(id);
+    handleUpdateDetailBox(false);
   };
 
   const active =
-    selectedFilterId === group.id.toString() ? constants.ACTIVE : '';
+    selectedFilter === group.id.toString() ? constants.ACTIVE : '';
 
   return (
     <li className={`group filter ${active}`}>
-      <label
-        className="group__text"
-        onClick={(e) => onChangeSelectedFilterId(group.id.toString())}
-        role="presentation"
-      >
-        {group.title}
-      </label>
-      <button className="group__delete" type="button" onClick={deleteGroup}>
-        x
-      </button>
+      <Label
+        name="group__text"
+        value={group.title}
+        handleOnClick={(e) => handleOnClickText(group.id.toString())}
+      />
+      <Button name="group__delete" value="x" handleOnClick={handleOnClickDelete} />
     </li>
   );
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import * as helper from '../helper/helper';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import { Input } from './common/Input';
+import { Label } from './common/Label';
 
 interface DueDateProps {
   selectedTodo: types.Item;
@@ -24,13 +26,15 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
     this.setState({ dueDateValue: newDueDate });
   }
 
-  changeDueDate = (e: React.FormEvent<HTMLInputElement>) => {
+  handleOnChange = (e: React.ChangeEvent) => {
     const { selectedTodo } = this.props;
     let todo = {} as types.Item;
     let todoObj = {} as types.updateTodoObj;
     const Todo = new types.Todo(todo);
     const newDueDate = helper.convertDate((e.target as HTMLInputElement).value);
-    const dataTodo = constants.todoList.map((item) => ({ ...item }));
+    const dataTodo = constants.todoList.map((item) => ({
+      ...(item as object),
+    })) as types.Item[];
 
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     todo = helper.findItemById(dataTodo, selectedTodo.id)!;
@@ -51,14 +55,16 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
   render() {
     return (
       <>
-        <input
-          className="date-picker"
+        <Input
+          name="date-picker"
           type="date"
-          onInput={this.changeDueDate}
+          handleOnChange={this.handleOnChange}
         />
-        <label>
-          Due date: <span>{this.state.dueDateValue}</span>
-        </label>
+        <Label
+          name="due-date"
+          value="Due date:"
+          spanValue={this.state.dueDateValue}
+        />
       </>
     );
   }

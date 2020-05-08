@@ -21,29 +21,29 @@ const filterList = [
 
 interface NavFilterProps {
   groupList: types.Group[];
-  selectedFilterId: string;
-  changeGroupList: (dataGroup: types.Group[]) => void;
-  changeTodoList: (dataTodo: types.Todo[]) => void;
-  changeSelectedFilterId: (id: string) => void;
-  changeDetailBoxState: Function;
+  selectedFilter: string;
+  handleUpdateGroup: (dataGroup: types.Group[]) => void;
+  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
+  handleChangeSelectedFilter: (id: string) => void;
+  handleUpdateDetailBox: Function;
 }
 
 const NavFilter = (props: NavFilterProps) => {
   const {
     groupList,
-    selectedFilterId,
-    changeGroupList,
-    changeTodoList,
-    changeSelectedFilterId,
-    changeDetailBoxState,
+    selectedFilter,
+    handleUpdateGroup,
+    handleUpdateTodo,
+    handleChangeSelectedFilter,
+    handleUpdateDetailBox,
   } = props;
 
   const addClassName = (item: types.Filter) => {
-    return selectedFilterId === item.id.toString() ? constants.ACTIVE : '';
+    return selectedFilter === item.id.toString() ? constants.ACTIVE : '';
   };
 
-  const onChangeSelectedFilterId = (id: string) => () => {
-    changeSelectedFilterId(id);
+  const handleOnClick = (id: string) => () => {
+    handleChangeSelectedFilter(id);
   };
 
   const renderFilterList = (list: types.Filter[]) =>
@@ -52,7 +52,7 @@ const NavFilter = (props: NavFilterProps) => {
         id={item.id}
         key={item.id}
         className={`filter ${addClassName(item)}`}
-        onClick={onChangeSelectedFilterId(item.id)}
+        onClick={handleOnClick(item.id)}
         role="presentation"
       >
         {item.text}
@@ -65,13 +65,13 @@ const NavFilter = (props: NavFilterProps) => {
       <GroupList
         name="groupList"
         groupList={groupList}
-        selectedFilterId={selectedFilterId}
-        changeGroupList={changeGroupList}
-        changeTodoList={changeTodoList}
-        changeSelectedFilterId={changeSelectedFilterId}
-        changeDetailBoxState={changeDetailBoxState}
+        selectedFilter={selectedFilter}
+        handleUpdateGroup={handleUpdateGroup}
+        handleUpdateTodo={handleUpdateTodo}
+        handleChangeSelectedFilter={handleChangeSelectedFilter}
+        handleUpdateDetailBox={handleUpdateDetailBox}
       />
-      <GroupForm groupList={groupList} changeGroupList={changeGroupList} />
+      <GroupForm groupList={groupList} handleUpdateGroup={handleUpdateGroup} />
     </div>
   );
 };

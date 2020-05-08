@@ -5,44 +5,44 @@ import TodoForm from './TodoForm';
 
 interface MainContentProps {
   todoList: types.Todo[];
-  selectedFilterId: string;
+  selectedFilter: string;
   detailState: boolean;
-  changeTodoList: (dataTodo: types.Todo[]) => void;
-  updateSelectedTodo: (todo: types.Todo) => void;
-  changeDetailBoxState: Function;
-  changeOptionList: Function;
-  changeOptionPopUpState: Function;
+  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
+  handleChangeSelectedTodo: (todo: types.Todo) => void;
+  handleUpdateDetailBox: Function;
+  handleUpdateOptionList: Function;
+  handleUpdateOptionPopUp: Function;
 }
 
 const MainContent = (props: MainContentProps) => {
   const {
     todoList,
-    selectedFilterId,
+    selectedFilter,
     detailState,
-    changeTodoList,
-    updateSelectedTodo,
-    changeDetailBoxState,
-    changeOptionList,
-    changeOptionPopUpState,
+    handleUpdateTodo,
+    handleChangeSelectedTodo,
+    handleUpdateDetailBox,
+    handleUpdateOptionList,
+    handleUpdateOptionPopUp,
   } = props;
 
   return (
     <div className="app__content">
       <TodoForm
         todoList={todoList}
-        selectedFilterId={selectedFilterId}
-        changeTodoList={changeTodoList}
+        selectedFilter={selectedFilter}
+        handleUpdateTodo={handleUpdateTodo}
       />
       <TodoList
         name="todoList"
         todoList={todoList}
-        selectedFilterId={selectedFilterId}
+        selectedFilter={selectedFilter}
         detailState={detailState}
-        changeTodoList={changeTodoList}
-        updateSelectedTodo={updateSelectedTodo}
-        changeDetailBoxState={changeDetailBoxState}
-        changeOptionList={changeOptionList}
-        changeOptionPopUpState={changeOptionPopUpState}
+        handleUpdateTodo={handleUpdateTodo}
+        handleChangeSelectedTodo={handleChangeSelectedTodo}
+        handleUpdateDetailBox={handleUpdateDetailBox}
+        handleUpdateOptionList={handleUpdateOptionList}
+        handleUpdateOptionPopUp={handleUpdateOptionPopUp}
       />
     </div>
   );

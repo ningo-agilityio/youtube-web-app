@@ -13,6 +13,7 @@
     }
   },
   "rules": {
+    "max-classes-per-file": "off",
     "no-nested-ternary": "off",
     "no-param-reassign": 0,
     "jsx-a11y/label-has-associated-control": "off",

@@ -1,11 +1,12 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import { Form } from './common/Form';
 
 interface TodoFormProps {
   todoList: types.Todo[];
-  selectedFilterId: string;
-  changeTodoList: (list: types.Todo[]) => void;
+  selectedFilter: string;
+  handleUpdateTodo: (list: types.Todo[]) => void;
 }
 
 interface TodoFormState {
@@ -18,13 +19,13 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
     this.state = { inputValue: '' };
   }
 
-  updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
+  handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
       inputValue: (e.target as HTMLInputElement).value.trim(),
     });
   };
 
-  updateTodoList = (e: React.FormEvent) => {
+  handleOnSubmit = () => {
     if (this.state.inputValue.length) {
       const id = Date.now();
       const item = {} as types.Item;
@@ -33,32 +34,30 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         newId: id,
         text: this.state.inputValue,
         item: constants.todoDefault,
-        key: this.props.selectedFilterId,
+        key: this.props.selectedFilter,
         todoList: this.props.todoList,
         name: constants.todoListName,
       };
 
       Todo.addTodo(todoObj);
-      this.props.changeTodoList(this.props.todoList);
-      (e.target as HTMLFormElement).reset();
+      this.props.handleUpdateTodo(this.props.todoList);
+      this.setState({ inputValue: '' });
     }
   };
 
   render() {
     return (
-      <form
-        className="app__content__form"
-        onSubmit={this.updateTodoList}
+      <Form
+        nameForm="app__content__form"
+        nameInput="main-input app-input"
+        value={this.state.inputValue}
+        type="text"
+        placeholder="What do you need to do?"
+        ariaLabel="Enter to do text"
         action="#"
-      >
-        <input
-          className="main-input app-input"
-          type="text"
-          placeholder="What do you need to do?"
-          aria-label="Enter to do text"
-          onInput={this.updateInputValue}
-        />
-      </form>
+        handleOnChange={this.handleOnChange}
+        handleOnSubmit={this.handleOnSubmit}
+      />
     );
   }
 }

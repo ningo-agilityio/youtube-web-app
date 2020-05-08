@@ -43,7 +43,7 @@ export type updateTodoObj = {
   todoList: Item[];
   newContent: string;
   newSubTask: Item[];
-  check: Status;
+  check: boolean;
   name: string;
   newDate?: string;
   newKey?: string;
@@ -68,7 +68,7 @@ export type updateSubTodoObj = {
   subTodo: Item;
   subTodoList: Item[];
   newContent: string;
-  check: Status;
+  check: boolean;
   name: string;
 };
 
@@ -87,7 +87,7 @@ export enum Status {
 export interface Item {
   id: number;
   title: string;
-  status?: Status;
+  status?: boolean;
   key?: string;
   dueDate?: string;
   subTask?: Item[];
@@ -97,7 +97,7 @@ export class SubTodo implements Item {
   id: number;
   title: string;
   key: string;
-  status: Status;
+  status: boolean;
 
   constructor(item: Item) {
     this.id = item.id;
@@ -110,35 +110,35 @@ export class SubTodo implements Item {
    * Add new sub todo
    * @param  {subTodoObj} subTodoObj
    */
-  addSubTodo(subTodoObj: subTodoObj) {
+  addSubTodo = (subTodoObj: subTodoObj) => {
     const subTodo = new SubTodo(subTodoObj.item);
     subTodo.id = Date.now();
     subTodo.title = subTodoObj.text;
     subTodo.key = subTodoObj.key;
-    subTodo.status = Status.Active;
+    subTodo.status = false;
     subTodoObj.subTodoList.push(subTodo);
     storage.setData(subTodoObj.name, subTodoObj.subTodoList);
-  }
+  };
 
   /**
    * Update sub todo
    * @param  {newObj} updateSubTodoObj
    */
-  updateSubTodo(newObj: updateSubTodoObj) {
+  updateSubTodo = (newObj: updateSubTodoObj) => {
     newObj.subTodo.title = newObj.newContent;
     newObj.subTodo.status = newObj.check;
     storage.setData(newObj.name, newObj.subTodoList);
-  }
+  };
 
   /**
    * Delete sub todo
    * @param  {newObj} deleteSubTodoObj
    */
-  deleteSubTodo(newObj: deleteSubTodoObj) {
+  deleteSubTodo = (newObj: deleteSubTodoObj) => {
     const newList = newObj.subTodoList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.subTodoList, newList, SubTodo);
     storage.setData(newObj.name, newObj.subTodoList);
-  }
+  };
 }
 
 export class Todo extends SubTodo {
@@ -157,40 +157,40 @@ export class Todo extends SubTodo {
    * Add new todo
    * @param  {todoObj} todoObj
    */
-  addTodo(todoObj: todoObj) {
-    let todo = new Todo(todoObj.item);
+  addTodo = (todoObj: todoObj) => {
+    const todo = new Todo(todoObj.item);
     todo.id = todoObj.newId;
     todo.title = todoObj.text;
     todo.subTask = [];
     todo.dueDate = null!;
-    todo.status = Status.Active;
+    todo.status = false;
     todo.key = todoObj.key;
     todoObj.todoList.push(todo);
     storage.setData(todoObj.name, todoObj.todoList);
-  }
+  };
 
   /**
    * Update todo
    * @param  {newObj} updateTodoObj
    */
-  updateTodo(newObj: updateTodoObj) {
+  updateTodo = (newObj: updateTodoObj) => {
     newObj.todo.title = newObj.newContent;
     newObj.todo.subTask = newObj.newSubTask;
     newObj.todo.status = newObj.check;
     newObj.todo.dueDate = newObj.newDate;
     newObj.todo.key = newObj.newKey;
     storage.setData(newObj.name, newObj.todoList);
-  }
+  };
 
   /**
    * Delete todo
    * @param  {newObj} deleteTodoObj
    */
-  deleteTodo(newObj: deleteTodoObj) {
-    let newList = newObj.todoList.filter((item) => item.id !== newObj.id);
+  deleteTodo = (newObj: deleteTodoObj) => {
+    const newList = newObj.todoList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.todoList, newList, Todo);
     storage.setData(newObj.name, newObj.todoList);
-  }
+  };
 }
 
 export class Group implements Item {
@@ -208,31 +208,31 @@ export class Group implements Item {
    * Add new group
    * @param  {groupObj} groupObj
    */
-  addGroup(groupObj: groupObj) {
-    let group = new Group(groupObj.item);
+  addGroup = (groupObj: groupObj) => {
+    const group = new Group(groupObj.item);
     group.id = Date.now();
     group.title = groupObj.text;
     group.subTask = [];
     groupObj.groupList.push(group);
     storage.setData(groupObj.name, groupObj.groupList);
-  }
+  };
 
   /**
    * Update group
    * @param  {newObj} groupUpdateObj
    */
-  updateGroup(newObj: groupUpdateObj) {
+  updateGroup = (newObj: groupUpdateObj) => {
     newObj.filterItem.title = newObj.newTitle;
     storage.setData(newObj.name, newObj.groupList);
-  }
+  };
 
   /**
    * Delete group
    * @param  {newObj} deleteGroupObj
    */
-  deleteGroup(newObj: deleteGroupObj) {
-    let newList = newObj.groupList.filter((item) => item.id !== newObj.id);
+  deleteGroup = (newObj: deleteGroupObj) => {
+    const newList = newObj.groupList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.groupList, newList, Group);
     storage.setData(newObj.name, newObj.groupList);
-  }
+  };
 }

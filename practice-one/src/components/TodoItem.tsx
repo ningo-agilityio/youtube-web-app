@@ -1,18 +1,20 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
+import { Input } from './common/Input';
+import { Label } from './common/Label';
+import { Button } from './common/Button';
 
 interface TodoItemProps {
   todo: types.Item;
   todoList: types.Todo[];
   name: string;
   detailState: boolean;
-  changeTodoList: Function;
-  updateSelectedTodo: Function;
-  changeDetailBoxState: Function;
-  changeOptionList: Function;
-  changeOptionPopUpState: Function;
+  handleUpdateTodo: Function;
+  handleChangeSelectedTodo: Function;
+  handleUpdateDetailBox: Function;
+  handleUpdateOptionList: Function;
+  handleUpdateOptionPopUp: Function;
 }
 
 const TodoItem = (props: TodoItemProps) => {
@@ -21,15 +23,15 @@ const TodoItem = (props: TodoItemProps) => {
     todoList,
     name,
     detailState,
-    changeTodoList,
-    updateSelectedTodo,
-    changeDetailBoxState,
-    changeOptionList,
-    changeOptionPopUpState,
+    handleUpdateTodo,
+    handleChangeSelectedTodo,
+    handleUpdateDetailBox,
+    handleUpdateOptionList,
+    handleUpdateOptionPopUp,
   } = props;
   const item = {} as types.Item;
   const Todo = new types.Todo(item);
-  const deleteTodo = () => {
+  const handleOnClickDelete = () => {
     const todoObj = {
       id: todo.id,
       todoList,
@@ -37,63 +39,57 @@ const TodoItem = (props: TodoItemProps) => {
     };
 
     Todo.deleteTodo(todoObj);
-    changeTodoList(todoList);
+    handleUpdateTodo(todoList);
   };
 
-  const changeTodoStatus = () => {
+  const handleOnClickCheckBox = () => {
     let todoObj = {} as types.updateTodoObj;
 
-    helper.checkStatus(todo);
     todoObj = {
       todo,
       todoList,
       newContent: todo.title,
       newSubTask: todo.subTask!,
-      check: todo.status!,
+      check: !todo.status,
       name: constants.todoListName,
       newDate: todo.dueDate!,
       newKey: todo.key,
     };
     Todo.updateTodo(todoObj);
-    changeTodoList(todoList);
+    handleUpdateTodo(todoList);
     if (detailState) {
-      changeDetailBoxState(false);
+      handleUpdateDetailBox(false);
     }
   };
 
-  const onShowDetailBox = (todoItem: types.Item) => () => {
-    updateSelectedTodo(todoItem);
-    changeDetailBoxState(true);
+  const handleOnClickText = (todoItem: types.Item) => () => {
+    handleChangeSelectedTodo(todoItem);
+    handleUpdateDetailBox(true);
   };
 
-  const onShowOptionPopUp = (todoItem: types.Item) => (e: React.MouseEvent) => {
+  const handleOnContextMenu = (todoItem: types.Item) => (e: React.MouseEvent) => {
     e.preventDefault();
-    updateSelectedTodo(todoItem);
-    changeOptionList(todoItem);
-    changeOptionPopUpState(true);
+    handleChangeSelectedTodo(todoItem);
+    handleUpdateOptionList(todoItem);
+    handleUpdateOptionPopUp(true);
   };
 
-  const todoChecked =
-    todo.status === types.Status.Active ? '' : constants.CHECKED;
+  const todoName = todo.status === false ? '' : constants.CHECKED;
 
   return (
-    <li className={`todo ${todoChecked}`} id={todo.id.toString()}>
-      <input
-        className="todo__checkbox"
+    <li className={`todo ${todoName}`} id={todo.id.toString()}>
+      <Input
+        name="todo__checkbox"
         type="checkbox"
-        onClick={changeTodoStatus}
+        handleOnClick={handleOnClickCheckBox}
       />
-      <label
-        className="todo__text"
-        onClick={onShowDetailBox(todo)}
-        onContextMenu={onShowOptionPopUp(todo)}
-        role="presentation"
-      >
-        {todo.title}
-      </label>
-      <button className="todo__delete" type="button" onClick={deleteTodo}>
-        x
-      </button>
+      <Label
+        name="todo__text"
+        value={todo.title}
+        handleOnClick={handleOnClickText(todo)}
+        handleOnContextMenu={handleOnContextMenu(todo)}
+      />
+      <Button name="todo__delete" value="x" handleOnClick={handleOnClickDelete} />
     </li>
   );
 };

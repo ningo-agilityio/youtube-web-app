@@ -8,9 +8,9 @@ interface OptionProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  selectedFilterId: string;
-  changeTodoList: Function;
-  changeOptionPopUpState: Function;
+  selectedFilter: string;
+  handleUpdateTodo: Function;
+  handleUpdateOptionPopUp: Function;
 }
 
 const OptionPopUp = (props: OptionProps) => {
@@ -19,9 +19,9 @@ const OptionPopUp = (props: OptionProps) => {
     selectedTodo,
     selectedGroupList,
     todoList,
-    selectedFilterId,
-    changeTodoList,
-    changeOptionPopUpState,
+    selectedFilter,
+    handleUpdateTodo,
+    handleUpdateOptionPopUp,
   } = props;
   const displayFlex = optionState === true ? constants.displayFlex : '';
 
@@ -33,9 +33,9 @@ const OptionPopUp = (props: OptionProps) => {
           selectedTodo={selectedTodo}
           selectedGroupList={selectedGroupList}
           todoList={todoList}
-          selectedFilterId={selectedFilterId}
-          changeTodoList={changeTodoList}
-          changeOptionPopUpState={changeOptionPopUpState}
+          selectedFilter={selectedFilter}
+          handleUpdateTodo={handleUpdateTodo}
+          handleUpdateOptionPopUp={handleUpdateOptionPopUp}
         />
       </div>
     </div>

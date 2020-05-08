@@ -5,22 +5,22 @@ import GroupItem from './GroupItem';
 interface GroupListProps {
   name: string;
   groupList: types.Group[];
-  selectedFilterId: string;
-  changeGroupList: Function;
-  changeTodoList: Function;
-  changeSelectedFilterId: Function;
-  changeDetailBoxState: Function;
+  selectedFilter: string;
+  handleUpdateGroup: Function;
+  handleUpdateTodo: Function;
+  handleChangeSelectedFilter: Function;
+  handleUpdateDetailBox: Function;
 }
 
 const GroupList = (props: GroupListProps) => {
   const {
     name,
     groupList,
-    selectedFilterId,
-    changeGroupList,
-    changeTodoList,
-    changeSelectedFilterId,
-    changeDetailBoxState,
+    selectedFilter,
+    handleUpdateGroup,
+    handleUpdateTodo,
+    handleChangeSelectedFilter,
+    handleUpdateDetailBox,
   } = props;
 
   const renderGroupList = (list: types.Group[]) =>
@@ -30,12 +30,11 @@ const GroupList = (props: GroupListProps) => {
         key={group.id.toString()}
         name={name}
         groupList={groupList}
-        selectedFilterId={selectedFilterId}
-        changeGroupList={changeGroupList}
-        changeTodoList={changeTodoList}
-        changeSelectedFilterId={changeSelectedFilterId}
-        changeDetailBoxState={changeDetailBoxState}
-        resetSelectedFilterId={changeSelectedFilterId}
+        selectedFilter={selectedFilter}
+        handleUpdateGroup={handleUpdateGroup}
+        handleUpdateTodo={handleUpdateTodo}
+        handleChangeSelectedFilter={handleChangeSelectedFilter}
+        handleUpdateDetailBox={handleUpdateDetailBox}
       />
     ));
 

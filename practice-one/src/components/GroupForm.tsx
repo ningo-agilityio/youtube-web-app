@@ -1,10 +1,11 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import { Form } from './common/Form';
 
 interface GroupFormProps {
   groupList: types.Group[];
-  changeGroupList: (list: types.Group[]) => void;
+  handleUpdateGroup: (list: types.Group[]) => void;
 }
 
 interface GroupFormState {
@@ -17,13 +18,13 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
     this.state = { inputValue: '' };
   }
 
-  updateInputValue = (e: React.FormEvent<HTMLInputElement>) => {
+  handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
       inputValue: (e.target as HTMLInputElement).value.trim(),
     });
   };
 
-  updateGroupList = (e: React.FormEvent) => {
+  handleOnSubmit = () => {
     if (this.state.inputValue.length) {
       const item = {} as types.Item;
       const Group = new types.Group(item);
@@ -35,26 +36,24 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
       };
 
       Group.addGroup(groupObj);
-      this.props.changeGroupList(this.props.groupList);
-      (e.target as HTMLFormElement).reset();
+      this.props.handleUpdateGroup(this.props.groupList);
+      this.setState({ inputValue: '' });
     }
   };
 
   render() {
     return (
-      <form
-        className="app__nav__form"
-        onSubmit={this.updateGroupList}
+      <Form
+        nameForm="app__nav__form"
+        nameInput="app__nav__input app-input"
+        value={this.state.inputValue}
+        type="text"
+        placeholder="Create list..."
+        ariaLabel="Enter to do text"
         action="#"
-      >
-        <input
-          className="app__nav__input app-input"
-          type="text"
-          placeholder="Create list..."
-          aria-label="Enter to do text"
-          onInput={this.updateInputValue}
-        />
-      </form>
+        handleOnChange={this.handleOnChange}
+        handleOnSubmit={this.handleOnSubmit}
+      />
     );
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
+import { Input } from './common/Input';
+import { Label } from './common/Label';
 import DueDate from './DueDate';
 import SubTodoList from './SubTodoList';
 import SubTodoForm from './SubTodoForm';
@@ -10,7 +12,6 @@ interface DetailBoxProps {
   detailState: boolean;
   selectedTodo: types.Item;
   todoList: types.Todo[];
-  changeTodoList: (dataTodo: types.Todo[]) => void;
 }
 
 interface DetailBoxState {
@@ -25,32 +26,37 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
 
   componentDidMount() {
     let subTodoList = [] as types.Item[];
-    const dataSubTodo = constants.todoList.map((item) => ({ ...item }));
+    const dataSubTodo = constants.todoList.map((item) => ({
+      ...(item as object),
+    })) as types.Item[];
 
-    helper.pushDataLocalToList('subTodoList', dataSubTodo, types.SubTodo);
+    helper.pushDataLocalToList(
+      constants.subTodoListName,
+      dataSubTodo,
+      types.SubTodo
+    );
     subTodoList = helper.filterItemByProp(
       dataSubTodo,
       'key',
       this.props.selectedTodo.id.toString()
     );
-    this.changeSubTodoList(subTodoList);
+    this.handleUpdateSubTodo(subTodoList);
   }
 
-  changeSubTodoList = (newSubTodoList: types.Item[]) => {
+  handleUpdateSubTodo = (newSubTodoList: types.Item[]) => {
     this.setState({ subTodoList: newSubTodoList });
   };
 
   render() {
-    const { detailState, selectedTodo, changeTodoList } = this.props;
+    const { detailState, selectedTodo } = this.props;
     const displayBlock = detailState === true ? constants.displayBlock : '';
-    const todoChecked =
-      selectedTodo.status === types.Status.Active ? '' : constants.CHECKED;
+    const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
 
     return (
       <ul className={`app__detail ${displayBlock}`}>
         <li className={`todo ${todoChecked}`}>
-          <input className="todo__checkbox" type="checkbox" />
-          <label className="todo__text">{selectedTodo.title}</label>
+          <Input name="todo__checkbox" type="checkbox" />
+          <Label name="todo__text" value={selectedTodo.title} />
         </li>
         <li className="todo-date">
           <DueDate
@@ -62,14 +68,13 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
           <SubTodoList
             selectedTodo={selectedTodo}
             name="subTodoList"
-            changeSubTodoList={this.changeSubTodoList}
+            handleUpdateSubTodo={this.handleUpdateSubTodo}
           />
         </li>
         <SubTodoForm
           subTodoList={this.state.subTodoList}
           selectedTodo={selectedTodo}
-          changeSubTodoList={this.changeSubTodoList}
-          changeTodoList={changeTodoList}
+          handleUpdateSubTodo={this.handleUpdateSubTodo}
         />
       </ul>
     );

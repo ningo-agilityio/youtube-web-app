@@ -2,14 +2,15 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
+import { Label } from './common/Label';
 
 interface OptionListProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  selectedFilterId: string;
-  changeTodoList: Function;
-  changeOptionPopUpState: Function;
+  selectedFilter: string;
+  handleUpdateTodo: Function;
+  handleUpdateOptionPopUp: Function;
 }
 
 const OptionList = (props: OptionListProps) => {
@@ -17,9 +18,9 @@ const OptionList = (props: OptionListProps) => {
     selectedTodo,
     selectedGroupList,
     todoList,
-    selectedFilterId,
-    changeTodoList,
-    changeOptionPopUpState,
+    selectedFilter,
+    handleUpdateTodo,
+    handleUpdateOptionPopUp,
   } = props;
 
   const moveTodo = (groupMoveIn: types.Group) => () => {
@@ -29,7 +30,7 @@ const OptionList = (props: OptionListProps) => {
     const newTodoList = helper.filterItemByProp(
       todoList,
       'key',
-      selectedFilterId
+      selectedFilter
     );
 
     selectedTodo.key = groupMoveIn.id.toString();
@@ -44,20 +45,18 @@ const OptionList = (props: OptionListProps) => {
       newKey: selectedTodo.key,
     };
     Todo.updateTodo(todoObj);
-    changeTodoList(newTodoList);
-    changeOptionPopUpState(false);
+    handleUpdateTodo(newTodoList);
+    handleUpdateOptionPopUp(false);
   };
 
   const renderOptionList = (list: types.Group[]) =>
     list.map((group) => (
       <li className="option" id={group.id.toString()} key={group.id.toString()}>
-        <label
-          className="option__text"
-          onClick={moveTodo(group)}
-          role="presentation"
-        >
-          {group.title}
-        </label>
+        <Label
+          name="option__text"
+          value={group.title}
+          handleOnClick={moveTodo(group)}
+        />
       </li>
     ));
 
