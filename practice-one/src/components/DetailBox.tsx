@@ -1,6 +1,5 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
 import { Input } from './common/Input';
 import { Label } from './common/Label';
@@ -12,39 +11,48 @@ interface DetailBoxProps {
   detailState: boolean;
   selectedTodo: types.Item;
   todoList: types.Todo[];
+  handleUpdateTodo: Function;
 }
 
 interface DetailBoxState {
   subTodoList: types.Item[];
+  dueDate: string;
 }
 
 class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   constructor(props: DetailBoxProps) {
     super(props);
-    this.state = { subTodoList: [] };
-  }
-
-  componentDidMount() {
-    let subTodoList = [] as types.Item[];
-    const dataSubTodo = constants.todoList.map((item) => ({
-      ...(item as object),
-    })) as types.Item[];
-
-    helper.pushDataLocalToList(
-      constants.subTodoListName,
-      dataSubTodo,
-      types.SubTodo
-    );
-    subTodoList = helper.filterItemByProp(
-      dataSubTodo,
-      'key',
-      this.props.selectedTodo.id.toString()
-    );
-    this.handleUpdateSubTodo(subTodoList);
+    this.state = { subTodoList: [], dueDate: '' };
   }
 
   handleUpdateSubTodo = (newSubTodoList: types.Item[]) => {
     this.setState({ subTodoList: newSubTodoList });
+  };
+
+  handleUpdateDueDate = (newDueDate: string) => {
+    this.setState({ dueDate: newDueDate });
+  };
+
+  handelKeyDown = (e: React.KeyboardEvent) => {
+    if (e.keyCode === 13) {
+      const newText = (e.target as HTMLLabelElement).textContent!.trim();
+      const item = {} as types.Item;
+      const Todo = new types.Todo(item);
+      const todoObj = {
+        todo: this.props.selectedTodo,
+        todoList: this.props.todoList,
+        newContent: newText,
+        newSubTask: this.props.selectedTodo.subTask!,
+        check: this.props.selectedTodo.status!,
+        name: constants.todoListName,
+        newDate: this.props.selectedTodo.dueDate!,
+        newKey: this.props.selectedTodo.key!,
+      };
+
+      Todo.updateTodo(todoObj);
+      this.props.handleUpdateTodo(this.props.todoList);
+      (e.target as HTMLLabelElement).blur();
+    }
   };
 
   render() {
@@ -56,18 +64,24 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
       <ul className={`app__detail ${displayBlock}`}>
         <li className={`todo ${todoChecked}`}>
           <Input name="todo__checkbox" type="checkbox" />
-          <Label name="todo__text" value={selectedTodo.title} />
+          <Label
+            name="todo__text"
+            value={selectedTodo.title}
+            contentEditable={true}
+            handelKeyDown={this.handelKeyDown}
+          />
         </li>
         <li className="todo-date">
           <DueDate
             selectedTodo={selectedTodo}
-            dueDateValue={selectedTodo.dueDate!}
+            dueDate={this.state.dueDate}
+            handleUpdateDueDate={this.handleUpdateDueDate}
           />
         </li>
         <li>
           <SubTodoList
+            subTodoList={this.state.subTodoList}
             selectedTodo={selectedTodo}
-            name="subTodoList"
             handleUpdateSubTodo={this.handleUpdateSubTodo}
           />
         </li>

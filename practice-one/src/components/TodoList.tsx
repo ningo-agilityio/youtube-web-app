@@ -7,7 +7,6 @@ interface TodoListProps {
   name: string;
   todoList: types.Todo[];
   selectedFilter: string;
-  detailState: boolean;
   handleUpdateTodo: Function;
   handleChangeSelectedTodo: Function;
   handleUpdateDetailBox: Function;
@@ -20,7 +19,6 @@ const TodoList = (props: TodoListProps) => {
     name,
     todoList,
     selectedFilter,
-    detailState,
     handleUpdateTodo,
     handleChangeSelectedTodo,
     handleUpdateDetailBox,
@@ -50,7 +48,6 @@ const TodoList = (props: TodoListProps) => {
         key={todo.id.toString()}
         todoList={todoList}
         name={name}
-        detailState={detailState}
         handleUpdateTodo={handleUpdateTodo}
         handleUpdateDetailBox={handleUpdateDetailBox}
         handleUpdateOptionList={handleUpdateOptionList}

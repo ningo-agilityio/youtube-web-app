@@ -44,6 +44,7 @@ const NavFilter = (props: NavFilterProps) => {
 
   const handleOnClick = (id: string) => () => {
     handleChangeSelectedFilter(id);
+    handleUpdateDetailBox(false);
   };
 
   const renderFilterList = (list: types.Filter[]) =>

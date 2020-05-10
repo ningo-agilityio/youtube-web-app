@@ -10,7 +10,7 @@ interface FormProps {
   ariaLabel: string;
   action: string;
   handleOnChange: (e: React.ChangeEvent) => void;
-  handleOnSubmit: () => void;
+  handleOnSubmit: (e: React.FormEvent) => void;
 }
 
 export const Form = (props: FormProps) => {

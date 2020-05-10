@@ -4,7 +4,6 @@ import * as helper from '../helper/helper';
 
 export type ItemList = SubTodo[] | Todo[] | Group[];
 export type ConstructList = typeof SubTodo | typeof Todo | typeof Group;
-export type a = SubTodo | Todo | Group;
 export type Filter = {
   id: string;
   text: string;
@@ -58,24 +57,18 @@ export type deleteTodoObj = {
 export type subTodoObj = {
   text: string;
   item: Item;
-  key: string;
   subTodoList: Item[];
-  todoList: Item[];
-  name: string;
 };
 
 export type updateSubTodoObj = {
   subTodo: Item;
-  subTodoList: Item[];
   newContent: string;
   check: boolean;
-  name: string;
 };
 
 export type deleteSubTodoObj = {
   id: number;
   subTodoList: Item[];
-  name: string;
 };
 
 export enum Status {
@@ -114,10 +107,8 @@ export class SubTodo implements Item {
     const subTodo = new SubTodo(subTodoObj.item);
     subTodo.id = Date.now();
     subTodo.title = subTodoObj.text;
-    subTodo.key = subTodoObj.key;
     subTodo.status = false;
     subTodoObj.subTodoList.push(subTodo);
-    storage.setData(subTodoObj.name, subTodoObj.subTodoList);
   };
 
   /**
@@ -127,7 +118,6 @@ export class SubTodo implements Item {
   updateSubTodo = (newObj: updateSubTodoObj) => {
     newObj.subTodo.title = newObj.newContent;
     newObj.subTodo.status = newObj.check;
-    storage.setData(newObj.name, newObj.subTodoList);
   };
 
   /**
@@ -137,7 +127,6 @@ export class SubTodo implements Item {
   deleteSubTodo = (newObj: deleteSubTodoObj) => {
     const newList = newObj.subTodoList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.subTodoList, newList, SubTodo);
-    storage.setData(newObj.name, newObj.subTodoList);
   };
 }
 

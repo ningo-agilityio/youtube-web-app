@@ -21,18 +21,20 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
 
   handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
-      inputValue: (e.target as HTMLInputElement).value.trim(),
+      inputValue: (e.target as HTMLInputElement).value,
     });
   };
 
-  handleOnSubmit = () => {
-    if (this.state.inputValue.length) {
+  handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (this.state.inputValue.trim().length) {
       const id = Date.now();
       const item = {} as types.Item;
       const Todo = new types.Todo(item);
       const todoObj = {
         newId: id,
-        text: this.state.inputValue,
+        text: this.state.inputValue.trim(),
         item: constants.todoDefault,
         key: this.props.selectedFilter,
         todoList: this.props.todoList,

@@ -22,33 +22,41 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
 
   handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
-      inputValue: (e.target as HTMLInputElement).value.trim(),
+      inputValue: (e.target as HTMLInputElement).value,
     });
   };
 
-  handleOnSubmit = () => {
-    if (this.state.inputValue.length) {
-      const item = {} as types.Item;
-      const SubTodo = new types.SubTodo(item);
-      let subTodoObj = {} as types.subTodoObj;
-      const dataSubTodo = this.props.subTodoList.map((subTodo) => ({
-        ...subTodo,
-      }));
+  handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-      helper.pushDataLocalToList(
-        constants.subTodoListName,
-        dataSubTodo,
-        types.SubTodo
-      );
+    if (this.state.inputValue.trim().length) {
+      const itemSubTodo = {} as types.Item;
+      let itemTodo = {} as types.Item;
+      let subTodoObj = {} as types.subTodoObj;
+      let updateTodoObj = {} as types.updateTodoObj;
+      const SubTodo = new types.SubTodo(itemSubTodo);
+      const Todo = new types.Todo(itemTodo);
+      const dataTodo = constants.todoList.map((item) => ({
+        ...(item as object),
+      })) as types.Item[];
+
+      helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
+      itemTodo = helper.findItemById(dataTodo, this.props.selectedTodo.id)!;
       subTodoObj = {
-        text: this.state.inputValue,
+        text: this.state.inputValue.trim(),
         item: constants.todoDefault,
-        key: this.props.selectedTodo.id.toString(),
-        subTodoList: dataSubTodo,
-        todoList: this.props.selectedTodo.subTask!,
-        name: constants.subTodoListName,
+        subTodoList: this.props.selectedTodo.subTask!,
+      };
+      updateTodoObj = {
+        todo: itemTodo,
+        todoList: dataTodo,
+        newContent: itemTodo.title,
+        newSubTask: this.props.selectedTodo.subTask!,
+        check: itemTodo.status!,
+        name: constants.todoListName,
       };
       SubTodo.addSubTodo(subTodoObj);
+      Todo.updateTodo(updateTodoObj);
       this.props.handleUpdateSubTodo(this.props.selectedTodo.subTask!);
       this.setState({ inputValue: '' });
     }

@@ -115,6 +115,7 @@ class App extends React.Component<{}, AppState> {
             detailState={detailState}
             selectedTodo={selectedTodo}
             todoList={todoList}
+            handleUpdateTodo={this.handleUpdateTodo}
           />
         </div>
         <OptionPopUp
@@ -122,8 +123,6 @@ class App extends React.Component<{}, AppState> {
           selectedTodo={selectedTodo}
           selectedGroupList={optionList}
           todoList={todoList}
-          selectedFilter={selectedFilter}
-          handleUpdateTodo={this.handleUpdateTodo}
           handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
         />
       </div>

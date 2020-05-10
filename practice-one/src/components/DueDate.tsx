@@ -7,35 +7,23 @@ import { Label } from './common/Label';
 
 interface DueDateProps {
   selectedTodo: types.Item;
-  dueDateValue: string;
+  dueDate: string;
+  handleUpdateDueDate: Function;
 }
 
-interface DueDateState {
-  dueDateValue: string;
-}
-
-class DueDate extends React.Component<DueDateProps, DueDateState> {
-  constructor(props: DueDateProps) {
-    super(props);
-    this.state = { dueDateValue: '' };
-  }
-
-  componentDidMount() {
-    const newDueDate = this.props.selectedTodo.dueDate!;
-
-    this.setState({ dueDateValue: newDueDate });
-  }
-
+class DueDate extends React.Component<DueDateProps> {
   handleOnChange = (e: React.ChangeEvent) => {
-    const { selectedTodo } = this.props;
+    const { selectedTodo, handleUpdateDueDate } = this.props;
     let todo = {} as types.Item;
     let todoObj = {} as types.updateTodoObj;
     const Todo = new types.Todo(todo);
-    const newDueDate = helper.convertDate((e.target as HTMLInputElement).value);
     const dataTodo = constants.todoList.map((item) => ({
       ...(item as object),
     })) as types.Item[];
 
+    selectedTodo.dueDate = helper.convertDate(
+      (e.target as HTMLInputElement).value
+    );
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     todo = helper.findItemById(dataTodo, selectedTodo.id)!;
     todoObj = {
@@ -45,25 +33,25 @@ class DueDate extends React.Component<DueDateProps, DueDateState> {
       newSubTask: todo.subTask!,
       check: todo.status!,
       name: constants.todoListName,
-      newDate: newDueDate,
+      newDate: selectedTodo.dueDate,
       newKey: todo.key,
     };
     Todo.updateTodo(todoObj);
-    this.setState({ dueDateValue: newDueDate });
+    handleUpdateDueDate(selectedTodo.dueDate);
   };
 
   render() {
     return (
       <>
+        <Label
+          name="due-date"
+          value="Due date: "
+          spanValue={this.props.selectedTodo.dueDate}
+        />
         <Input
           name="date-picker"
           type="date"
           handleOnChange={this.handleOnChange}
-        />
-        <Label
-          name="due-date"
-          value="Due date:"
-          spanValue={this.state.dueDateValue}
         />
       </>
     );

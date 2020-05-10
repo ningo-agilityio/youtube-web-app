@@ -1,45 +1,64 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import * as helper from '../helper/helper';
 import { Input } from './common/Input';
 import { Label } from './common/Label';
 import { Button } from './common/Button';
 
 interface SubTodoProps {
+  selectedTodo: types.Item;
   subTodo: types.Item;
-  subTodoList: types.Item[];
-  name: string;
   handleUpdateSubTodo: Function;
 }
 
 const SubTodoItem = (props: SubTodoProps) => {
-  const { subTodo, subTodoList, name, handleUpdateSubTodo } = props;
-  const item = {} as types.Item;
-  const SubTodo = new types.SubTodo(item);
+  const { selectedTodo, subTodo, handleUpdateSubTodo } = props;
+  const itemSubTodo = {} as types.Item;
+  const SubTodo = new types.SubTodo(itemSubTodo);
+
+  const updateTodo = () => {
+    let itemTodo = {} as types.Item;
+    let updateTodoObj = {} as types.updateTodoObj;
+    const Todo = new types.Todo(itemTodo);
+    const dataTodo = constants.todoList.map((item) => ({
+      ...(item as object),
+    })) as types.Item[];
+
+    helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
+    itemTodo = helper.findItemById(dataTodo, selectedTodo.id)!;
+    updateTodoObj = {
+      todo: itemTodo,
+      todoList: dataTodo,
+      newContent: itemTodo.title,
+      newSubTask: selectedTodo.subTask!,
+      check: itemTodo.status!,
+      name: constants.todoListName,
+    };
+    Todo.updateTodo(updateTodoObj);
+  };
 
   const handleOnClickDelete = (e: React.MouseEvent) => {
     const subTodoObj = {
       id: subTodo.id,
-      subTodoList,
-      name,
+      subTodoList: selectedTodo.subTask!,
     };
 
     SubTodo.deleteSubTodo(subTodoObj);
-    handleUpdateSubTodo(subTodoList);
+    updateTodo();
+    handleUpdateSubTodo(selectedTodo.subTask!);
   };
 
   const handleOnClickCheckBox = () => {
-    let subTodoObj = {} as types.updateSubTodoObj;
-
-    subTodoObj = {
+    const subTodoObj = {
       subTodo,
-      subTodoList,
       newContent: subTodo.title,
       check: !subTodo.status,
-      name,
     };
+
     SubTodo.updateSubTodo(subTodoObj);
-    handleUpdateSubTodo(subTodoList);
+    updateTodo();
+    handleUpdateSubTodo(selectedTodo.subTask!);
   };
 
   const handelKeyDown = (e: React.KeyboardEvent) => {
@@ -47,14 +66,13 @@ const SubTodoItem = (props: SubTodoProps) => {
       const newText = (e.target as HTMLLabelElement).textContent!.trim();
       const subTodoObj = {
         subTodo,
-        subTodoList,
         newContent: newText,
         check: subTodo.status!,
-        name,
       };
 
       SubTodo.updateSubTodo(subTodoObj);
-      handleUpdateSubTodo(subTodoList);
+      updateTodo();
+      handleUpdateSubTodo(selectedTodo.subTask!);
       (e.target as HTMLLabelElement).blur();
     }
   };
@@ -74,7 +92,11 @@ const SubTodoItem = (props: SubTodoProps) => {
         contentEditable={true}
         handelKeyDown={handelKeyDown}
       />
-      <Button name="todo__delete" value="x" handleOnClick={handleOnClickDelete} />
+      <Button
+        name="todo__delete"
+        value="x"
+        handleOnClick={handleOnClickDelete}
+      />
     </li>
   );
 };

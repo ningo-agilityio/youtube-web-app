@@ -8,8 +8,6 @@ interface OptionListProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  selectedFilter: string;
-  handleUpdateTodo: Function;
   handleUpdateOptionPopUp: Function;
 }
 
@@ -18,22 +16,19 @@ const OptionList = (props: OptionListProps) => {
     selectedTodo,
     selectedGroupList,
     todoList,
-    selectedFilter,
-    handleUpdateTodo,
     handleUpdateOptionPopUp,
   } = props;
 
-  const moveTodo = (groupMoveIn: types.Group) => () => {
+  const handleMoveTodo = (groupMoveIn: types.Group) => () => {
     const todo = helper.findItemById(todoList, selectedTodo.id)!;
     const Todo = new types.Todo(todo);
     let todoObj = {} as types.updateTodoObj;
-    const newTodoList = helper.filterItemByProp(
-      todoList,
-      'key',
-      selectedFilter
-    );
+    const dataTodo = constants.todoList.map((item) => ({
+      ...(item as object),
+    })) as types.Todo[];
 
     selectedTodo.key = groupMoveIn.id.toString();
+    helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
     todoObj = {
       todo,
       todoList,
@@ -42,10 +37,9 @@ const OptionList = (props: OptionListProps) => {
       check: todo.status!,
       name: constants.todoListName,
       newDate: todo.dueDate,
-      newKey: selectedTodo.key,
+      newKey: groupMoveIn.id.toString(),
     };
     Todo.updateTodo(todoObj);
-    handleUpdateTodo(newTodoList);
     handleUpdateOptionPopUp(false);
   };
 
@@ -55,7 +49,7 @@ const OptionList = (props: OptionListProps) => {
         <Label
           name="option__text"
           value={group.title}
-          handleOnClick={moveTodo(group)}
+          handleOnClick={handleMoveTodo(group)}
         />
       </li>
     ));

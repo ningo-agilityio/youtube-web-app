@@ -9,7 +9,6 @@ interface TodoItemProps {
   todo: types.Item;
   todoList: types.Todo[];
   name: string;
-  detailState: boolean;
   handleUpdateTodo: Function;
   handleChangeSelectedTodo: Function;
   handleUpdateDetailBox: Function;
@@ -22,7 +21,6 @@ const TodoItem = (props: TodoItemProps) => {
     todo,
     todoList,
     name,
-    detailState,
     handleUpdateTodo,
     handleChangeSelectedTodo,
     handleUpdateDetailBox,
@@ -45,6 +43,9 @@ const TodoItem = (props: TodoItemProps) => {
   const handleOnClickCheckBox = () => {
     let todoObj = {} as types.updateTodoObj;
 
+    todo.subTask!.forEach((ite) => {
+      ite.status = !todo.status;
+    });
     todoObj = {
       todo,
       todoList,
@@ -57,9 +58,6 @@ const TodoItem = (props: TodoItemProps) => {
     };
     Todo.updateTodo(todoObj);
     handleUpdateTodo(todoList);
-    if (detailState) {
-      handleUpdateDetailBox(false);
-    }
   };
 
   const handleOnClickText = (todoItem: types.Item) => () => {
@@ -67,7 +65,9 @@ const TodoItem = (props: TodoItemProps) => {
     handleUpdateDetailBox(true);
   };
 
-  const handleOnContextMenu = (todoItem: types.Item) => (e: React.MouseEvent) => {
+  const handleOnContextMenu = (todoItem: types.Item) => (
+    e: React.MouseEvent
+  ) => {
     e.preventDefault();
     handleChangeSelectedTodo(todoItem);
     handleUpdateOptionList(todoItem);
@@ -89,7 +89,11 @@ const TodoItem = (props: TodoItemProps) => {
         handleOnClick={handleOnClickText(todo)}
         handleOnContextMenu={handleOnContextMenu(todo)}
       />
-      <Button name="todo__delete" value="x" handleOnClick={handleOnClickDelete} />
+      <Button
+        name="todo__delete"
+        value="x"
+        handleOnClick={handleOnClickDelete}
+      />
     </li>
   );
 };

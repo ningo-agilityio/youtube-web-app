@@ -9,6 +9,7 @@ export const CHECKED = 'todo-checked';
 export const ACTIVE = 'active';
 export const displayBlock = 'd-block';
 export const displayFlex = 'd-flex';
+export const displayMinSize = 'd-detail';
 
 export const groupDefault = {
   id: 0,

@@ -20,16 +20,18 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
 
   handleOnChange = (e: React.ChangeEvent) => {
     this.setState({
-      inputValue: (e.target as HTMLInputElement).value.trim(),
+      inputValue: (e.target as HTMLInputElement).value,
     });
   };
 
-  handleOnSubmit = () => {
-    if (this.state.inputValue.length) {
+  handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (this.state.inputValue.trim().length) {
       const item = {} as types.Item;
       const Group = new types.Group(item);
       const groupObj = {
-        text: this.state.inputValue,
+        text: this.state.inputValue.trim(),
         item: constants.groupDefault,
         groupList: this.props.groupList,
         name: constants.groupListName,

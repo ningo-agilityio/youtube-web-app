@@ -1,5 +1,6 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
+import * as constants from '../constants/Constants';
 import TodoList from './TodoList';
 import TodoForm from './TodoForm';
 
@@ -26,8 +27,10 @@ const MainContent = (props: MainContentProps) => {
     handleUpdateOptionPopUp,
   } = props;
 
+  const displayBlock = detailState === true ? constants.displayMinSize : '';
+
   return (
-    <div className="app__content">
+    <div className={`app__content ${displayBlock}`}>
       <TodoForm
         todoList={todoList}
         selectedFilter={selectedFilter}
@@ -37,7 +40,6 @@ const MainContent = (props: MainContentProps) => {
         name="todoList"
         todoList={todoList}
         selectedFilter={selectedFilter}
-        detailState={detailState}
         handleUpdateTodo={handleUpdateTodo}
         handleChangeSelectedTodo={handleChangeSelectedTodo}
         handleUpdateDetailBox={handleUpdateDetailBox}

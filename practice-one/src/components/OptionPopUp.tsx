@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
@@ -8,8 +9,6 @@ interface OptionProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  selectedFilter: string;
-  handleUpdateTodo: Function;
   handleUpdateOptionPopUp: Function;
 }
 
@@ -19,22 +18,27 @@ const OptionPopUp = (props: OptionProps) => {
     selectedTodo,
     selectedGroupList,
     todoList,
-    selectedFilter,
-    handleUpdateTodo,
     handleUpdateOptionPopUp,
   } = props;
+
+  const handleOnclickOutside = () => {
+    handleUpdateOptionPopUp(false);
+  };
+
   const displayFlex = optionState === true ? constants.displayFlex : '';
 
   return (
-    <div className={`wrapper-option ${displayFlex}`}>
+    <div
+      className={`wrapper-option ${displayFlex}`}
+      onClick={handleOnclickOutside}
+      role="presentation"
+    >
       <div className="option-box">
-        <p>Move to-do to...</p>
+        <p>Move todo to group...</p>
         <OptionList
           selectedTodo={selectedTodo}
           selectedGroupList={selectedGroupList}
           todoList={todoList}
-          selectedFilter={selectedFilter}
-          handleUpdateTodo={handleUpdateTodo}
           handleUpdateOptionPopUp={handleUpdateOptionPopUp}
         />
       </div>
