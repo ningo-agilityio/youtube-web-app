@@ -1,8 +1,9 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
+import * as constants from '../constants/Constants';
+import ItemContext from '../contexts/Contexts';
 import GroupList from './GroupList';
 import GroupForm from './GroupForm';
-import * as constants from '../constants/Constants';
 
 const filterList = [
   {
@@ -22,8 +23,6 @@ const filterList = [
 interface NavFilterProps {
   groupList: types.Group[];
   selectedFilter: string;
-  handleUpdateGroup: (dataGroup: types.Group[]) => void;
-  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
   handleChangeSelectedFilter: (id: string) => void;
   handleUpdateDetailBox: Function;
 }
@@ -32,8 +31,6 @@ const NavFilter = (props: NavFilterProps) => {
   const {
     groupList,
     selectedFilter,
-    handleUpdateGroup,
-    handleUpdateTodo,
     handleChangeSelectedFilter,
     handleUpdateDetailBox,
   } = props;
@@ -61,19 +58,25 @@ const NavFilter = (props: NavFilterProps) => {
     ));
 
   return (
-    <div className="app__nav">
-      <ul className="app__nav__filter">{renderFilterList(filterList)}</ul>
-      <GroupList
-        name="groupList"
-        groupList={groupList}
-        selectedFilter={selectedFilter}
-        handleUpdateGroup={handleUpdateGroup}
-        handleUpdateTodo={handleUpdateTodo}
-        handleChangeSelectedFilter={handleChangeSelectedFilter}
-        handleUpdateDetailBox={handleUpdateDetailBox}
-      />
-      <GroupForm groupList={groupList} handleUpdateGroup={handleUpdateGroup} />
-    </div>
+    <ItemContext.Consumer>
+      {({ handleUpdateGroup, handleUpdateTodo }) => {
+        return (
+          <div className="app__nav">
+            <ul className="app__nav__filter">{renderFilterList(filterList)}</ul>
+            <GroupList
+              name={constants.groupListName}
+              groupList={groupList}
+              selectedFilter={selectedFilter}
+              handleUpdateGroup={handleUpdateGroup!}
+              handleUpdateTodo={handleUpdateTodo!}
+              handleChangeSelectedFilter={handleChangeSelectedFilter}
+              handleUpdateDetailBox={handleUpdateDetailBox}
+            />
+            <GroupForm />
+          </div>
+        );
+      }}
+    </ItemContext.Consumer>
   );
 };
 

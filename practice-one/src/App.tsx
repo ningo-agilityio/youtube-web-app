@@ -2,6 +2,7 @@ import React from 'react';
 import * as types from './buildTypes/buildTypes';
 import * as helper from './helper/helper';
 import * as constants from './constants/Constants';
+import ItemContext from './contexts/Contexts';
 import NavFilter from './components/NavFilter';
 import MainContent from './components/MainContent';
 import DetailBox from './components/DetailBox';
@@ -18,6 +19,8 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
+  textInput = React.createRef<HTMLInputElement>();
+
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -32,6 +35,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   componentDidMount() {
+    this.textInput.current!.focus();
     const dataTodo = constants.todoList.map((item) => ({
       ...(item as object),
     })) as types.Todo[];
@@ -40,7 +44,11 @@ class App extends React.Component<{}, AppState> {
     })) as types.Group[];
 
     helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
-    helper.pushDataLocalToList(constants.groupListName, dataGroup!, types.Group);
+    helper.pushDataLocalToList(
+      constants.groupListName,
+      dataGroup!,
+      types.Group
+    );
     this.handleUpdateTodo(dataTodo);
     this.handleUpdateGroup(dataGroup);
   }
@@ -74,7 +82,8 @@ class App extends React.Component<{}, AppState> {
       (item) => item.id !== parseInt(todo.key!, 10)
     );
     const allGroup = this.state.groupList;
-    const selectedGroupList = todo.key === types.Status.All ? allGroup : groupListFiltered;
+    const selectedGroupList =
+      todo.key === types.Status.All ? allGroup : groupListFiltered;
 
     this.setState({ optionList: selectedGroupList });
   };
@@ -93,18 +102,24 @@ class App extends React.Component<{}, AppState> {
     return (
       <div className="todo-app">
         <div className="wrapper-app">
-          <NavFilter
-            selectedFilter={selectedFilter}
-            groupList={groupList}
-            handleUpdateGroup={this.handleUpdateGroup}
-            handleUpdateTodo={this.handleUpdateTodo}
-            handleChangeSelectedFilter={this.handleChangeSelectedFilter}
-            handleUpdateDetailBox={this.handleUpdateDetailBox}
-          />
+          <ItemContext.Provider
+            value={{
+              handleUpdateGroup: this.handleUpdateGroup,
+              handleUpdateTodo: this.handleUpdateTodo,
+            }}
+          >
+            <NavFilter
+              selectedFilter={selectedFilter}
+              groupList={groupList}
+              handleChangeSelectedFilter={this.handleChangeSelectedFilter}
+              handleUpdateDetailBox={this.handleUpdateDetailBox}
+            />
+          </ItemContext.Provider>
           <MainContent
             todoList={todoList}
             selectedFilter={selectedFilter}
             detailState={detailState}
+            inputRef={this.textInput}
             handleUpdateTodo={this.handleUpdateTodo}
             handleChangeSelectedTodo={this.handleChangeSelectedTodo}
             handleUpdateDetailBox={this.handleUpdateDetailBox}

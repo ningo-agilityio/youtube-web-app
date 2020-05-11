@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as storage from '../storage/storage';

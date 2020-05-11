@@ -6,6 +6,7 @@ import { Form } from './common/Form';
 interface TodoFormProps {
   todoList: types.Todo[];
   selectedFilter: string;
+  inputRef: React.RefObject<HTMLInputElement>;
   handleUpdateTodo: (list: types.Todo[]) => void;
 }
 
@@ -54,6 +55,7 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
         nameInput="main-input app-input"
         value={this.state.inputValue}
         type="text"
+        inputRef={this.props.inputRef}
         placeholder="What do you need to do?"
         ariaLabel="Enter to do text"
         action="#"

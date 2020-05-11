@@ -6,6 +6,7 @@ interface FormProps {
   nameInput: string;
   value: string;
   type: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
   placeholder: string;
   ariaLabel: string;
   action: string;
@@ -24,6 +25,7 @@ export const Form = (props: FormProps) => {
         name={props.nameInput}
         value={props.value}
         type={props.type}
+        inputRef={props.inputRef}
         placeholder={props.placeholder}
         ariaLabel={props.ariaLabel}
         handleOnChange={props.handleOnChange}

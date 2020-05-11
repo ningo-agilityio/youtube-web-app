@@ -1,19 +1,15 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import ItemContext from '../contexts/Contexts';
 import { Form } from './common/Form';
-
-interface GroupFormProps {
-  groupList: types.Group[];
-  handleUpdateGroup: (list: types.Group[]) => void;
-}
 
 interface GroupFormState {
   inputValue: string;
 }
 
-class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
-  constructor(props: GroupFormProps) {
+class GroupForm extends React.Component<{}, GroupFormState> {
+  constructor(props: {}) {
     super(props);
     this.state = { inputValue: '' };
   }
@@ -33,12 +29,12 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
       const groupObj = {
         text: this.state.inputValue.trim(),
         item: constants.groupDefault,
-        groupList: this.props.groupList,
+        groupList: this.context.groupList,
         name: constants.groupListName,
       };
 
       Group.addGroup(groupObj);
-      this.props.handleUpdateGroup(this.props.groupList);
+      this.context.handleUpdateGroup(this.context.groupList);
       this.setState({ inputValue: '' });
     }
   };
@@ -59,5 +55,7 @@ class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
     );
   }
 }
+
+GroupForm.contextType = ItemContext;
 
 export default GroupForm;

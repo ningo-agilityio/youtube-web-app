@@ -8,6 +8,7 @@ interface MainContentProps {
   todoList: types.Todo[];
   selectedFilter: string;
   detailState: boolean;
+  inputRef: React.RefObject<HTMLInputElement>;
   handleUpdateTodo: (dataTodo: types.Todo[]) => void;
   handleChangeSelectedTodo: (todo: types.Todo) => void;
   handleUpdateDetailBox: Function;
@@ -20,6 +21,7 @@ const MainContent = (props: MainContentProps) => {
     todoList,
     selectedFilter,
     detailState,
+    inputRef,
     handleUpdateTodo,
     handleChangeSelectedTodo,
     handleUpdateDetailBox,
@@ -34,6 +36,7 @@ const MainContent = (props: MainContentProps) => {
       <TodoForm
         todoList={todoList}
         selectedFilter={selectedFilter}
+        inputRef={inputRef}
         handleUpdateTodo={handleUpdateTodo}
       />
       <TodoList
