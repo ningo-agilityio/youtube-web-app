@@ -54,6 +54,8 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
         newSubTask: this.props.selectedTodo.subTask!,
         check: itemTodo.status!,
         name: constants.todoListName,
+        newDate: itemTodo.dueDate,
+        newKey: itemTodo.key,
       };
       SubTodo.addSubTodo(subTodoObj);
       Todo.updateTodo(updateTodoObj);

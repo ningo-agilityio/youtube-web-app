@@ -1,7 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
-import ItemContext from '../contexts/Contexts';
+import NavContext from '../contexts/Contexts';
 import GroupList from './GroupList';
 import GroupForm from './GroupForm';
 
@@ -20,28 +20,18 @@ const filterList = [
   },
 ];
 
-interface NavFilterProps {
-  groupList: types.Group[];
-  selectedFilter: string;
-  handleChangeSelectedFilter: (id: string) => void;
-  handleUpdateDetailBox: Function;
-}
-
-const NavFilter = (props: NavFilterProps) => {
-  const {
-    groupList,
-    selectedFilter,
-    handleChangeSelectedFilter,
-    handleUpdateDetailBox,
-  } = props;
+const NavFilter = () => {
+  const context = React.useContext(NavContext);
 
   const addClassName = (item: types.Filter) => {
-    return selectedFilter === item.id.toString() ? constants.ACTIVE : '';
+    return context.selectedFilter === item.id.toString()
+      ? constants.ACTIVE
+      : '';
   };
 
   const handleOnClick = (id: string) => () => {
-    handleChangeSelectedFilter(id);
-    handleUpdateDetailBox(false);
+    context.handleChangeSelectedFilter!(id);
+    context.handleUpdateDetailBox!(false);
   };
 
   const renderFilterList = (list: types.Filter[]) =>
@@ -58,25 +48,11 @@ const NavFilter = (props: NavFilterProps) => {
     ));
 
   return (
-    <ItemContext.Consumer>
-      {({ handleUpdateGroup, handleUpdateTodo }) => {
-        return (
-          <div className="app__nav">
-            <ul className="app__nav__filter">{renderFilterList(filterList)}</ul>
-            <GroupList
-              name={constants.groupListName}
-              groupList={groupList}
-              selectedFilter={selectedFilter}
-              handleUpdateGroup={handleUpdateGroup!}
-              handleUpdateTodo={handleUpdateTodo!}
-              handleChangeSelectedFilter={handleChangeSelectedFilter}
-              handleUpdateDetailBox={handleUpdateDetailBox}
-            />
-            <GroupForm />
-          </div>
-        );
-      }}
-    </ItemContext.Consumer>
+    <div className="app__nav">
+      <ul className="app__nav__filter">{renderFilterList(filterList)}</ul>
+      <GroupList />
+      <GroupForm />
+    </div>
   );
 };
 

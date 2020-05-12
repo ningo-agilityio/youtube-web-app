@@ -1,7 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 
-interface ItemContextProps {
+interface NavContextProps {
   selectedFilter?: string;
   groupList?: types.Group[];
   handleUpdateTodo?: Function;
@@ -9,5 +9,5 @@ interface ItemContextProps {
   handleChangeSelectedFilter?: Function;
   handleUpdateDetailBox?: Function;
 }
-const ItemContext = React.createContext({} as ItemContextProps);
-export default ItemContext;
+const NavContext = React.createContext({} as NavContextProps);
+export default NavContext;

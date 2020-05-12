@@ -2,7 +2,8 @@ import React from 'react';
 import * as types from './buildTypes/buildTypes';
 import * as helper from './helper/helper';
 import * as constants from './constants/Constants';
-import ItemContext from './contexts/Contexts';
+import NavContext from './contexts/Contexts';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import NavFilter from './components/NavFilter';
 import MainContent from './components/MainContent';
 import DetailBox from './components/DetailBox';
@@ -102,19 +103,18 @@ class App extends React.Component<{}, AppState> {
     return (
       <div className="todo-app">
         <div className="wrapper-app">
-          <ItemContext.Provider
+          <NavContext.Provider
             value={{
+              groupList,
+              selectedFilter,
               handleUpdateGroup: this.handleUpdateGroup,
               handleUpdateTodo: this.handleUpdateTodo,
+              handleChangeSelectedFilter: this.handleChangeSelectedFilter,
+              handleUpdateDetailBox: this.handleUpdateDetailBox,
             }}
           >
-            <NavFilter
-              selectedFilter={selectedFilter}
-              groupList={groupList}
-              handleChangeSelectedFilter={this.handleChangeSelectedFilter}
-              handleUpdateDetailBox={this.handleUpdateDetailBox}
-            />
-          </ItemContext.Provider>
+            <NavFilter />
+          </NavContext.Provider>
           <MainContent
             todoList={todoList}
             selectedFilter={selectedFilter}
@@ -126,12 +126,14 @@ class App extends React.Component<{}, AppState> {
             handleUpdateOptionList={this.handleUpdateOptionList}
             handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
           />
-          <DetailBox
-            detailState={detailState}
-            selectedTodo={selectedTodo}
-            todoList={todoList}
-            handleUpdateTodo={this.handleUpdateTodo}
-          />
+          <ErrorBoundary>
+            <DetailBox
+              detailState={detailState}
+              selectedTodo={selectedTodo}
+              todoList={todoList}
+              handleUpdateTodo={this.handleUpdateTodo}
+            />
+          </ErrorBoundary>
         </div>
         <OptionPopUp
           optionState={optionState}

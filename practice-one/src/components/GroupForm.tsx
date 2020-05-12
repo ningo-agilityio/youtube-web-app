@@ -1,7 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
-import ItemContext from '../contexts/Contexts';
+import NavContext from '../contexts/Contexts';
 import { Form } from './common/Form';
 
 interface GroupFormState {
@@ -56,6 +56,6 @@ class GroupForm extends React.Component<{}, GroupFormState> {
   }
 }
 
-GroupForm.contextType = ItemContext;
+GroupForm.contextType = NavContext;
 
 export default GroupForm;
