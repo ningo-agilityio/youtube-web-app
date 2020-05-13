@@ -1,7 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
-import NavContext from '../contexts/Contexts';
+import NavContext from '../contexts/Context';
 import { Form } from './common/Form';
 
 interface GroupFormState {

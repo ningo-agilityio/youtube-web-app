@@ -7,47 +7,30 @@ import TodoForm from './TodoForm';
 interface MainContentProps {
   todoList: types.Todo[];
   selectedFilter: string;
-  detailState: boolean;
+  isShowDetail: boolean;
   inputRef: React.RefObject<HTMLInputElement>;
-  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
-  handleChangeSelectedTodo: (todo: types.Todo) => void;
-  handleUpdateDetailBox: Function;
-  handleUpdateOptionList: Function;
-  handleUpdateOptionPopUp: Function;
 }
 
 const MainContent = (props: MainContentProps) => {
   const {
     todoList,
     selectedFilter,
-    detailState,
+    isShowDetail,
     inputRef,
-    handleUpdateTodo,
-    handleChangeSelectedTodo,
-    handleUpdateDetailBox,
-    handleUpdateOptionList,
-    handleUpdateOptionPopUp,
   } = props;
 
-  const displayBlock = detailState === true ? constants.displayMinSize : '';
+  const showMinSize = isShowDetail ? constants.displayMinSize : '';
 
   return (
-    <div className={`app__content ${displayBlock}`}>
+    <div className={`app__content ${showMinSize}`}>
       <TodoForm
         todoList={todoList}
         selectedFilter={selectedFilter}
         inputRef={inputRef}
-        handleUpdateTodo={handleUpdateTodo}
       />
       <TodoList
-        name="todoList"
         todoList={todoList}
         selectedFilter={selectedFilter}
-        handleUpdateTodo={handleUpdateTodo}
-        handleChangeSelectedTodo={handleChangeSelectedTodo}
-        handleUpdateDetailBox={handleUpdateDetailBox}
-        handleUpdateOptionList={handleUpdateOptionList}
-        handleUpdateOptionPopUp={handleUpdateOptionPopUp}
       />
     </div>
   );

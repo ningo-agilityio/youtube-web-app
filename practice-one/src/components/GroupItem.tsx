@@ -3,7 +3,7 @@ import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as storage from '../storage/storage';
 import * as constants from '../constants/Constants';
-import NavContext from '../contexts/Contexts';
+import NavContext from '../contexts/Context';
 import { Label } from './common/Label';
 import { Button } from './common/Button';
 

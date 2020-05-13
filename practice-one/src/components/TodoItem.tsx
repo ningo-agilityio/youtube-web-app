@@ -1,6 +1,7 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import Context from '../contexts/Context';
 import { Input } from './common/Input';
 import { Label } from './common/Label';
 import { Button } from './common/Button';
@@ -8,24 +9,13 @@ import { Button } from './common/Button';
 interface TodoItemProps {
   todo: types.Item;
   todoList: types.Todo[];
-  name: string;
-  handleUpdateTodo: Function;
-  handleChangeSelectedTodo: Function;
-  handleUpdateDetailBox: Function;
-  handleUpdateOptionList: Function;
-  handleUpdateOptionPopUp: Function;
 }
 
 const TodoItem = (props: TodoItemProps) => {
+  const context = React.useContext(Context);
   const {
     todo,
     todoList,
-    name,
-    handleUpdateTodo,
-    handleChangeSelectedTodo,
-    handleUpdateDetailBox,
-    handleUpdateOptionList,
-    handleUpdateOptionPopUp,
   } = props;
   const item = {} as types.Item;
   const Todo = new types.Todo(item);
@@ -33,11 +23,11 @@ const TodoItem = (props: TodoItemProps) => {
     const todoObj = {
       id: todo.id,
       todoList,
-      name,
+      name: constants.todoListName,
     };
 
     Todo.deleteTodo(todoObj);
-    handleUpdateTodo(todoList);
+    context.handleUpdateTodo!(todoList);
   };
 
   const handleOnClickCheckBox = () => {
@@ -57,21 +47,21 @@ const TodoItem = (props: TodoItemProps) => {
       newKey: todo.key,
     };
     Todo.updateTodo(todoObj);
-    handleUpdateTodo(todoList);
+    context.handleUpdateTodo!(todoList);
   };
 
   const handleOnClickText = (todoItem: types.Item) => () => {
-    handleChangeSelectedTodo(todoItem);
-    handleUpdateDetailBox(true);
+    context.handleChangeSelectedTodo!(todoItem);
+    context.handleUpdateDetailBox!(true);
   };
 
   const handleOnContextMenu = (todoItem: types.Item) => (
     e: React.MouseEvent
   ) => {
     e.preventDefault();
-    handleChangeSelectedTodo(todoItem);
-    handleUpdateOptionList(todoItem);
-    handleUpdateOptionPopUp(true);
+    context.handleChangeSelectedTodo!(todoItem);
+    context.handleUpdateOptionList!(todoItem);
+    context.handleUpdateOptionPopUp!(true);
   };
 
   const todoName = todo.status === false ? '' : constants.CHECKED;

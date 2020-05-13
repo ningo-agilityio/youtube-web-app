@@ -1,11 +1,8 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import * as constants from '../constants/Constants';
 import OptionList from './OptionList';
 
 interface OptionProps {
-  optionState: boolean;
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
@@ -14,7 +11,6 @@ interface OptionProps {
 
 const OptionPopUp = (props: OptionProps) => {
   const {
-    optionState,
     selectedTodo,
     selectedGroupList,
     todoList,
@@ -25,11 +21,9 @@ const OptionPopUp = (props: OptionProps) => {
     handleUpdateOptionPopUp(false);
   };
 
-  const displayFlex = optionState === true ? constants.displayFlex : '';
-
   return (
     <div
-      className={`wrapper-option ${displayFlex}`}
+      className="wrapper-option"
       onClick={handleOnclickOutside}
       role="presentation"
     >

@@ -2,7 +2,7 @@ import React from 'react';
 import * as types from './buildTypes/buildTypes';
 import * as helper from './helper/helper';
 import * as constants from './constants/Constants';
-import NavContext from './contexts/Contexts';
+import Context from './contexts/Context';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import NavFilter from './components/NavFilter';
 import MainContent from './components/MainContent';
@@ -15,8 +15,8 @@ interface AppState {
   groupList: types.Group[];
   selectedTodo: types.Item;
   optionList: types.Group[];
-  detailState: boolean;
-  optionState: boolean;
+  isShowDetail: boolean;
+  isShowOption: boolean;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -30,13 +30,12 @@ class App extends React.Component<{}, AppState> {
       groupList: [],
       selectedTodo: constants.todoDefault,
       optionList: [],
-      detailState: false,
-      optionState: false,
+      isShowDetail: false,
+      isShowOption: false,
     };
   }
 
   componentDidMount() {
-    this.textInput.current!.focus();
     const dataTodo = constants.todoList.map((item) => ({
       ...(item as object),
     })) as types.Todo[];
@@ -52,6 +51,7 @@ class App extends React.Component<{}, AppState> {
     );
     this.handleUpdateTodo(dataTodo);
     this.handleUpdateGroup(dataGroup);
+    this.textInput.current!.focus();
   }
 
   handleUpdateTodo = (dataTodo: types.Todo[]) => {
@@ -70,12 +70,12 @@ class App extends React.Component<{}, AppState> {
     this.setState({ selectedTodo: todo });
   };
 
-  handleUpdateOptionPopUp = (displayState: boolean) => {
-    this.setState({ optionState: displayState });
+  handleUpdateOptionPopUp = (isShow: boolean) => {
+    this.setState({ isShowOption: isShow });
   };
 
-  handleUpdateDetailBox = (displayState: boolean) => {
-    this.setState({ detailState: displayState });
+  handleUpdateDetailBox = (isShow: boolean) => {
+    this.setState({ isShowDetail: isShow });
   };
 
   handleUpdateOptionList = (todo: types.Item) => {
@@ -96,52 +96,53 @@ class App extends React.Component<{}, AppState> {
       groupList,
       selectedTodo,
       optionList,
-      detailState,
-      optionState,
+      isShowDetail,
+      isShowOption,
     } = this.state;
 
     return (
       <div className="todo-app">
-        <div className="wrapper-app">
-          <NavContext.Provider
-            value={{
-              groupList,
-              selectedFilter,
-              handleUpdateGroup: this.handleUpdateGroup,
-              handleUpdateTodo: this.handleUpdateTodo,
-              handleChangeSelectedFilter: this.handleChangeSelectedFilter,
-              handleUpdateDetailBox: this.handleUpdateDetailBox,
-            }}
-          >
+        <Context.Provider
+          value={{
+            groupList,
+            selectedFilter,
+            handleUpdateGroup: this.handleUpdateGroup,
+            handleUpdateTodo: this.handleUpdateTodo,
+            handleChangeSelectedFilter: this.handleChangeSelectedFilter,
+            handleChangeSelectedTodo: this.handleChangeSelectedTodo,
+            handleUpdateDetailBox: this.handleUpdateDetailBox,
+            handleUpdateOptionPopUp: this.handleUpdateOptionPopUp,
+            handleUpdateOptionList: this.handleUpdateOptionList,
+          }}
+        >
+          <div className="wrapper-app">
             <NavFilter />
-          </NavContext.Provider>
-          <MainContent
+            <MainContent
+              todoList={todoList}
+              selectedFilter={selectedFilter}
+              isShowDetail={isShowDetail}
+              inputRef={this.textInput}
+            />
+            <ErrorBoundary>
+              {isShowDetail && (
+                <DetailBox
+                  selectedTodo={selectedTodo}
+                  todoList={todoList}
+                  handleUpdateTodo={this.handleUpdateTodo}
+                />
+              )}
+            </ErrorBoundary>
+          </div>
+        </Context.Provider>
+
+        {isShowOption && (
+          <OptionPopUp
+            selectedTodo={selectedTodo}
+            selectedGroupList={optionList}
             todoList={todoList}
-            selectedFilter={selectedFilter}
-            detailState={detailState}
-            inputRef={this.textInput}
-            handleUpdateTodo={this.handleUpdateTodo}
-            handleChangeSelectedTodo={this.handleChangeSelectedTodo}
-            handleUpdateDetailBox={this.handleUpdateDetailBox}
-            handleUpdateOptionList={this.handleUpdateOptionList}
             handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
           />
-          <ErrorBoundary>
-            <DetailBox
-              detailState={detailState}
-              selectedTodo={selectedTodo}
-              todoList={todoList}
-              handleUpdateTodo={this.handleUpdateTodo}
-            />
-          </ErrorBoundary>
-        </div>
-        <OptionPopUp
-          optionState={optionState}
-          selectedTodo={selectedTodo}
-          selectedGroupList={optionList}
-          todoList={todoList}
-          handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
-        />
+        )}
       </div>
     );
   }

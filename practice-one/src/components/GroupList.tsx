@@ -1,6 +1,6 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
-import NavContext from '../contexts/Contexts';
+import NavContext from '../contexts/Context';
 import GroupItem from './GroupItem';
 
 const GroupList = () => {

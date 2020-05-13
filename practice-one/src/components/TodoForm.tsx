@@ -1,13 +1,13 @@
 import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
+import Context from '../contexts/Context';
 import { Form } from './common/Form';
 
 interface TodoFormProps {
   todoList: types.Todo[];
   selectedFilter: string;
   inputRef: React.RefObject<HTMLInputElement>;
-  handleUpdateTodo: (list: types.Todo[]) => void;
 }
 
 interface TodoFormState {
@@ -43,7 +43,7 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
       };
 
       Todo.addTodo(todoObj);
-      this.props.handleUpdateTodo(this.props.todoList);
+      this.context.handleUpdateTodo(this.props.todoList);
       this.setState({ inputValue: '' });
     }
   };
@@ -65,5 +65,7 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
     );
   }
 }
+
+TodoForm.contextType = Context;
 
 export default TodoForm;

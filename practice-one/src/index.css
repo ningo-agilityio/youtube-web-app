@@ -56,7 +56,6 @@ body {
 }
 
 .app__detail {
-  display: none;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -293,7 +292,7 @@ body {
 /* Start option box */
 .wrapper-option {
   position: fixed;
-  display: none;
+  display: flex;
   top: 0;
   left: 0;
   bottom: 0;
@@ -312,15 +311,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-/* Added class */
-.d-block {
-  display: block;
-}
-
-.d-flex {
-  display: flex;
 }
 
 .d-detail {

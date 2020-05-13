@@ -4,26 +4,14 @@ import * as helper from '../helper/helper';
 import TodoItem from './TodoItem';
 
 interface TodoListProps {
-  name: string;
   todoList: types.Todo[];
   selectedFilter: string;
-  handleUpdateTodo: Function;
-  handleChangeSelectedTodo: Function;
-  handleUpdateDetailBox: Function;
-  handleUpdateOptionList: Function;
-  handleUpdateOptionPopUp: Function;
 }
 
 const TodoList = (props: TodoListProps) => {
   const {
-    name,
     todoList,
     selectedFilter,
-    handleUpdateTodo,
-    handleChangeSelectedTodo,
-    handleUpdateDetailBox,
-    handleUpdateOptionList,
-    handleUpdateOptionPopUp,
   } = props;
 
   const filterTodoList = () => {
@@ -47,12 +35,6 @@ const TodoList = (props: TodoListProps) => {
         todo={todo}
         key={todo.id.toString()}
         todoList={todoList}
-        name={name}
-        handleUpdateTodo={handleUpdateTodo}
-        handleUpdateDetailBox={handleUpdateDetailBox}
-        handleUpdateOptionList={handleUpdateOptionList}
-        handleUpdateOptionPopUp={handleUpdateOptionPopUp}
-        handleChangeSelectedTodo={handleChangeSelectedTodo}
       />
     ));
 

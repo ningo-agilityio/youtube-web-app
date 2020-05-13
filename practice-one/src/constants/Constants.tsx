@@ -4,7 +4,6 @@ export const filteredTodo = [];
 export const selectedFilter = 'ALL';
 export const todoListName = 'todoList';
 export const groupListName = 'groupList';
-export const subTodoListName = 'subTodoList';
 export const CHECKED = 'todo-checked';
 export const ACTIVE = 'active';
 export const displayBlock = 'd-block';

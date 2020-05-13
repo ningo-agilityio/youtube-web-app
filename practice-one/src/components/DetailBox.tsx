@@ -8,7 +8,6 @@ import SubTodoList from './SubTodoList';
 import SubTodoForm from './SubTodoForm';
 
 interface DetailBoxProps {
-  detailState: boolean;
   selectedTodo: types.Item;
   todoList: types.Todo[];
   handleUpdateTodo: Function;
@@ -56,12 +55,11 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   };
 
   render() {
-    const { detailState, selectedTodo } = this.props;
-    const displayBlock = detailState === true ? constants.displayBlock : '';
+    const {selectedTodo } = this.props;
     const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
 
     return (
-      <ul className={`app__detail ${displayBlock}`}>
+      <ul className="app__detail">
         <li className={`todo ${todoChecked}`}>
           <Input name="todo__checkbox" type="checkbox" />
           <Label
