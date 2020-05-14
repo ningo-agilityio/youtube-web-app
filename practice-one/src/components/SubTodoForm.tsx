@@ -7,7 +7,7 @@ import { Form } from './common/Form';
 interface SubTodoFormProps {
   subTodoList: types.Item[];
   selectedTodo: types.Item;
-  handleUpdateSubTodo: Function;
+  handleUpdateSubTodo: (list: types.Item[]) => void;
 }
 
 interface SubTodoFormState {

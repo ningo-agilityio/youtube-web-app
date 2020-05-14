@@ -2,8 +2,8 @@ import React from 'react';
 import { Input } from './Input';
 
 interface FormProps {
-  nameForm: string;
-  nameInput: string;
+  nameForm?: string;
+  nameInput?: string;
   value: string;
   type: string;
   inputRef?: React.RefObject<HTMLInputElement>;

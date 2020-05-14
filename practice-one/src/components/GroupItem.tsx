@@ -33,7 +33,7 @@ const GroupItem = (props: GroupItemProps) => {
     newTodoList = helper.filterItemByKey(dataTodo, group.id.toString());
     storage.setData(constants.todoListName, newTodoList);
     Group.deleteGroup(groupObj);
-    context.handleUpdateGroup!(context.groupList);
+    context.handleUpdateGroup!(context.groupList!);
     context.handleUpdateTodo!(newTodoList);
     context.handleChangeSelectedFilter!(types.Status.All);
   };

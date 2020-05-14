@@ -10,7 +10,7 @@ import SubTodoForm from './SubTodoForm';
 interface DetailBoxProps {
   selectedTodo: types.Item;
   todoList: types.Todo[];
-  handleUpdateTodo: Function;
+  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
 }
 
 interface DetailBoxState {
@@ -55,7 +55,7 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   };
 
   render() {
-    const {selectedTodo } = this.props;
+    const { selectedTodo } = this.props;
     const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
 
     return (

@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 
 interface InputProps {
-  name: string;
+  name?: string;
   value?: string;
   type: string;
   inputRef?: React.RefObject<HTMLInputElement>;
@@ -11,9 +12,11 @@ interface InputProps {
   handleOnClick?: () => void;
 }
 
+const InputStyle = styled.input``;
+
 export const Input = (props: InputProps) => {
   return (
-    <input
+    <InputStyle
       className={props.name}
       type={props.type}
       ref={props.inputRef}
