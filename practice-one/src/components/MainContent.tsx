@@ -1,6 +1,6 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
-import * as constants from '../constants/Constants';
 import TodoList from './TodoList';
 import TodoForm from './TodoForm';
 
@@ -11,28 +11,26 @@ interface MainContentProps {
   inputRef: React.RefObject<HTMLInputElement>;
 }
 
-const MainContent = (props: MainContentProps) => {
-  const {
-    todoList,
-    selectedFilter,
-    isShowDetail,
-    inputRef,
-  } = props;
+const MainContentStyled = styled.div`
+  width: ${(props: MainContentProps) =>
+    props.isShowDetail ? 'calc(100% - 41rem)' : 'calc(100% - 16rem)'};
+  box-sizing: border-box;
+  padding: 1.25rem;
+  background: rgba(102, 137, 100, 0.2);
+`;
 
-  const showMinSize = isShowDetail ? constants.displayMinSize : '';
+const MainContent = (props: MainContentProps) => {
+  const { todoList, selectedFilter, inputRef } = props;
 
   return (
-    <div className={`app__content ${showMinSize}`}>
+    <MainContentStyled {...props}>
       <TodoForm
         todoList={todoList}
         selectedFilter={selectedFilter}
         inputRef={inputRef}
       />
-      <TodoList
-        todoList={todoList}
-        selectedFilter={selectedFilter}
-      />
-    </div>
+      <TodoList todoList={todoList} selectedFilter={selectedFilter} />
+    </MainContentStyled>
   );
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import TodoItem from './TodoItem';
@@ -8,11 +9,15 @@ interface TodoListProps {
   selectedFilter: string;
 }
 
+const ListTodoStyled = styled.ul`
+  margin: 1.25rem 0;
+  padding: 0;
+  max-height: calc(100vh - 7.5rem);
+  overflow: auto;
+`;
+
 const TodoList = (props: TodoListProps) => {
-  const {
-    todoList,
-    selectedFilter,
-  } = props;
+  const { todoList, selectedFilter } = props;
 
   const filterTodoList = () => {
     switch (selectedFilter) {
@@ -31,17 +36,13 @@ const TodoList = (props: TodoListProps) => {
 
   const renderTodoList = (list: types.Item[]) =>
     list.map((todo) => (
-      <TodoItem
-        todo={todo}
-        key={todo.id.toString()}
-        todoList={todoList}
-      />
+      <TodoItem todo={todo} key={todo.id.toString()} todoList={todoList} />
     ));
 
   return (
-    <ul className="app__content__todo" aria-label="List of todo">
+    <ListTodoStyled aria-label="List of todo">
       {renderTodoList(newTodoList)}
-    </ul>
+    </ListTodoStyled>
   );
 };
 

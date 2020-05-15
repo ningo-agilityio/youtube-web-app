@@ -3,7 +3,7 @@ import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as storage from '../storage/storage';
 import * as constants from '../constants/Constants';
-import NavContext from '../contexts/Context';
+import Context from '../contexts/Context';
 import { Label } from './common/Label';
 import { Button } from './common/Button';
 
@@ -13,7 +13,7 @@ interface GroupItemProps {
 }
 
 const GroupItem = (props: GroupItemProps) => {
-  const context = React.useContext(NavContext);
+  const context = React.useContext(Context);
   const { group, groupList } = props;
 
   const handleOnClickDelete = () => {

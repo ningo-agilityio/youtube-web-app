@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from './buildTypes/buildTypes';
 import * as helper from './helper/helper';
 import * as constants from './constants/Constants';
@@ -18,6 +19,14 @@ interface AppState {
   isShowDetail: boolean;
   isShowOption: boolean;
 }
+
+const StyledWrapperApp = styled.div`
+  display: flex;
+  height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+  color: rgb(102, 137, 100);
+`;
 
 class App extends React.Component<{}, AppState> {
   textInput = React.createRef<HTMLInputElement>();
@@ -115,7 +124,7 @@ class App extends React.Component<{}, AppState> {
             handleUpdateOptionList: this.handleUpdateOptionList,
           }}
         >
-          <div className="wrapper-app">
+          <StyledWrapperApp>
             <NavFilter />
             <MainContent
               todoList={todoList}
@@ -132,7 +141,7 @@ class App extends React.Component<{}, AppState> {
                 />
               )}
             </ErrorBoundary>
-          </div>
+          </StyledWrapperApp>
         </Context.Provider>
 
         {isShowOption && (

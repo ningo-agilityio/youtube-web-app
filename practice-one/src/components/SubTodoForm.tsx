@@ -67,8 +67,8 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
   render() {
     return (
       <Form
-        nameForm="sub-form"
-        nameInput="detail-input app-input"
+        name="sub-form"
+        nameInput="sub-input"
         value={this.state.inputValue}
         type="text"
         placeholder="Create subtask..."

@@ -1,8 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Input } from './Input';
 
 interface FormProps {
-  nameForm?: string;
+  name?: string;
   nameInput?: string;
   value: string;
   type: string;
@@ -14,10 +15,22 @@ interface FormProps {
   handleOnSubmit: (e: React.FormEvent) => void;
 }
 
+const FormStyled = styled.form`
+  background: ${(props: FormProps) =>
+    props.name === 'main-form' ? 'rgb(102, 137, 100)' : 'rgb(247,247,247)'};
+  color: ${(props: FormProps) =>
+    props.name === 'main-form' ? 'rgb(255, 255, 255)' : 'rgb(102, 137, 100)'};
+  border-radius: ${(props: FormProps) => props.name === 'main-form' && '0.25rem'};
+  border-top: ${(props: FormProps) =>
+    props.name === 'main-form' ? '' : '0.063rem solid rgba(0, 0, 0, 0.1)'};
+  padding: 1rem;
+`;
+
 export const Form = (props: FormProps) => {
   return (
-    <form
-      className={props.nameForm}
+    <FormStyled
+      {...props}
+      className={props.name}
       onSubmit={props.handleOnSubmit}
       action={props.action}
     >
@@ -30,6 +43,6 @@ export const Form = (props: FormProps) => {
         ariaLabel={props.ariaLabel}
         handleOnChange={props.handleOnChange}
       />
-    </form>
+    </FormStyled>
   );
 };

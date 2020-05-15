@@ -1,12 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import SubTodoItem from './SubTodoItem';
 
 interface SubTodoListProps {
   subTodoList: types.Item[];
   selectedTodo: types.Item;
-  handleUpdateSubTodo: Function;
+  handleUpdateSubTodo: (newList: types.Item[]) => void;
 }
+
+const SubTodoListStyled = styled.ul`
+  margin: 0;
+  padding: 0 1.25rem;
+`;
 
 const SubTodoList = (props: SubTodoListProps) => {
   const { selectedTodo, handleUpdateSubTodo } = props;
@@ -21,9 +27,9 @@ const SubTodoList = (props: SubTodoListProps) => {
     ));
 
   return (
-    <ul className="sub-todo" aria-label="List of sub todo">
+    <SubTodoListStyled aria-label="List of sub todo">
       {renderSubTodoList(selectedTodo.subTask!)}
-    </ul>
+    </SubTodoListStyled>
   );
 };
 

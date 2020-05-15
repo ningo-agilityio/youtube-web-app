@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
 import Context from '../contexts/Context';
@@ -11,12 +12,37 @@ interface TodoItemProps {
   todoList: types.Todo[];
 }
 
+// const StyledInput = styled(Input)``;
+
+// const TodoStyled = styled.input`
+//   ${StyledInput} {
+//     width: 1.875rem;
+//     height: 1.875rem;
+//     -webkit-appearance: none;
+//     margin: 0;
+//     border: 0.125rem solid rgba(77, 77, 77, 0.15);
+//     border-radius: 50%;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     cursor: pointer;
+
+//     ::before {
+//       content: '✓';
+//       font-size: 1.25rem;
+//       display: none;
+//       color: #5cc2af;
+//     }
+
+//     :focus {
+//       outline: 0;
+//     }
+//   }
+// `;
+
 const TodoItem = (props: TodoItemProps) => {
   const context = React.useContext(Context);
-  const {
-    todo,
-    todoList,
-  } = props;
+  const { todo, todoList } = props;
   const item = {} as types.Item;
   const Todo = new types.Todo(item);
   const handleOnClickDelete = () => {

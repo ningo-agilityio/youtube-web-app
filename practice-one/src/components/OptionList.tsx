@@ -8,7 +8,7 @@ interface OptionListProps {
   selectedTodo: types.Item;
   selectedGroupList: types.Group[];
   todoList: types.Todo[];
-  handleUpdateOptionPopUp: Function;
+  handleUpdateOptionPopUp: (isShow: boolean) => void;
 }
 
 const OptionList = (props: OptionListProps) => {
@@ -45,7 +45,7 @@ const OptionList = (props: OptionListProps) => {
 
   const renderOptionList = (list: types.Group[]) =>
     list.map((group) => (
-      <li className="option" id={group.id.toString()} key={group.id.toString()}>
+      <li id={group.id.toString()} key={group.id.toString()}>
         <Label
           name="option__text"
           value={group.title}
@@ -55,7 +55,7 @@ const OptionList = (props: OptionListProps) => {
     ));
 
   return (
-    <ul className="app__nav__filter" aria-label="List of groups">
+    <ul aria-label="List of groups">
       {renderOptionList(selectedGroupList)}
     </ul>
   );

@@ -51,8 +51,8 @@ class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
   render() {
     return (
       <Form
-        nameForm="app__content__form"
-        nameInput="main-input app-input"
+        name="main-form"
+        nameInput="main-input"
         value={this.state.inputValue}
         type="text"
         inputRef={this.props.inputRef}

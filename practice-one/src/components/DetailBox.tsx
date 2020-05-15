@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
 import { Input } from './common/Input';
@@ -18,14 +19,29 @@ interface DetailBoxState {
   dueDate: string;
 }
 
+const DetailBoxStyled = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 25rem;
+`;
+
+const DueDateStyled = styled.li`
+  padding: 0.5rem;
+  border-top: 0.063rem solid rgba(0, 0, 0, 0.2);
+  border-bottom: 0.063rem solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+`;
+
 class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
   constructor(props: DetailBoxProps) {
     super(props);
     this.state = { subTodoList: [], dueDate: '' };
   }
 
-  handleUpdateSubTodo = (newSubTodoList: types.Item[]) => {
-    this.setState({ subTodoList: newSubTodoList });
+  handleUpdateSubTodo = (newList: types.Item[]) => {
+    this.setState({ subTodoList: newList });
   };
 
   handleUpdateDueDate = (newDueDate: string) => {
@@ -59,7 +75,7 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
     const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
 
     return (
-      <ul className="app__detail">
+      <DetailBoxStyled>
         <li className={`todo ${todoChecked}`}>
           <Input name="todo__checkbox" type="checkbox" />
           <Label
@@ -69,13 +85,13 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
             handelKeyDown={this.handelKeyDown}
           />
         </li>
-        <li className="todo-date">
+        <DueDateStyled>
           <DueDate
             selectedTodo={selectedTodo}
             dueDate={this.state.dueDate}
             handleUpdateDueDate={this.handleUpdateDueDate}
           />
-        </li>
+        </DueDateStyled>
         <li>
           <SubTodoList
             subTodoList={this.state.subTodoList}
@@ -88,7 +104,7 @@ class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
           selectedTodo={selectedTodo}
           handleUpdateSubTodo={this.handleUpdateSubTodo}
         />
-      </ul>
+      </DetailBoxStyled>
     );
   }
 }
