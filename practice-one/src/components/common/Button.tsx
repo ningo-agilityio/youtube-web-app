@@ -8,12 +8,11 @@ interface ButtonProps {
 }
 
 const StyledButton = styled.button`
-  width: 2.5rem;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   color: #df8383;
-  justify-self: end;
   visibility: hidden;
   background: none;
+  margin-top: 0px;
   border: none;
   outline: none;
 

@@ -26,9 +26,9 @@ const InputStyle = styled.input`
   ::placeholder {
     font-style: ${(props: InputProps) => props.type === 'text' && 'italic'};
     color: ${(props: InputProps) =>
-    props.name === 'main-input'
-      ? 'rgb(255, 255, 255, 0.5)'
-      : props.name === 'sub-input'
+      props.name === 'main-input'
+        ? 'rgb(255, 255, 255, 0.5)'
+        : props.name === 'sub-input'
         ? 'rgb(102, 137, 100, 0.5)'
         : ''};
   }

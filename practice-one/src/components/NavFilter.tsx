@@ -5,6 +5,8 @@ import * as constants from '../constants/Constants';
 import NavContext from '../contexts/Context';
 import GroupList from './GroupList';
 import GroupForm from './GroupForm';
+import { Context } from 'vm';
+import { prependOnceListener } from 'cluster';
 
 const filterList = [
   {
@@ -20,6 +22,8 @@ const filterList = [
     text: 'Completed',
   },
 ];
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
 
 const NavFilterStyled = styled.div`
   width: 16rem;
@@ -42,6 +46,8 @@ const FilterListStyled = styled.ul`
 //   background: rgba(102, 137, 100, 0.8);
 //   color: #fff;
 // `;
+
+// interface StyledFilterProps
 
 const NavFilter = () => {
   const context = React.useContext(NavContext);
