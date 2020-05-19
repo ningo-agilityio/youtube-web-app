@@ -1,35 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as helper from '../helper/helper';
 import * as constants from '../constants/Constants';
 import { Form } from './common/Form';
 
 interface SubTodoFormProps {
-  subTodoList: types.Item[];
   selectedTodo: types.Item;
   handleUpdateSubTodo: (list: types.Item[]) => void;
 }
 
-interface SubTodoFormState {
-  inputValue: string;
-}
-
-class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
-  constructor(props: SubTodoFormProps) {
-    super(props);
-    this.state = { inputValue: '' };
-  }
-
-  handleOnChange = (e: React.ChangeEvent) => {
-    this.setState({
-      inputValue: (e.target as HTMLInputElement).value,
-    });
+const SubTodoForm = (props: SubTodoFormProps) => {
+  const { selectedTodo, handleUpdateSubTodo } = props;
+  const [inputValue, setInputValue] = useState('');
+  const handleOnChange = (e: React.ChangeEvent) => {
+    setInputValue((e.target as HTMLInputElement).value);
   };
 
-  handleOnSubmit = (e: React.FormEvent) => {
+  const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (this.state.inputValue.trim().length) {
+    if (inputValue.trim().length) {
       const itemSubTodo = {} as types.Item;
       let itemTodo = {} as types.Item;
       let subTodoObj = {} as types.subTodoObj;
@@ -41,17 +31,17 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
       })) as types.Item[];
 
       helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
-      itemTodo = helper.findItemById(dataTodo, this.props.selectedTodo.id)!;
+      itemTodo = helper.findItemById(dataTodo, selectedTodo.id)!;
       subTodoObj = {
-        text: this.state.inputValue.trim(),
+        text: inputValue.trim(),
         item: constants.todoDefault,
-        subTodoList: this.props.selectedTodo.subTask!,
+        subTodoList: selectedTodo.subTask!,
       };
       updateTodoObj = {
         todo: itemTodo,
         todoList: dataTodo,
         newContent: itemTodo.title,
-        newSubTask: this.props.selectedTodo.subTask!,
+        newSubTask: selectedTodo.subTask!,
         check: itemTodo.status!,
         name: constants.todoListName,
         newDate: itemTodo.dueDate,
@@ -59,26 +49,24 @@ class SubTodoForm extends React.Component<SubTodoFormProps, SubTodoFormState> {
       };
       SubTodo.addSubTodo(subTodoObj);
       Todo.updateTodo(updateTodoObj);
-      this.props.handleUpdateSubTodo(this.props.selectedTodo.subTask!);
-      this.setState({ inputValue: '' });
+      handleUpdateSubTodo(selectedTodo.subTask!);
+      setInputValue('');
     }
   };
 
-  render() {
-    return (
-      <Form
-        name="sub-form"
-        nameInput="sub-input"
-        value={this.state.inputValue}
-        type="text"
-        placeholder="Create subtask..."
-        ariaLabel="Enter to do text"
-        action="#"
-        handleOnChange={this.handleOnChange}
-        handleOnSubmit={this.handleOnSubmit}
-      />
-    );
-  }
-}
+  return (
+    <Form
+      name="sub-form"
+      nameInput="sub-input"
+      value={inputValue}
+      type="text"
+      placeholder="Create subtask..."
+      ariaLabel="Enter to do text"
+      action="#"
+      handleOnChange={handleOnChange}
+      handleOnSubmit={handleOnSubmit}
+    />
+  );
+};
 
 export default SubTodoForm;

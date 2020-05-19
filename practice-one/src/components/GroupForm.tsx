@@ -1,61 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
 import Context from '../contexts/Context';
 import { Form } from './common/Form';
 
-interface GroupFormState {
-  inputValue: string;
+interface GroupFormProps {
+  handleUpdateGroup: (dataGroup: types.Group[]) => void;
 }
 
-class GroupForm extends React.Component<{}, GroupFormState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = { inputValue: '' };
-  }
+const GroupForm = (props: GroupFormProps) => {
+  const context = React.useContext(Context);
+  const [inputValue, setInputValue] = useState('');
 
-  handleOnChange = (e: React.ChangeEvent) => {
-    this.setState({
-      inputValue: (e.target as HTMLInputElement).value,
-    });
+  const handleOnChange = (e: React.ChangeEvent) => {
+    setInputValue((e.target as HTMLInputElement).value);
   };
 
-  handleOnSubmit = (e: React.FormEvent) => {
+  const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (this.state.inputValue.trim().length) {
+    if (inputValue.trim().length) {
       const item = {} as types.Item;
       const Group = new types.Group(item);
       const groupObj = {
-        text: this.state.inputValue.trim(),
+        text: inputValue.trim(),
         item: constants.groupDefault,
-        groupList: this.context.groupList,
+        groupList: context.groupList!,
         name: constants.groupListName,
       };
 
       Group.addGroup(groupObj);
-      this.context.handleUpdateGroup(this.context.groupList);
-      this.setState({ inputValue: '' });
+      props.handleUpdateGroup!(context.groupList!);
+      setInputValue('');
     }
   };
 
-  render() {
-    return (
-      <Form
-        name="sub-form"
-        nameInput="sub-input"
-        value={this.state.inputValue}
-        type="text"
-        placeholder="Create list..."
-        ariaLabel="Enter to do text"
-        action="#"
-        handleOnChange={this.handleOnChange}
-        handleOnSubmit={this.handleOnSubmit}
-      />
-    );
-  }
-}
-
-GroupForm.contextType = Context;
+  return (
+    <Form
+      name="sub-form"
+      nameInput="sub-input"
+      value={inputValue}
+      type="text"
+      placeholder="Create list..."
+      ariaLabel="Enter to do text"
+      action="#"
+      handleOnChange={handleOnChange}
+      handleOnSubmit={handleOnSubmit}
+    />
+  );
+};
 
 export default GroupForm;

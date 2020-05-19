@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
@@ -7,17 +7,6 @@ import { Label } from './common/Label';
 import DueDate from './DueDate';
 import SubTodoList from './SubTodoList';
 import SubTodoForm from './SubTodoForm';
-
-interface DetailBoxProps {
-  selectedTodo: types.Item;
-  todoList: types.Todo[];
-  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
-}
-
-interface DetailBoxState {
-  subTodoList: types.Item[];
-  dueDate: string;
-}
 
 const DetailBoxStyled = styled.ul`
   list-style: none;
@@ -34,79 +23,80 @@ const DueDateStyled = styled.li`
   justify-content: space-between;
 `;
 
-class DetailBox extends React.Component<DetailBoxProps, DetailBoxState> {
-  constructor(props: DetailBoxProps) {
-    super(props);
-    this.state = { subTodoList: [], dueDate: '' };
-  }
+interface DetailBoxProps {
+  selectedTodo: types.Item;
+  todoList: types.Todo[];
+  handleUpdateTodo: (dataTodo: types.Todo[]) => void;
+}
 
-  handleUpdateSubTodo = (newList: types.Item[]) => {
-    this.setState({ subTodoList: newList });
+const DetailBox = (props: DetailBoxProps) => {
+  const { selectedTodo, todoList, handleUpdateTodo } = props;
+  const [subTodoList, setSubTodoList] = useState(selectedTodo.subTask!);
+  const [dueDate, setDueDate] = useState('');
+
+  const handleUpdateSubTodo = (newList: types.Item[]) => {
+    setSubTodoList(newList);
   };
 
-  handleUpdateDueDate = (newDueDate: string) => {
-    this.setState({ dueDate: newDueDate });
+  const handleUpdateDueDate = (newDueDate: string) => {
+    setDueDate(newDueDate);
   };
 
-  handelKeyDown = (e: React.KeyboardEvent) => {
+  const handelKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       const newText = (e.target as HTMLLabelElement).textContent!.trim();
       const item = {} as types.Item;
       const Todo = new types.Todo(item);
       const todoObj = {
-        todo: this.props.selectedTodo,
-        todoList: this.props.todoList,
+        todo: selectedTodo,
+        todoList,
         newContent: newText,
-        newSubTask: this.props.selectedTodo.subTask!,
-        check: this.props.selectedTodo.status!,
+        newSubTask: selectedTodo.subTask!,
+        check: selectedTodo.status!,
         name: constants.todoListName,
-        newDate: this.props.selectedTodo.dueDate!,
-        newKey: this.props.selectedTodo.key!,
+        newDate: selectedTodo.dueDate!,
+        newKey: selectedTodo.key!,
       };
 
       Todo.updateTodo(todoObj);
-      this.props.handleUpdateTodo(this.props.todoList);
+      handleUpdateTodo(todoList);
       (e.target as HTMLLabelElement).blur();
     }
   };
 
-  render() {
-    const { selectedTodo } = this.props;
-    const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
+  const todoChecked = selectedTodo.status === false ? '' : constants.CHECKED;
 
-    return (
-      <DetailBoxStyled>
-        <li className={`todo ${todoChecked}`}>
-          <Input name="todo__checkbox" type="checkbox" />
-          <Label
-            name="todo__text"
-            value={selectedTodo.title}
-            contentEditable={true}
-            handelKeyDown={this.handelKeyDown}
-          />
-        </li>
-        <DueDateStyled>
-          <DueDate
-            selectedTodo={selectedTodo}
-            dueDate={this.state.dueDate}
-            handleUpdateDueDate={this.handleUpdateDueDate}
-          />
-        </DueDateStyled>
-        <li>
-          <SubTodoList
-            subTodoList={this.state.subTodoList}
-            selectedTodo={selectedTodo}
-            handleUpdateSubTodo={this.handleUpdateSubTodo}
-          />
-        </li>
-        <SubTodoForm
-          subTodoList={this.state.subTodoList}
-          selectedTodo={selectedTodo}
-          handleUpdateSubTodo={this.handleUpdateSubTodo}
+  return (
+    <DetailBoxStyled>
+      <li className={`todo ${todoChecked}`}>
+        <Input name="todo__checkbox" type="checkbox" />
+        <Label
+          name="todo__text"
+          value={selectedTodo.title}
+          contentEditable={true}
+          handelKeyDown={handelKeyDown}
         />
-      </DetailBoxStyled>
-    );
-  }
-}
+      </li>
+      <DueDateStyled>
+        <DueDate
+          selectedTodo={selectedTodo}
+          dueDate={dueDate}
+          handleUpdateDueDate={handleUpdateDueDate}
+        />
+      </DueDateStyled>
+      <li>
+        <SubTodoList
+          subTodoList={subTodoList}
+          selectedTodo={selectedTodo}
+          handleUpdateSubTodo={handleUpdateSubTodo}
+        />
+      </li>
+      <SubTodoForm
+        selectedTodo={selectedTodo}
+        handleUpdateSubTodo={handleUpdateSubTodo}
+      />
+    </DetailBoxStyled>
+  );
+};
 
 export default DetailBox;

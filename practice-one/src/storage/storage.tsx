@@ -13,7 +13,7 @@ export function setData(key: string, items: types.Item[]): void {
  * returns value of the specified Storage Object item
  * @param  {string} key
  */
-export function getData(key: string): [] {
+export function getData(key: string) {
   try {
     return JSON.parse(localStorage.getItem(key) || '{}');
   } catch (error) {

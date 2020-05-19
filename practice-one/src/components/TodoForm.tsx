@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
 import Context from '../contexts/Context';
@@ -10,62 +10,50 @@ interface TodoFormProps {
   inputRef: React.RefObject<HTMLInputElement>;
 }
 
-interface TodoFormState {
-  inputValue: string;
-}
-
-class TodoForm extends React.Component<TodoFormProps, TodoFormState> {
-  constructor(props: TodoFormProps) {
-    super(props);
-    this.state = { inputValue: '' };
-  }
-
-  handleOnChange = (e: React.ChangeEvent) => {
-    this.setState({
-      inputValue: (e.target as HTMLInputElement).value,
-    });
+const TodoForm = (props: TodoFormProps) => {
+  const { todoList, selectedFilter, inputRef } = props;
+  const context = React.useContext(Context);
+  const [inputValue, setInputValue] = useState('');
+  const handleOnChange = (e: React.ChangeEvent) => {
+    setInputValue((e.target as HTMLInputElement).value);
   };
 
-  handleOnSubmit = (e: React.FormEvent) => {
+  const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (this.state.inputValue.trim().length) {
+    if (inputValue.trim().length) {
       const id = Date.now();
       const item = {} as types.Item;
       const Todo = new types.Todo(item);
       const todoObj = {
         newId: id,
-        text: this.state.inputValue.trim(),
+        text: inputValue.trim(),
         item: constants.todoDefault,
-        key: this.props.selectedFilter,
-        todoList: this.props.todoList,
+        key: selectedFilter,
+        todoList,
         name: constants.todoListName,
       };
 
       Todo.addTodo(todoObj);
-      this.context.handleUpdateTodo(this.props.todoList);
-      this.setState({ inputValue: '' });
+      context.handleUpdateTodo!(todoList);
+      setInputValue('');
     }
   };
 
-  render() {
-    return (
-      <Form
-        name="main-form"
-        nameInput="main-input"
-        value={this.state.inputValue}
-        type="text"
-        inputRef={this.props.inputRef}
-        placeholder="What do you need to do?"
-        ariaLabel="Enter to do text"
-        action="#"
-        handleOnChange={this.handleOnChange}
-        handleOnSubmit={this.handleOnSubmit}
-      />
-    );
-  }
-}
-
-TodoForm.contextType = Context;
+  return (
+    <Form
+      name="main-form"
+      nameInput="main-input"
+      value={inputValue}
+      type="text"
+      inputRef={inputRef}
+      placeholder="What do you need to do?"
+      ariaLabel="Enter to do text"
+      action="#"
+      handleOnChange={handleOnChange}
+      handleOnSubmit={handleOnSubmit}
+    />
+  );
+};
 
 export default TodoForm;

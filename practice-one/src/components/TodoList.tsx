@@ -33,6 +33,7 @@ const TodoList = (props: TodoListProps) => {
   };
 
   const newTodoList = filterTodoList();
+  console.log('tt', newTodoList);
 
   const renderTodoList = (list: types.Item[]) =>
     list.map((todo) => (

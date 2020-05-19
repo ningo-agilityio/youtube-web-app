@@ -5,8 +5,6 @@ import * as constants from '../constants/Constants';
 import NavContext from '../contexts/Context';
 import GroupList from './GroupList';
 import GroupForm from './GroupForm';
-import { Context } from 'vm';
-import { prependOnceListener } from 'cluster';
 
 const filterList = [
   {
@@ -23,8 +21,6 @@ const filterList = [
   },
 ];
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-
 const NavFilterStyled = styled.div`
   width: 16rem;
 `;
@@ -38,18 +34,12 @@ const FilterListStyled = styled.ul`
   list-style: none;
 `;
 
-// const StyledFilter = styled.li`
-//   padding: 0.625rem;
-//   cursor: pointer;
-//   background: ${(props: FormProps) => props.name === 'main-form' && '0.25rem'}
+interface NavFilterProps {
+  groupList: types.Group[];
+  handleUpdateGroup: (dataGroup: types.Group[]) => void;
+}
 
-//   background: rgba(102, 137, 100, 0.8);
-//   color: #fff;
-// `;
-
-// interface StyledFilterProps
-
-const NavFilter = () => {
+const NavFilter = (props: NavFilterProps) => {
   const context = React.useContext(NavContext);
 
   const addClassName = (item: types.Filter) => {
@@ -79,8 +69,8 @@ const NavFilter = () => {
   return (
     <NavFilterStyled>
       <FilterListStyled>{renderFilterList(filterList)}</FilterListStyled>
-      <GroupList />
-      <GroupForm />
+      <GroupList groupList={props.groupList} />
+      <GroupForm handleUpdateGroup={props.handleUpdateGroup} />
     </NavFilterStyled>
   );
 };

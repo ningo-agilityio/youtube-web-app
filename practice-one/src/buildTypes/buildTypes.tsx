@@ -130,6 +130,7 @@ export class SubTodo implements Item {
   };
 }
 
+// tslint:disable-next-line:max-classes-per-file
 export class Todo extends SubTodo {
   key: string;
   subTask?: Item[];
@@ -182,6 +183,7 @@ export class Todo extends SubTodo {
   };
 }
 
+// tslint:disable-next-line:max-classes-per-file
 export class Group implements Item {
   id: number;
   title: string;
@@ -222,6 +224,6 @@ export class Group implements Item {
   deleteGroup = (newObj: deleteGroupObj) => {
     const newList = newObj.groupList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.groupList, newList, Group);
-    storage.setData(newObj.name, newObj.groupList);
+    // storage.setData(newObj.name, newObj.groupList);
   };
 }

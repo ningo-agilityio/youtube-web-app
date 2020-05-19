@@ -13,20 +13,21 @@ const ListStyled = styled.ul`
   list-style: none;
 `;
 
-const GroupList = () => {
+interface GroupListProps {
+  groupList: types.Group[];
+}
+
+const GroupList = (props: GroupListProps) => {
+  console.log('kiki', props.groupList);
   const renderGroupList = (list: types.Group[]) =>
     list.map((group) => (
       <GroupItem group={group} key={group.id.toString()} groupList={list} />
     ));
 
   return (
-    <NavContext.Consumer>
-      {({ groupList }) => (
-        <ListStyled aria-label="List of groups">
-          {renderGroupList(groupList!)}
-        </ListStyled>
-      )}
-    </NavContext.Consumer>
+    <ListStyled aria-label="List of groups">
+      {renderGroupList(props.groupList)}
+    </ListStyled>
   );
 };
 

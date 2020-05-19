@@ -1,24 +1,15 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import * as types from './buildTypes/buildTypes';
 import * as helper from './helper/helper';
+import * as types from './buildTypes/buildTypes';
 import * as constants from './constants/Constants';
+import * as storage from './storage/storage';
 import Context from './contexts/Context';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import NavFilter from './components/NavFilter';
 import MainContent from './components/MainContent';
 import DetailBox from './components/DetailBox';
 import OptionPopUp from './components/OptionPopUp';
-
-interface AppState {
-  selectedFilter: string;
-  todoList: types.Todo[];
-  groupList: types.Group[];
-  selectedTodo: types.Item;
-  optionList: types.Group[];
-  isShowDetail: boolean;
-  isShowOption: boolean;
-}
 
 const StyledWrapperApp = styled.div`
   display: flex;
@@ -28,133 +19,139 @@ const StyledWrapperApp = styled.div`
   color: rgb(102, 137, 100);
 `;
 
-class App extends React.Component<{}, AppState> {
-  textInput = React.createRef<HTMLInputElement>();
+const useLocalStorage = (
+  key: string,
+  initialValue: types.Todo[] | types.Group[],
+  typeConstruct: types.ConstructList
+) => {
+  const [state, setState] = useState(() => {
+    let value;
+    try {
+      const data = storage.getData(key);
+      if (data) {
+        value =
+          (helper.pushItem(initialValue, data, typeConstruct) as any) ||
+          initialValue;
+      }
+    } catch (error) {
+      value = initialValue;
+    }
+    return value;
+  });
 
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      selectedFilter: types.Status.All,
-      todoList: [],
-      groupList: [],
-      selectedTodo: constants.todoDefault,
-      optionList: [],
-      isShowDetail: false,
-      isShowOption: false,
-    };
-  }
+  useEffect(() => {
+    storage.setData(key, state);
+  });
+  return [state, setState];
+};
 
-  componentDidMount() {
-    const dataTodo = constants.todoList.map((item) => ({
-      ...(item as object),
-    })) as types.Todo[];
-    const dataGroup = constants.groupList.map((item) => ({
-      ...(item as object),
-    })) as types.Group[];
+const App = () => {
+  const textInput = useRef<HTMLInputElement>(null);
+  const [todoList, setTodoList] = useLocalStorage(
+    'todoList',
+    constants.todoList,
+    types.Todo
+  );
+  const [groupList, setGroupList] = useLocalStorage(
+    'groupList',
+    constants.groupList,
+    types.Group
+  );
+  const [optionList, setOptionList] = useState<types.Group[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>(
+    types.Status.All
+  );
+  const [selectedTodo, setSelectedTodo] = useState<types.Item>(
+    constants.todoDefault
+  );
+  const [isShowDetail, setIsShowDetail] = useState(false);
+  const [isShowOption, setIsShowOption] = useState(false);
 
-    helper.pushDataLocalToList(constants.todoListName, dataTodo, types.Todo);
-    helper.pushDataLocalToList(
-      constants.groupListName,
-      dataGroup!,
-      types.Group
-    );
-    this.handleUpdateTodo(dataTodo);
-    this.handleUpdateGroup(dataGroup);
-    this.textInput.current!.focus();
-  }
-
-  handleUpdateTodo = (dataTodo: types.Todo[]) => {
-    this.setState({ todoList: dataTodo });
+  const handleUpdateTodo = (dataTodo: types.Todo[]) => {
+    setTodoList(dataTodo);
+    console.log('aa', todoList);
   };
 
-  handleUpdateGroup = (dataGroup: types.Group[]) => {
-    this.setState({ groupList: dataGroup });
+  const handleUpdateGroup = (dataGroup: types.Group[]) => {
+    setGroupList(dataGroup);
+    console.log('new group list', groupList);
   };
 
-  handleChangeSelectedFilter = (id: string) => {
-    this.setState({ selectedFilter: id });
+  const handleChangeSelectedFilter = (id: string) => {
+    setSelectedFilter(id);
   };
 
-  handleChangeSelectedTodo = (todo: types.Item) => {
-    this.setState({ selectedTodo: todo });
+  const handleChangeSelectedTodo = (todo: types.Item) => {
+    setSelectedTodo(todo);
   };
 
-  handleUpdateOptionPopUp = (isShow: boolean) => {
-    this.setState({ isShowOption: isShow });
+  const handleUpdateOptionPopUp = (isShow: boolean) => {
+    setIsShowOption(isShow);
   };
 
-  handleUpdateDetailBox = (isShow: boolean) => {
-    this.setState({ isShowDetail: isShow });
+  const handleUpdateDetailBox = (isShow: boolean) => {
+    setIsShowDetail(isShow);
   };
 
-  handleUpdateOptionList = (todo: types.Item) => {
-    const groupListFiltered = this.state.groupList.filter(
+  const handleUpdateOptionList = (todo: types.Item) => {
+    const groupListFiltered = (groupList as types.Group[]).filter(
       (item) => item.id !== parseInt(todo.key!, 10)
     );
-    const allGroup = this.state.groupList;
+    const allGroup = groupList;
     const selectedGroupList =
       todo.key === types.Status.All ? allGroup : groupListFiltered;
 
-    this.setState({ optionList: selectedGroupList });
+    setOptionList(selectedGroupList);
   };
 
-  render() {
-    const {
-      selectedFilter,
-      todoList,
-      groupList,
-      selectedTodo,
-      optionList,
-      isShowDetail,
-      isShowOption,
-    } = this.state;
-
-    return (
-      <div className="todo-app">
-        <Context.Provider
-          value={{
-            groupList,
-            selectedFilter,
-            handleUpdateGroup: this.handleUpdateGroup,
-            handleUpdateTodo: this.handleUpdateTodo,
-            handleChangeSelectedFilter: this.handleChangeSelectedFilter,
-            handleChangeSelectedTodo: this.handleChangeSelectedTodo,
-            handleUpdateDetailBox: this.handleUpdateDetailBox,
-            handleUpdateOptionPopUp: this.handleUpdateOptionPopUp,
-            handleUpdateOptionList: this.handleUpdateOptionList,
-          }}
-        >
-          <StyledWrapperApp>
-            <NavFilter />
-            <MainContent
-              todoList={todoList}
-              selectedFilter={selectedFilter}
-              isShowDetail={isShowDetail}
-              inputRef={this.textInput}
-            />
-            <ErrorBoundary>
-              {isShowDetail && (
-                <DetailBox
-                  selectedTodo={selectedTodo}
-                  todoList={todoList}
-                  handleUpdateTodo={this.handleUpdateTodo}
-                />
-              )}
-            </ErrorBoundary>
-          </StyledWrapperApp>
-        </Context.Provider>
-
-        {isShowOption && (
-          <OptionPopUp
-            selectedTodo={selectedTodo}
-            selectedGroupList={optionList}
-            todoList={todoList}
-            handleUpdateOptionPopUp={this.handleUpdateOptionPopUp}
+  return (
+    <div className="todo-app">
+      <Context.Provider
+        value={{
+          groupList,
+          selectedFilter,
+          handleUpdateGroup,
+          handleUpdateTodo,
+          handleChangeSelectedFilter,
+          handleChangeSelectedTodo,
+          handleUpdateDetailBox,
+          handleUpdateOptionPopUp,
+          handleUpdateOptionList,
+        }}
+      >
+        <StyledWrapperApp>
+          <NavFilter
+            groupList={groupList}
+            handleUpdateGroup={handleUpdateGroup}
           />
-        )}
-      </div>
-    );
-  }
-}
+          <MainContent
+            todoList={todoList}
+            selectedFilter={selectedFilter}
+            isShowDetail={isShowDetail}
+            inputRef={textInput}
+          />
+          <ErrorBoundary>
+            {isShowDetail && (
+              <DetailBox
+                selectedTodo={selectedTodo}
+                todoList={todoList}
+                handleUpdateTodo={handleUpdateTodo}
+              />
+            )}
+          </ErrorBoundary>
+        </StyledWrapperApp>
+      </Context.Provider>
+
+      {isShowOption && (
+        <OptionPopUp
+          selectedTodo={selectedTodo}
+          selectedGroupList={optionList}
+          todoList={todoList}
+          handleUpdateOptionPopUp={handleUpdateOptionPopUp}
+        />
+      )}
+    </div>
+  );
+};
 
 export default App;

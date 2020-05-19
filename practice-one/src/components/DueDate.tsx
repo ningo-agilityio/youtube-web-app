@@ -11,9 +11,9 @@ interface DueDateProps {
   handleUpdateDueDate: (newDueDate: string) => void;
 }
 
-class DueDate extends React.Component<DueDateProps> {
-  handleOnChange = (e: React.ChangeEvent) => {
-    const { selectedTodo, handleUpdateDueDate } = this.props;
+const DueDate = (props: DueDateProps) => {
+  const { selectedTodo, handleUpdateDueDate } = props;
+  const handleOnChange = (e: React.ChangeEvent) => {
     let todo = {} as types.Item;
     let todoObj = {} as types.updateTodoObj;
     const Todo = new types.Todo(todo);
@@ -40,21 +40,16 @@ class DueDate extends React.Component<DueDateProps> {
     handleUpdateDueDate(selectedTodo.dueDate);
   };
 
-  render() {
-    return (
-      <>
-        <Label
-          name="due-date"
-          value="Due date: "
-          spanValue={this.props.selectedTodo.dueDate}
-        />
-        <InputDueDate
-          type="date"
-          handleOnChange={this.handleOnChange}
-        />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Label
+        name="due-date"
+        value="Due date: "
+        spanValue={selectedTodo.dueDate}
+      />
+      <InputDueDate type="date" handleOnChange={handleOnChange} />
+    </>
+  );
+};
 
 export default DueDate;

@@ -1,5 +1,7 @@
-export const todoList = [];
-export const groupList = [];
+import * as types from '../buildTypes/buildTypes';
+
+export const todoList : types.Todo[] = [];
+export const groupList: types.Group[] = [];
 export const filteredTodo = [];
 export const selectedFilter = 'ALL';
 export const todoListName = 'todoList';

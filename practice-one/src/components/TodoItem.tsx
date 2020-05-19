@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/Constants';
 import Context from '../contexts/Context';
