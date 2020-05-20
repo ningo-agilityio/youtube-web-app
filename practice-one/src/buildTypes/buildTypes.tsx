@@ -156,7 +156,6 @@ export class Todo extends SubTodo {
     todo.status = false;
     todo.key = todoObj.key;
     todoObj.todoList.push(todo);
-    storage.setData(todoObj.name, todoObj.todoList);
   };
 
   /**
@@ -169,7 +168,6 @@ export class Todo extends SubTodo {
     newObj.todo.status = newObj.check;
     newObj.todo.dueDate = newObj.newDate;
     newObj.todo.key = newObj.newKey;
-    storage.setData(newObj.name, newObj.todoList);
   };
 
   /**
@@ -179,7 +177,6 @@ export class Todo extends SubTodo {
   deleteTodo = (newObj: deleteTodoObj) => {
     const newList = newObj.todoList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.todoList, newList, Todo);
-    storage.setData(newObj.name, newObj.todoList);
   };
 }
 
@@ -205,7 +202,6 @@ export class Group implements Item {
     group.title = groupObj.text;
     group.subTask = [];
     groupObj.groupList.push(group);
-    storage.setData(groupObj.name, groupObj.groupList);
   };
 
   /**
@@ -224,6 +220,5 @@ export class Group implements Item {
   deleteGroup = (newObj: deleteGroupObj) => {
     const newList = newObj.groupList.filter((item) => item.id !== newObj.id);
     helper.pushItem(newObj.groupList, newList, Group);
-    // storage.setData(newObj.name, newObj.groupList);
   };
 }

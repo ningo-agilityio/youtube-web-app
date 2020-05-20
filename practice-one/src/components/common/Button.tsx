@@ -22,10 +22,10 @@ const StyledButton = styled.button`
   }
 `;
 
-export const Button = (props: ButtonProps) => {
+export const Button = React.memo((props: ButtonProps) => {
   return (
     <StyledButton className={props.name} type="button" onClick={props.handleOnClick}>
       {props.value}
     </StyledButton>
   );
-};
+});

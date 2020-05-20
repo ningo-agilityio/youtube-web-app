@@ -34,7 +34,7 @@ const InputStyle = styled.input`
   }
 `;
 
-export const Input = (props: InputProps) => {
+export const Input = React.memo((props: InputProps) => {
   return (
     <InputStyle
       {...props}
@@ -48,4 +48,4 @@ export const Input = (props: InputProps) => {
       onClick={props.handleOnClick}
     />
   );
-};
+});

@@ -10,7 +10,7 @@ interface LabelProps {
   handelKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
-export const Label = (props: LabelProps) => {
+export const Label = React.memo((props: LabelProps) => {
   return (
     <label
       className={props.name}
@@ -25,4 +25,4 @@ export const Label = (props: LabelProps) => {
       <span>{props.spanValue}</span>
     </label>
   );
-};
+});

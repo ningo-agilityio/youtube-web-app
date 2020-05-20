@@ -16,7 +16,7 @@ const ListTodoStyled = styled.ul`
   overflow: auto;
 `;
 
-const TodoList = (props: TodoListProps) => {
+const TodoList = React.memo((props: TodoListProps) => {
   const { todoList, selectedFilter } = props;
 
   const filterTodoList = () => {
@@ -33,7 +33,6 @@ const TodoList = (props: TodoListProps) => {
   };
 
   const newTodoList = filterTodoList();
-  console.log('tt', newTodoList);
 
   const renderTodoList = (list: types.Item[]) =>
     list.map((todo) => (
@@ -45,6 +44,6 @@ const TodoList = (props: TodoListProps) => {
       {renderTodoList(newTodoList)}
     </ListTodoStyled>
   );
-};
+});
 
 export default TodoList;

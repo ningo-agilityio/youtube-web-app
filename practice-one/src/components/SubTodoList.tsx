@@ -14,7 +14,7 @@ const SubTodoListStyled = styled.ul`
   padding: 0 1.25rem;
 `;
 
-const SubTodoList = (props: SubTodoListProps) => {
+const SubTodoList = React.memo((props: SubTodoListProps) => {
   const { selectedTodo, handleUpdateSubTodo } = props;
   const renderSubTodoList = (list: types.Item[]) =>
     list.map((subTodo) => (
@@ -31,6 +31,6 @@ const SubTodoList = (props: SubTodoListProps) => {
       {renderSubTodoList(selectedTodo.subTask!)}
     </SubTodoListStyled>
   );
-};
+});
 
 export default SubTodoList;

@@ -9,7 +9,7 @@ import { Button } from './common/Button';
 interface SubTodoProps {
   selectedTodo: types.Item;
   subTodo: types.Item;
-  handleUpdateSubTodo: Function;
+  handleUpdateSubTodo: (dataTodo: types.Item[]) => void;
 }
 
 const SubTodoItem = (props: SubTodoProps) => {

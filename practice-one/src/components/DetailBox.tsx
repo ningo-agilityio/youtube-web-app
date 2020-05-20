@@ -35,7 +35,7 @@ const DetailBox = (props: DetailBoxProps) => {
   const [dueDate, setDueDate] = useState('');
 
   const handleUpdateSubTodo = (newList: types.Item[]) => {
-    setSubTodoList(newList);
+    setSubTodoList([...newList]);
   };
 
   const handleUpdateDueDate = (newDueDate: string) => {

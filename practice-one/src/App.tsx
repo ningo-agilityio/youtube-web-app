@@ -68,13 +68,11 @@ const App = () => {
   const [isShowOption, setIsShowOption] = useState(false);
 
   const handleUpdateTodo = (dataTodo: types.Todo[]) => {
-    setTodoList(dataTodo);
-    console.log('aa', todoList);
+    setTodoList([...dataTodo]);
   };
 
   const handleUpdateGroup = (dataGroup: types.Group[]) => {
-    setGroupList(dataGroup);
-    console.log('new group list', groupList);
+    setGroupList([...dataGroup]);
   };
 
   const handleChangeSelectedFilter = (id: string) => {
