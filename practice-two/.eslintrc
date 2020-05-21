@@ -13,11 +13,6 @@
     }
   },
   "rules": {
-    "max-classes-per-file": "off",
-    "no-nested-ternary": "off",
-    "no-param-reassign": 0,
-    "jsx-a11y/label-has-associated-control": "off",
-    "jsx-a11y/label-has-for":"off",
     "object-curly-spacing": ["warn", "always"],
     "no-unused-vars": [
       "warn",

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Issue one",
+    "description": "Parts of an issue",
+    "isOpen": true
+  },
+  {
+    "id": 2,
+    "title": "Issue two",
+    "description": "Parts of an issue",
+    "isOpen": false
+  },
+  {
+    "id": 3,
+    "title": "Issue three",
+    "description": "Parts of an issue",
+    "isOpen": false
+  },
+  {
+    "id": 4,
+    "title": "Issue four",
+    "description": "Parts of an issue",
+    "isOpen": true
+  },
+  {
+    "id": 5,
+    "title": "Issue five",
+    "description": "Parts of an issue",
+    "isOpen": true
+  }
+]
