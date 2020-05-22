@@ -4,3 +4,5 @@ export const issueDefault = {
   description: '',
   isOpen: true,
 };
+
+export const TITLE = 'github issues app';

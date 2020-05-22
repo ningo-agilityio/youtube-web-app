@@ -9,17 +9,28 @@ const ButtonStyled = styled.button`
   border: none;
   padding: ${(props: ButtonProps) =>
     props.name === 'main-btn' ? '0.5rem' : ''};
-  color: ${(props: ButtonProps) =>
-    props.value === 'Open'
-      ? 'red'
-      : props.value === 'Closed'
-      ? 'gray'
-      : '#fff'};
-  outline-color: rgb(33, 255, 65);
+  color: #fff;
+  outline: none;
+  cursor: pointer;
 
   :hover {
-    background: rgb(33, 140, 90);
+    opacity: 0.6;
   }
+
+  ${(props: ButtonProps) =>
+    props.name === 'status-btn' &&
+    `
+    color: ${props.value === 'Close' ? 'rgb(236, 73, 37)' : 'gray'};
+  `};
+
+  ${(props: ButtonProps) =>
+    props.name === 'close-btn' &&
+    `
+    background: gray;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  `};
 `;
 
 interface ButtonProps {
@@ -28,7 +39,7 @@ interface ButtonProps {
   handleOnClick?: (e: React.MouseEvent) => void;
 }
 
-export const Button = (props: ButtonProps) => {
+export const Button = React.memo((props: ButtonProps) => {
   return (
     <ButtonStyled
       {...props}
@@ -39,4 +50,4 @@ export const Button = (props: ButtonProps) => {
       {props.value}
     </ButtonStyled>
   );
-};
+});

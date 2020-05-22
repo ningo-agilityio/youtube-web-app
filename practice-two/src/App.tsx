@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import * as types from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
@@ -21,6 +21,7 @@ const Wrapper = styled.div`
 `;
 
 const App = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [issueList, setIssueList] = useLocalStorage('issueList', data);
   const [selectedIssue, setSelectedIssue] = useState<types.Issue>(
     constants.issueDefault
@@ -28,41 +29,71 @@ const App = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
 
+  const handleUpdateIssue = (newList: types.Issue[]) => {
+    setIssueList([...newList]);
+  };
+
   const handleChangeSelectedIssue = (issue: types.Issue) => {
     setSelectedIssue(issue);
   };
 
   const handleShowForm = (isShow: boolean) => () => {
+    setIsShowDetail(false);
     setIsShowForm(isShow);
   };
 
-  const handleShowDetail = (isShow: boolean) => {
+  const handleShowDetail = (isShow: boolean) => () => {
+    setIsShowForm(false);
     setIsShowDetail(isShow);
   };
 
+  const handleClickNew = () => {
+    if (!isShowDetail) {
+      setIsShowForm(true);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.focus();
+    }
+  });
+
   return (
     <AppStyled>
-      <Title />
+      <Title value={constants.TITLE} />
       <Button
         name="main-btn"
         value="New issue"
-        handleOnClick={handleShowForm(true)}
+        handleOnClick={handleClickNew}
       />
       <Wrapper>
-        {isShowForm && (
-          <Form
-            nameForm="New Issue"
-            handleIsShowForm={handleShowForm(!isShowForm)}
-          />
-        )}
         <IssueList
           issueList={issueList}
           isShowDetail={isShowDetail}
           isShowForm={isShowForm}
-          handleShowDetail={handleShowDetail}
+          handleShowDetail={handleShowDetail(true)}
           handleChangeSelectedIssue={handleChangeSelectedIssue}
+          handleUpdateIssue={handleUpdateIssue}
         />
-        {isShowDetail && <IssueDetail issue={selectedIssue} />}
+        {isShowForm && (
+          <Form
+            inputRef={inputRef}
+            issueList={issueList}
+            selectedIssue={selectedIssue}
+            handleChangeSelectedIssue={handleChangeSelectedIssue}
+            handleShowForm={handleShowForm(!isShowForm)}
+            handleUpdateIssue={handleUpdateIssue}
+          />
+        )}
+        {isShowDetail && (
+          <IssueDetail
+            issue={selectedIssue}
+            handleChangeSelectedIssue={handleChangeSelectedIssue}
+            handleShowForm={handleShowForm(!isShowForm)}
+            handleShowDetail={handleShowDetail(false)}
+          />
+        )}
       </Wrapper>
     </AppStyled>
   );

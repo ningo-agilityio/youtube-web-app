@@ -19,6 +19,7 @@ interface IssueListProps {
   isShowForm: boolean;
   handleShowDetail: Function;
   handleChangeSelectedIssue: (issue: types.Issue) => void;
+  handleUpdateIssue: (newList: types.Issue[]) => void;
 }
 
 export const IssueList = React.memo((props: IssueListProps) => {
@@ -27,6 +28,7 @@ export const IssueList = React.memo((props: IssueListProps) => {
     isShowDetail,
     handleShowDetail,
     handleChangeSelectedIssue,
+    handleUpdateIssue
   } = props;
 
   const renderList = (list: types.Issue[]) =>
@@ -34,9 +36,11 @@ export const IssueList = React.memo((props: IssueListProps) => {
       <IssueItem
         key={item.id.toString()}
         issue={item}
+        issueList={list}
         isShowDetail={isShowDetail}
         handleShowDetail={handleShowDetail}
         handleChangeSelectedIssue={handleChangeSelectedIssue}
+        handleUpdateIssue={handleUpdateIssue}
       />
     ));
 

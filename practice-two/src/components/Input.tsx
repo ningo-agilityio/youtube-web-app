@@ -10,8 +10,19 @@ const InputStyled = styled.input`
 interface InputProps {
   type: string;
   placeholder: string;
+  value: string;
+  inputRef: React.RefObject<HTMLInputElement>;
+  handleOnChange: (e: React.ChangeEvent) => void;
 }
 
-export const Input = (props: InputProps) => {
-  return <InputStyled type={props.type} placeholder={props.placeholder} />;
-};
+export const Input = React.memo((props: InputProps) => {
+  return (
+    <InputStyled
+      type={props.type}
+      ref={props.inputRef}
+      placeholder={props.placeholder}
+      value={props.value}
+      onChange={props.handleOnChange}
+    />
+  );
+});
