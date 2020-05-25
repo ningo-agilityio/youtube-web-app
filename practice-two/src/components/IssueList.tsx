@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import IssueItem from './IssueItem';
 
-const IssueListStyled = styled.ul`
+export const IssueListStyled = styled.ul`
   background: rgba(236, 103, 37, 0.1);
   width: ${(props: IssueListProps) =>
     props.isShowDetail === true || props.isShowForm === true ? '50%' : '100%'};
@@ -17,18 +17,12 @@ interface IssueListProps {
   issueList: types.Issue[];
   isShowDetail: boolean;
   isShowForm: boolean;
-  handleShowDetail: Function;
-  handleChangeSelectedIssue: (issue: types.Issue) => void;
-  handleUpdateIssue: (newList: types.Issue[]) => void;
 }
 
 export const IssueList = React.memo((props: IssueListProps) => {
   const {
     issueList,
-    isShowDetail,
-    handleShowDetail,
-    handleChangeSelectedIssue,
-    handleUpdateIssue
+    isShowDetail
   } = props;
 
   const renderList = (list: types.Issue[]) =>
@@ -38,9 +32,6 @@ export const IssueList = React.memo((props: IssueListProps) => {
         issue={item}
         issueList={list}
         isShowDetail={isShowDetail}
-        handleShowDetail={handleShowDetail}
-        handleChangeSelectedIssue={handleChangeSelectedIssue}
-        handleUpdateIssue={handleUpdateIssue}
       />
     ));
 

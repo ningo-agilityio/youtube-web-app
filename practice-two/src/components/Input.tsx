@@ -10,8 +10,8 @@ const InputStyled = styled.input`
 interface InputProps {
   type: string;
   placeholder: string;
-  value: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  value?: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
   handleOnChange: (e: React.ChangeEvent) => void;
 }
 

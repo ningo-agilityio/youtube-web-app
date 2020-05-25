@@ -24,7 +24,7 @@ const ButtonStyled = styled.button`
   `};
 
   ${(props: ButtonProps) =>
-    props.name === 'close-btn' &&
+    props.name === 'exit-btn' &&
     `
     background: gray;
     position: absolute;
@@ -34,8 +34,9 @@ const ButtonStyled = styled.button`
 `;
 
 interface ButtonProps {
-  name: string;
+  name?: string;
   value: string;
+  type: 'button' | 'submit' | 'reset';
   handleOnClick?: (e: React.MouseEvent) => void;
 }
 
@@ -44,7 +45,7 @@ export const Button = React.memo((props: ButtonProps) => {
     <ButtonStyled
       {...props}
       className={props.name}
-      type="button"
+      type={props.type}
       onClick={props.handleOnClick}
     >
       {props.value}

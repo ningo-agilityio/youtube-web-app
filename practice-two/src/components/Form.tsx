@@ -7,7 +7,7 @@ import { Input } from './Input';
 import { Textarea } from './Textarea';
 import { Button } from './Button';
 
-const FormStyled = styled.form`
+export const FormStyled = styled.form`
   width: 50%;
   margin-left: 1rem;
   padding: 1rem;
@@ -15,13 +15,13 @@ const FormStyled = styled.form`
   border: 0.1rem solid rgba(236, 103, 37, 0.3);
 `;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0.8rem 0;
 `;
 
-const FormTitle = styled.h3`
+export const FormTitle = styled.h3`
   border-bottom: 0.1rem solid rgba(236, 103, 37, 0.3);
   margin: 0;
   font-size: 1.5rem;
@@ -31,7 +31,7 @@ interface FormProps {
   issueList: types.Issue[];
   selectedIssue: types.Issue;
   inputRef: React.RefObject<HTMLInputElement>;
-  handleShowForm: (e: React.MouseEvent) => void;
+  handleShowForm: (e: React.FormEvent) => void;
   handleUpdateIssue: (newList: types.Issue[]) => void;
   handleChangeSelectedIssue: (newIssue: types.Issue) => void;
 }
@@ -63,7 +63,7 @@ export const Form = (props: FormProps) => {
     clearForm();
   };
 
-  const handleOnClickSubmit = (e: React.MouseEvent) => {
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (input.trim() && textarea.trim()) {
@@ -98,7 +98,7 @@ export const Form = (props: FormProps) => {
   const nameForm = props.selectedIssue.id !== 0 ? 'Edit Issue' : 'New Issue';
 
   return (
-    <FormStyled>
+    <FormStyled onSubmit={handleOnSubmit}>
       <FormTitle>{nameForm}</FormTitle>
       <Wrapper>
         <Label value="Title" />
@@ -119,14 +119,11 @@ export const Form = (props: FormProps) => {
         />
       </Wrapper>
       <Wrapper>
-        <Button
-          name="main-btn"
-          value="Submit"
-          handleOnClick={handleOnClickSubmit}
-        />
+        <Button name="main-btn" value="Submit" type="submit" />
         <Button
           name="main-btn"
           value="Cancel"
+          type="button"
           handleOnClick={handleOnClickCancel}
         />
       </Wrapper>

@@ -10,7 +10,7 @@ const TextareaStyled = styled.textarea`
 
 interface TextareaProps {
   placeholder: string;
-  value: string;
+  value?: string;
   handleOnChange: (e: React.ChangeEvent) => void;
 }
 

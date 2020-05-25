@@ -59,13 +59,15 @@ export const IssueDetail = (props: IssueDetailProps) => {
         <Button
           name="main-btn"
           value="Edit"
+          type="button"
           handleOnClick={handleOnClickEdit}
         />
       </Wrapper>
       <Description>{issue.description}</Description>
       <Button
-        name="close-btn"
-        value="Close"
+        name="exit-btn"
+        value="Exit"
+        type="button"
         handleOnClick={handleOnClickClose}
       />
     </IssueDetailStyled>

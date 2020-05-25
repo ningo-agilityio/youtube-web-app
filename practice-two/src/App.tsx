@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as types from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
 import { useLocalStorage } from './components/Storage';
+import Context from './contexts/contexts';
 import { Title } from './components/Title';
 import { Button } from './components/Button';
 import { Form } from './components/Form';
@@ -12,7 +13,6 @@ import data from './data.json';
 
 const AppStyled = styled.div`
   padding: 0 2rem;
-  background: ;
 `;
 
 const Wrapper = styled.div`
@@ -65,17 +65,23 @@ const App = () => {
       <Button
         name="main-btn"
         value="New issue"
+        type="button"
         handleOnClick={handleClickNew}
       />
       <Wrapper>
-        <IssueList
-          issueList={issueList}
-          isShowDetail={isShowDetail}
-          isShowForm={isShowForm}
-          handleShowDetail={handleShowDetail(true)}
-          handleChangeSelectedIssue={handleChangeSelectedIssue}
-          handleUpdateIssue={handleUpdateIssue}
-        />
+        <Context.Provider
+          value={{
+            handleShowDetail: handleShowDetail(true),
+            handleUpdateIssue,
+            handleChangeSelectedIssue,
+          }}
+        >
+          <IssueList
+            issueList={issueList}
+            isShowDetail={isShowDetail}
+            isShowForm={isShowForm}
+          />
+        </Context.Provider>
         {isShowForm && (
           <Form
             inputRef={inputRef}
