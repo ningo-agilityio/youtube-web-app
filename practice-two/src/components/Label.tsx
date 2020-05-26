@@ -6,7 +6,7 @@ const LabelStyled = styled.label`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: ${(props: LabelProps) => props.isOpen === false && 'gray'};
+  color: ${(props: LabelProps) => props.locked === true && 'gray'};
   :hover {
     text-decoration: underline;
   }
@@ -14,7 +14,7 @@ const LabelStyled = styled.label`
 
 interface LabelProps {
   value: string;
-  isOpen?: boolean;
+  locked?: boolean;
   handleOnClick?: (e: React.MouseEvent) => void;
 }
 

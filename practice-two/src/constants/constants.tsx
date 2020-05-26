@@ -1,8 +1,14 @@
+import * as types from '../buildTypes/buildTypes';
+
 export const issueDefault = {
-  id: 0,
+  id: null,
   title: '',
-  description: '',
-  isOpen: true,
+  body: '',
+  locked: false,
 };
 
+export const listDefault: types.Issue[]  = [];
+
 export const TITLE = 'github issues app';
+
+export const URL_API = 'http://localhost:3000/posts';

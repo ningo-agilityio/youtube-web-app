@@ -1,32 +1,46 @@
-[
-  {
-    "id": 1,
-    "title": "Issue one",
-    "description": "Parts of an issue",
-    "isOpen": true
-  },
-  {
-    "id": 2,
-    "title": "Issue two",
-    "description": "Parts of an issue",
-    "isOpen": false
-  },
-  {
-    "id": 3,
-    "title": "Issue three",
-    "description": "Parts of an issue",
-    "isOpen": false
-  },
-  {
-    "id": 4,
-    "title": "Issue four",
-    "description": "Parts of an issue",
-    "isOpen": true
-  },
-  {
-    "id": 5,
-    "title": "Issue five",
-    "description": "Parts of an issue",
-    "isOpen": true
-  }
-]
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Issue one",
+      "body": "Parts of an issue",
+      "locked": true
+    },
+    {
+      "id": 2,
+      "title": "Issue two",
+      "body": "Parts of an issue",
+      "locked": false
+    },
+    {
+      "id": 3,
+      "title": "Issue three",
+      "body": "Parts of an issue",
+      "locked": false
+    },
+    {
+      "id": 4,
+      "title": "Issue four",
+      "body": "Parts of an issue",
+      "locked": true
+    },
+    {
+      "id": 5,
+      "title": "Issue five",
+      "body": "Parts of an issue",
+      "locked": true
+    },
+    {
+      "id": 1590478367626,
+      "title": "Issue 6",
+      "body": "hello",
+      "locked": false
+    },
+    {
+      "id": 1590478383914,
+      "title": "Issue 7",
+      "body": "hello",
+      "locked": false
+    }
+  ]
+}

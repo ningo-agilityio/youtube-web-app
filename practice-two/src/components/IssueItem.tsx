@@ -1,7 +1,9 @@
 import React from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import Context from '../contexts/contexts';
+import * as constants from '../constants/constants';
 import { Label } from './Label';
 import { Button } from './Button';
 
@@ -28,35 +30,50 @@ const IssueItem = (props: IssueItemProps) => {
 
   const context = React.useContext(Context);
 
-  const valueButton = issue.isOpen === true ? 'Close' : 'Reopen';
+  const valueButton = issue.locked === false ? 'Lock' : 'Unlock';
+
+  const getIssue = (issueItem: types.Issue) => {
+    axios
+      .get(`${constants.URL_API}/${issueItem.id}`)
+      .then((response) => context.handleChangeSelectedIssue(response.data));
+  };
+
+  const lockIssue = (issueItem: types.Issue) => {
+    axios
+      .put(`${constants.URL_API}/${issueItem.id}/lock`, { locked: true })
+      .then(() => true);
+  };
+
+  const unLockIssue = (issueItem: types.Issue) => {
+    axios.delete(`${constants.URL_API}/${issueItem.id}/lock`).then(() => false);
+  };
 
   const handleOnClickTitle = (issueItem: types.Issue) => () => {
-    context.handleChangeSelectedIssue(issueItem);
+    getIssue(issueItem);
     context.handleShowDetail(!isShowDetail);
   };
 
   const handleChangeStatus = () => {
-    context.handleUpdateIssue(
-      issueList.map((item) =>
-        item.id === issue.id
-          ? {
-              ...item,
-              isOpen: !item.isOpen,
-            }
-          : item
-      )
+    issueList.map((item) =>
+      item.id === issue.id
+        ? {
+            ...item,
+            locked: issue.locked ? unLockIssue(item) : lockIssue(item),
+          }
+        : item
     );
+    context.handleUpdateIssue(issueList);
   };
 
   return (
-    <IssueItemStyled id={issue.id.toString()}>
+    <IssueItemStyled id={issue.id!.toString()}>
       <Label
-        isOpen={issue.isOpen}
+        locked={issue.locked}
         value={issue.title}
         handleOnClick={handleOnClickTitle(issue)}
       />
       <Button
-        name="status-btn"
+        name="lock-btn"
         value={valueButton}
         type="button"
         handleOnClick={handleChangeStatus}

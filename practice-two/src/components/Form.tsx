@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/constants';
@@ -32,7 +33,7 @@ interface FormProps {
   selectedIssue: types.Issue;
   inputRef: React.RefObject<HTMLInputElement>;
   handleShowForm: (e: React.FormEvent) => void;
-  handleUpdateIssue: (newList: types.Issue[]) => void;
+  handleUpdateIssue: (list: types.Issue[]) => void;
   handleChangeSelectedIssue: (newIssue: types.Issue) => void;
 }
 
@@ -41,7 +42,7 @@ export const Form = (props: FormProps) => {
     props.selectedIssue.id !== 0 ? props.selectedIssue.title : ''
   );
   const [textarea, setTextarea] = useState(
-    props.selectedIssue.id !== 0 ? props.selectedIssue.description : ''
+    props.selectedIssue.id !== 0 ? props.selectedIssue.body : ''
   );
 
   const handleChangeInput = (e: React.ChangeEvent) => {
@@ -67,28 +68,38 @@ export const Form = (props: FormProps) => {
     e.preventDefault();
 
     if (input.trim() && textarea.trim()) {
-      if (props.selectedIssue.id !== 0) {
-        props.handleUpdateIssue(
-          props.issueList.map((item) =>
-            item.id === props.selectedIssue.id
-              ? {
-                  ...item,
-                  title: input,
-                  description: textarea,
-                }
-              : item
-          )
+      if (props.selectedIssue.id !== null) {
+        const updateList = props.issueList.map((item) =>
+          item.id === props.selectedIssue.id
+            ? {
+                ...item,
+                title: input,
+                body: textarea,
+              }
+            : item
         );
+
+        const editedIssue = updateList.find(
+          (item) => item.id === props.selectedIssue.id
+        );
+        axios
+          .patch(`${constants.URL_API}/${props.selectedIssue.id}`, editedIssue)
+          .then(() => {
+            props.handleUpdateIssue(updateList);
+          });
         props.handleShowForm(e);
       } else {
         const issue: types.Issue = {
           id: Date.now(),
           title: input,
-          description: textarea,
-          isOpen: true,
+          body: textarea,
+          locked: false,
         };
+
         props.issueList.push(issue);
-        props.handleUpdateIssue(props.issueList);
+        axios.post(constants.URL_API, issue).then(() => {
+          props.handleUpdateIssue(props.issueList);
+        });
       }
 
       clearForm();

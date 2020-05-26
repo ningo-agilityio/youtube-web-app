@@ -28,7 +28,7 @@ export const IssueList = React.memo((props: IssueListProps) => {
   const renderList = (list: types.Issue[]) =>
     list.map((item) => (
       <IssueItem
-        key={item.id.toString()}
+        key={item.id!.toString()}
         issue={item}
         issueList={list}
         isShowDetail={isShowDetail}

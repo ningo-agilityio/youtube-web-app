@@ -1,6 +1,9 @@
 export interface Issue {
-  id: number;
+  id?: number | null;
   title: string;
-  description: string;
-  isOpen: boolean;
+  body: string;
+  locked?: boolean;
+  assignees?: [string];
+  milestone?: number;
+  labels?: [string];
 }

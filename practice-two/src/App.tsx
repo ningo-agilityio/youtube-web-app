@@ -1,15 +1,14 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import * as types from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
-import { useLocalStorage } from './components/Storage';
 import Context from './contexts/contexts';
 import { Title } from './components/Title';
 import { Button } from './components/Button';
 import { Form } from './components/Form';
 import { IssueList } from './components/IssueList';
 import { IssueDetail } from './components/IssueDetail';
-import data from './data.json';
 
 const AppStyled = styled.div`
   padding: 0 2rem;
@@ -22,15 +21,17 @@ const Wrapper = styled.div`
 
 const App = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [issueList, setIssueList] = useLocalStorage('issueList', data);
+  const [issueList, setIssueList] = useState<types.Issue[]>(
+    constants.listDefault
+  );
   const [selectedIssue, setSelectedIssue] = useState<types.Issue>(
     constants.issueDefault
   );
   const [isShowForm, setIsShowForm] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
 
-  const handleUpdateIssue = (newList: types.Issue[]) => {
-    setIssueList([...newList]);
+  const handleUpdateIssue = (list: types.Issue[]) => {
+    setIssueList([...list]);
   };
 
   const handleChangeSelectedIssue = (issue: types.Issue) => {
@@ -53,9 +54,15 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    axios.get(constants.URL_API).then((response) => {
+      setIssueList(response.data);
+    });
+  }, []);
+
   useLayoutEffect(() => {
     if (inputRef.current !== null) {
-      inputRef.current.focus();
+      inputRef.current!.focus();
     }
   });
 

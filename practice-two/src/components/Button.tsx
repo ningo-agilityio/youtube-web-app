@@ -18,9 +18,9 @@ const ButtonStyled = styled.button`
   }
 
   ${(props: ButtonProps) =>
-    props.name === 'status-btn' &&
+    props.name === 'lock-btn' &&
     `
-    color: ${props.value === 'Close' ? 'rgb(236, 73, 37)' : 'gray'};
+    color: ${props.value === 'Lock' ? 'rgb(236, 73, 37)' : 'gray'};
   `};
 
   ${(props: ButtonProps) =>
