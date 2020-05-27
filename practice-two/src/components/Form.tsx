@@ -22,7 +22,7 @@ export const Wrapper = styled.div`
   margin: 0.8rem 0;
 `;
 
-export const FormTitle = styled.h3`
+export const Title = styled.h3`
   border-bottom: 0.1rem solid rgba(236, 103, 37, 0.3);
   margin: 0;
   font-size: 1.5rem;
@@ -34,23 +34,23 @@ interface FormProps {
   inputRef: React.RefObject<HTMLInputElement>;
   handleShowForm: (e: React.FormEvent) => void;
   handleUpdateIssue: (list: types.Issue[]) => void;
-  handleChangeSelectedIssue: (newIssue: types.Issue) => void;
+  handleChangeSelectedIssue: (issue: types.Issue) => void;
 }
 
 export const Form = (props: FormProps) => {
   const [input, setInput] = useState(
-    props.selectedIssue.id !== 0 ? props.selectedIssue.title : ''
+    props.selectedIssue.id !== null ? props.selectedIssue.title : ''
   );
   const [textarea, setTextarea] = useState(
-    props.selectedIssue.id !== 0 ? props.selectedIssue.body : ''
+    props.selectedIssue.id !== null ? props.selectedIssue.body : ''
   );
 
-  const handleChangeInput = (e: React.ChangeEvent) => {
-    setInput((e.target as HTMLInputElement).value);
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
   };
 
-  const handleChangeTextarea = (e: React.ChangeEvent) => {
-    setTextarea((e.target as HTMLInputElement).value);
+  const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextarea(e.target.value);
   };
 
   const clearForm = () => {
@@ -68,7 +68,12 @@ export const Form = (props: FormProps) => {
     e.preventDefault();
 
     if (input.trim() && textarea.trim()) {
-      if (props.selectedIssue.id !== null) {
+      const issue: types.Issue = {
+        title: input,
+        body: textarea,
+      };
+
+      if (props.selectedIssue.id !== null ) {
         const updateList = props.issueList.map((item) =>
           item.id === props.selectedIssue.id
             ? {
@@ -79,38 +84,32 @@ export const Form = (props: FormProps) => {
             : item
         );
 
-        const editedIssue = updateList.find(
-          (item) => item.id === props.selectedIssue.id
-        );
         axios
-          .patch(`${constants.URL_API}/${props.selectedIssue.id}`, editedIssue)
+          .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
           .then(() => {
             props.handleUpdateIssue(updateList);
           });
         props.handleShowForm(e);
       } else {
-        const issue: types.Issue = {
-          id: Date.now(),
-          title: input,
-          body: textarea,
-          locked: false,
-        };
-
-        props.issueList.push(issue);
-        axios.post(constants.URL_API, issue).then(() => {
+        axios.post(`${constants.API.url}`, issue).then((response) => {
+          props.issueList.unshift(response.data);
           props.handleUpdateIssue(props.issueList);
+          props.handleShowForm(e);
         });
       }
-
       clearForm();
     }
   };
 
-  const nameForm = props.selectedIssue.id !== 0 ? 'Edit Issue' : 'New Issue';
+  const nameForm = props.selectedIssue.id
+    ? constants.TITLE_EDIT_FORM
+    : constants.TITLE_ADD_FORM;
+
+  const isEnabled = input.length > 0 && textarea.length > 0;
 
   return (
     <FormStyled onSubmit={handleOnSubmit}>
-      <FormTitle>{nameForm}</FormTitle>
+      <Title>{nameForm}</Title>
       <Wrapper>
         <Label value="Title" />
         <Input
@@ -130,7 +129,12 @@ export const Form = (props: FormProps) => {
         />
       </Wrapper>
       <Wrapper>
-        <Button name="main-btn" value="Submit" type="submit" />
+        <Button
+          name="main-btn"
+          value="Submit"
+          isEnabled={!isEnabled}
+          type="submit"
+        />
         <Button
           name="main-btn"
           value="Cancel"

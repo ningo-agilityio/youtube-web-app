@@ -10,6 +10,8 @@ import { Form } from './components/Form';
 import { IssueList } from './components/IssueList';
 import { IssueDetail } from './components/IssueDetail';
 
+axios.defaults.headers.common.Authorization = `Bearer ${constants.API.token}`;
+
 const AppStyled = styled.div`
   padding: 0 2rem;
 `;
@@ -31,7 +33,7 @@ const App = () => {
   const [isShowDetail, setIsShowDetail] = useState(false);
 
   const handleUpdateIssue = (list: types.Issue[]) => {
-    setIssueList([...list]);
+    setIssueList(list);
   };
 
   const handleChangeSelectedIssue = (issue: types.Issue) => {
@@ -55,7 +57,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    axios.get(constants.URL_API).then((response) => {
+    axios.get(`${constants.API.url}`).then((response) => {
       setIssueList(response.data);
     });
   }, []);

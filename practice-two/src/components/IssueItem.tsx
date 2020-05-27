@@ -2,8 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import * as types from '../buildTypes/buildTypes';
-import Context from '../contexts/contexts';
 import * as constants from '../constants/constants';
+import Context from '../contexts/contexts';
 import { Label } from './Label';
 import { Button } from './Button';
 
@@ -34,18 +34,20 @@ const IssueItem = (props: IssueItemProps) => {
 
   const getIssue = (issueItem: types.Issue) => {
     axios
-      .get(`${constants.URL_API}/${issueItem.id}`)
-      .then((response) => context.handleChangeSelectedIssue(response.data));
+      .get(`${constants.API.url}/${issueItem.number}`)
+      .then(() => context.handleChangeSelectedIssue(issueItem));
   };
 
   const lockIssue = (issueItem: types.Issue) => {
     axios
-      .put(`${constants.URL_API}/${issueItem.id}/lock`, { locked: true })
-      .then(() => true);
+      .put(`${constants.API.url}/${issueItem.number}/lock`, { locked: true })
+      .then((response) => response);
   };
 
   const unLockIssue = (issueItem: types.Issue) => {
-    axios.delete(`${constants.URL_API}/${issueItem.id}/lock`).then(() => false);
+    axios
+      .delete(`${constants.API.url}/${issueItem.number}/lock`)
+      .then((response) => response);
   };
 
   const handleOnClickTitle = (issueItem: types.Issue) => () => {
@@ -54,20 +56,23 @@ const IssueItem = (props: IssueItemProps) => {
   };
 
   const handleChangeStatus = () => {
-    issueList.map((item) =>
+    const updateList = issueList.map((item) =>
       item.id === issue.id
         ? {
             ...item,
-            locked: issue.locked ? unLockIssue(item) : lockIssue(item),
+            locked: !item.locked,
           }
         : item
     );
-    context.handleUpdateIssue(issueList);
+
+    issue.locked ? unLockIssue(issue) : lockIssue(issue);
+    context.handleUpdateIssue(updateList);
   };
 
   return (
     <IssueItemStyled id={issue.id!.toString()}>
       <Label
+        name="title-issue"
         locked={issue.locked}
         value={issue.title}
         handleOnClick={handleOnClickTitle(issue)}

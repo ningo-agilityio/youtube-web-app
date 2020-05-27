@@ -35,7 +35,6 @@
   - Edit an issue
   - Lock an issue
   - Unlock an issue
-  - Custom media types
 
 ## Development environment
 
@@ -60,6 +59,10 @@
 - To run in development mode:
   ```
   npm start
+  ```
+- To run storybook:
+  ```
+    npm run storybook
   ```
 
 ## Folder Structure

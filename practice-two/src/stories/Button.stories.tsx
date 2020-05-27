@@ -74,7 +74,7 @@ export const Primary = () => (
       </tr>
       <tr>
         <td>type</td>
-        <td>'button' | 'submit' | 'reset'</td>
+        <td>button | submit | reset</td>
       </tr>
       <tr>
         <td>handleOnClick</td>
@@ -119,7 +119,7 @@ export const Exit = () => (
       </tr>
       <tr>
         <td>type</td>
-        <td>'button' | 'submit' | 'reset'</td>
+        <td>button | submit | reset</td>
       </tr>
       <tr>
         <td>handleOnClick</td>
@@ -171,7 +171,7 @@ export const Lock = () => (
       </tr>
       <tr>
         <td>type</td>
-        <td>'button' | 'submit' | 'reset'</td>
+        <td>button | submit | reset</td>
       </tr>
       <tr>
         <td>handleOnClick</td>

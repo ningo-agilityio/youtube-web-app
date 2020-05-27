@@ -58,7 +58,9 @@
           "**/*.test.jsx",
           "**/*.test.ts",
           "**/*.test.tsx",
-          "src/tests/**/*"
+          "src/tests/**/*",
+          "src/storybook/**", 
+          "src/stories/**"
         ]
       }
     ],

@@ -47,7 +47,7 @@ export const IssueDetail = (props: IssueDetailProps) => {
     props.handleShowForm(e);
   };
 
-  const handleOnClickClose = (e: React.MouseEvent) => {
+  const handleOnClickExit = (e: React.MouseEvent) => {
     props.handleShowDetail(e);
     props.handleChangeSelectedIssue(constants.issueDefault);
   };
@@ -68,7 +68,7 @@ export const IssueDetail = (props: IssueDetailProps) => {
         name="exit-btn"
         value="Exit"
         type="button"
-        handleOnClick={handleOnClickClose}
+        handleOnClick={handleOnClickExit}
       />
     </IssueDetailStyled>
   );

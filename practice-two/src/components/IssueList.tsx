@@ -19,7 +19,7 @@ interface IssueListProps {
   isShowForm: boolean;
 }
 
-export const IssueList = React.memo((props: IssueListProps) => {
+export const IssueList = (props: IssueListProps) => {
   const {
     issueList,
     isShowDetail
@@ -36,4 +36,4 @@ export const IssueList = React.memo((props: IssueListProps) => {
     ));
 
   return <IssueListStyled {...props}>{renderList(issueList)}</IssueListStyled>;
-});
+};

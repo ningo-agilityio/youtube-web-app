@@ -17,6 +17,11 @@ const ButtonStyled = styled.button`
     opacity: 0.6;
   }
 
+  :disabled {
+    background: gray;
+    opacity: 1;
+  }
+
   ${(props: ButtonProps) =>
     props.name === 'lock-btn' &&
     `
@@ -36,6 +41,7 @@ const ButtonStyled = styled.button`
 interface ButtonProps {
   name?: string;
   value: string;
+  isEnabled?: boolean;
   type: 'button' | 'submit' | 'reset';
   handleOnClick?: (e: React.MouseEvent) => void;
 }
@@ -46,6 +52,7 @@ export const Button = React.memo((props: ButtonProps) => {
       {...props}
       className={props.name}
       type={props.type}
+      disabled={props.isEnabled}
       onClick={props.handleOnClick}
     >
       {props.value}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
-import { FormStyled, Wrapper, FormTitle } from '../components/Form';
+import { FormStyled, Wrapper, Title } from '../components/Form';
 import { Input } from '../components/Input';
 import { Label } from '../components/Label';
 import { Textarea } from '../components/Textarea';
@@ -21,7 +21,7 @@ export const Add = () => (
   <>
     <h2>Add Form</h2>
     <FormStyled>
-      <FormTitle>New Issue</FormTitle>
+      <Title>New Issue</Title>
       <Wrapper>
         <Label value="Title" />
         <Input
@@ -98,7 +98,7 @@ export const Edit = () => (
   <>
     <h2>Edit Form</h2>
     <FormStyled>
-      <FormTitle>Edit Issue</FormTitle>
+      <Title>Edit Issue</Title>
       <Wrapper>
         <Label value="Title" />
         <Input
