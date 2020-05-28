@@ -1,15 +1,17 @@
 import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/constants';
+import { Issue, IssueItemProps } from '../buildTypes/buildTypes';
+import { grayColor } from '../theme/color';
+import * as metric from '../theme/metric';
 import Context from '../contexts/contexts';
 import { Label } from './Label';
 import { Button } from './Button';
 
 export const IssueItemStyled = styled.li`
-  border-bottom: 0.05rem solid rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0;
+  border-bottom: 0.05rem solid ${grayColor};
+  padding: ${metric.PADDING_2} 0;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -19,40 +21,34 @@ export const IssueItemStyled = styled.li`
   }
 `;
 
-interface IssueItemProps {
-  issue: types.Issue;
-  issueList: types.Issue[];
-  isShowDetail: boolean;
-}
-
 const IssueItem = (props: IssueItemProps) => {
   const { issue, issueList, isShowDetail } = props;
 
   const context = React.useContext(Context);
 
-  const valueButton = issue.locked === false ? 'Lock' : 'Unlock';
+  const valueButton = issue.locked ? constants.BTN_UNLOCK : constants.BTN_LOCK;
 
-  const getIssue = (issueItem: types.Issue) => {
+  const getIssue = (issueItem: Issue) => {
     axios
       .get(`${constants.API.url}/${issueItem.number}`)
       .then(() => context.handleChangeSelectedIssue(issueItem));
   };
 
-  const lockIssue = (issueItem: types.Issue) => {
+  const lockIssue = (issueItem: Issue) => {
     axios
       .put(`${constants.API.url}/${issueItem.number}/lock`, { locked: true })
       .then((response) => response);
   };
 
-  const unLockIssue = (issueItem: types.Issue) => {
+  const unLockIssue = (issueItem: Issue) => {
     axios
       .delete(`${constants.API.url}/${issueItem.number}/lock`)
       .then((response) => response);
   };
 
-  const handleOnClickTitle = (issueItem: types.Issue) => () => {
+  const handleOnClickTitle = (issueItem: Issue) => () => {
     getIssue(issueItem);
-    context.handleShowDetail(!isShowDetail);
+    context.toggleDetail(!isShowDetail);
   };
 
   const handleChangeStatus = () => {
@@ -69,19 +65,25 @@ const IssueItem = (props: IssueItemProps) => {
     context.handleUpdateIssue(updateList);
   };
 
+  const nameLabel = issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT;
+
+  const nameBtn = issue.locked
+    ? constants.BTN_NO_OUTLINE_DARK
+    : constants.BTN_NO_OUTLINE_LIGHT;
+
   return (
     <IssueItemStyled id={issue.id!.toString()}>
       <Label
-        name="title-issue"
+        name={nameLabel}
         locked={issue.locked}
         value={issue.title}
-        handleOnClick={handleOnClickTitle(issue)}
+        onClick={handleOnClickTitle(issue)}
       />
       <Button
-        name="lock-btn"
+        name={nameBtn}
         value={valueButton}
         type="button"
-        handleOnClick={handleChangeStatus}
+        onClick={handleChangeStatus}
       />
     </IssueItemStyled>
   );

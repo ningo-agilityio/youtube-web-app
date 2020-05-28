@@ -28,33 +28,33 @@ export const Primary = () => (
       name="main-btn"
       value="New Issue"
       type="button"
-      handleOnClick={action('Create new issue')}
+      onClick={action('Create new issue')}
     />
     <span> </span>
     <Button
       name="main-btn"
       value="Edit"
       type="button"
-      handleOnClick={action('Edit an issue')}
+      onClick={action('Edit an issue')}
     />
     <span> </span>
     <Button
       name="main-btn"
       value="Submit"
       type="submit"
-      handleOnClick={action('Submit form')}
+      onClick={action('Submit form')}
     />
 
     <pre>
       <CodeStyled>
         &lt;Button name="main-btn" value="New issue" type="button"
-        handleOnClick=handleClickNew /&gt;
+        onClick=handleClickNew /&gt;
         <br />
         &lt;Button name="main-btn" value="Edit" type="button"
-        handleOnClick=handleClickEdit /&gt;
+        onClick=handleClickEdit /&gt;
         <br />
         &lt;Button name="main-btn" value="Submit" type="submit"
-        handleOnClick=handleClickSubmit /&gt;
+        onClick=handleClickSubmit /&gt;
       </CodeStyled>
     </pre>
 
@@ -84,22 +84,22 @@ export const Primary = () => (
   </>
 );
 
-export const Exit = () => (
+export const Secondary = () => (
   <>
-    <h2>Exit Button</h2>
+    <h2>Secondary Button</h2>
     <Wrapper>
       <Button
         name="exit-btn"
         value="Exit"
         type="button"
-        handleOnClick={action('Exit detail form')}
+        onClick={action('Exit detail form')}
       />
     </Wrapper>
 
     <pre>
       <CodeStyled>
         &lt;Button name="exit-btn" value="Exit" type="button"
-        handleOnClick=handleClickExit /&gt;
+        onClick=handleClickExit /&gt;
       </CodeStyled>
     </pre>
 
@@ -129,29 +129,29 @@ export const Exit = () => (
   </>
 );
 
-export const Lock = () => (
+export const NoOutline = () => (
   <>
-    <h2>Lock Button</h2>
+    <h2>No Outline Button</h2>
     <Button
       name="lock-btn"
       value="Lock"
       type="button"
-      handleOnClick={action('Lock an issue')}
+      onClick={action('Lock an issue')}
     />
     <span> </span>
     <Button
       name="lock-btn"
       value="Unlock"
       type="button"
-      handleOnClick={action('Unlock an issue')}
+      onClick={action('Unlock an issue')}
     />
     <pre>
       <CodeStyled>
         &lt;Button name="exit-btn" value="Lock" type="button"
-        handleOnClick=handleOnClick /&gt;
+        onClick=handleOnClick /&gt;
         <br />
         &lt;Button name="exit-btn" value="Unlock" type="button"
-        handleOnClick=handleOnClick /&gt;
+        onClick=handleOnClick /&gt;
       </CodeStyled>
     </pre>
 

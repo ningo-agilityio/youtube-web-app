@@ -24,26 +24,26 @@ export const UnlockIssue = () => (
         <Label
           locked={false}
           value="Issue one"
-          handleOnClick={action('Show detail form')}
+          onClick={action('Show detail form')}
         />
         <Button
           name="lock-btn"
           value="Lock"
           type="button"
-          handleOnClick={action('Close an issue')}
+          onClick={action('Close an issue')}
         />
       </IssueItemStyled>
       <IssueItemStyled id="2">
         <Label
           locked={false}
           value="Issue Two"
-          handleOnClick={action('Show detail form')}
+          onClick={action('Show detail form')}
         />
         <Button
           name="lock-btn"
           value="Lock"
           type="button"
-          handleOnClick={action('Close an issue')}
+          onClick={action('Close an issue')}
         />
       </IssueItemStyled>
     </ul>
@@ -89,26 +89,26 @@ export const LockedIssue = () => (
         <Label
           locked={true}
           value="Issue one"
-          handleOnClick={action('Show detail form')}
+          onClick={action('Show detail form')}
         />
         <Button
           name="lock-btn"
           value="Unlock"
           type="button"
-          handleOnClick={action('Reopen an issue')}
+          onClick={action('Reopen an issue')}
         />
       </IssueItemStyled>
       <IssueItemStyled id="2">
         <Label
           locked={true}
           value="Issue Two"
-          handleOnClick={action('Show detail form')}
+          onClick={action('Show detail form')}
         />
         <Button
           name="lock-btn"
           value="Unlock"
           type="button"
-          handleOnClick={action('Reopen an issue')}
+          onClick={action('Reopen an issue')}
         />
       </IssueItemStyled>
     </ul>

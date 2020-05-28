@@ -1,19 +1,19 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import * as types from './buildTypes/buildTypes';
+import { Issue } from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
+import * as metric from './theme/metric';
 import Context from './contexts/contexts';
 import { Title } from './components/Title';
 import { Button } from './components/Button';
 import { Form } from './components/Form';
 import { IssueList } from './components/IssueList';
 import { IssueDetail } from './components/IssueDetail';
-
-axios.defaults.headers.common.Authorization = `Bearer ${constants.API.token}`;
+import './configs/api';
 
 const AppStyled = styled.div`
-  padding: 0 2rem;
+  padding: 0 ${metric.PADDING_4};
 `;
 
 const Wrapper = styled.div`
@@ -22,30 +22,27 @@ const Wrapper = styled.div`
 `;
 
 const App = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [issueList, setIssueList] = useState<types.Issue[]>(
-    constants.listDefault
-  );
-  const [selectedIssue, setSelectedIssue] = useState<types.Issue>(
+  const [issueList, setIssueList] = useState<Issue[]>(constants.listDefault);
+  const [selectedIssue, setSelectedIssue] = useState<Issue>(
     constants.issueDefault
   );
   const [isShowForm, setIsShowForm] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
 
-  const handleUpdateIssue = (list: types.Issue[]) => {
+  const handleUpdateIssue = (list: Issue[]) => {
     setIssueList(list);
   };
 
-  const handleChangeSelectedIssue = (issue: types.Issue) => {
+  const handleChangeSelectedIssue = (issue: Issue) => {
     setSelectedIssue(issue);
   };
 
-  const handleShowForm = (isShow: boolean) => () => {
+  const toggleForm = (isShow: boolean) => () => {
     setIsShowDetail(false);
     setIsShowForm(isShow);
   };
 
-  const handleShowDetail = (isShow: boolean) => () => {
+  const toggleDetail = (isShow: boolean) => () => {
     setIsShowForm(false);
     setIsShowDetail(isShow);
   };
@@ -62,25 +59,19 @@ const App = () => {
     });
   }, []);
 
-  useLayoutEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current!.focus();
-    }
-  });
-
   return (
     <AppStyled>
       <Title value={constants.TITLE} />
       <Button
-        name="main-btn"
-        value="New issue"
+        name={constants.BTN_PRIMARY}
+        value={constants.BTN_NEW}
         type="button"
-        handleOnClick={handleClickNew}
+        onClick={handleClickNew}
       />
       <Wrapper>
         <Context.Provider
           value={{
-            handleShowDetail: handleShowDetail(true),
+            toggleDetail: toggleDetail(true),
             handleUpdateIssue,
             handleChangeSelectedIssue,
           }}
@@ -93,11 +84,10 @@ const App = () => {
         </Context.Provider>
         {isShowForm && (
           <Form
-            inputRef={inputRef}
             issueList={issueList}
             selectedIssue={selectedIssue}
             handleChangeSelectedIssue={handleChangeSelectedIssue}
-            handleShowForm={handleShowForm(!isShowForm)}
+            toggleForm={toggleForm(!isShowForm)}
             handleUpdateIssue={handleUpdateIssue}
           />
         )}
@@ -105,8 +95,8 @@ const App = () => {
           <IssueDetail
             issue={selectedIssue}
             handleChangeSelectedIssue={handleChangeSelectedIssue}
-            handleShowForm={handleShowForm(!isShowForm)}
-            handleShowDetail={handleShowDetail(false)}
+            toggleForm={toggleForm(!isShowForm)}
+            toggleDetail={toggleDetail(false)}
           />
         )}
       </Wrapper>

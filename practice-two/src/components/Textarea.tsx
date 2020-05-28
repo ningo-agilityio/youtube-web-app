@@ -1,25 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { TextareaProps } from '../buildTypes/buildTypes';
+import { grayColor } from '../theme/color';
+import * as metric from '../theme/metric';
 
 const TextareaStyled = styled.textarea`
   width: 75%;
   min-height: 10rem;
-  padding: 0.3rem;
-  border: 0.05rem solid rgba(0, 0, 0, 0.2);
+  padding: ${metric.PADDING_1};
+  border: 0.05rem solid ${grayColor};
 `;
-
-interface TextareaProps {
-  placeholder: string;
-  value?: string;
-  handleOnChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
 
 export const Textarea = (props: TextareaProps) => {
   return (
     <TextareaStyled
       placeholder={props.placeholder}
       value={props.value}
-      onChange={props.handleOnChange}
+      onChange={props.onChange}
     />
   );
 };

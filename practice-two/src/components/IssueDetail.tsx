@@ -1,24 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/constants';
+import * as metric from '../theme/metric';
+import * as color from '../theme/color';
+import { IssueDetailProps } from '../buildTypes/buildTypes';
 import { Button } from './Button';
 
 const IssueDetailStyled = styled.div`
   width: 50%;
   margin-left: 1rem;
-  padding: 1rem;
+  padding: ${metric.PADDING_3};
   border-radius: 0.5rem;
-  border: 0.1rem solid rgba(236, 103, 37, 0.3);
+  border: 0.1rem solid ${color.lightOrangeColor};
   position: relative;
 `;
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  border-bottom: 0.1rem solid rgba(236, 103, 37, 0.3);
+  border-bottom: 0.1rem solid ${color.lightOrangeColor};
   align-content: center;
-  padding: 0.5rem 0;
+  padding: ${metric.PADDING_2} 0;
 `;
 
 const Title = styled.h3`
@@ -33,22 +35,15 @@ const Description = styled.p`
   font-size: 0.8rem;
 `;
 
-interface IssueDetailProps {
-  issue: types.Issue;
-  handleShowForm: (e: React.MouseEvent) => void;
-  handleShowDetail: (e: React.MouseEvent) => void;
-  handleChangeSelectedIssue: (newIssue: types.Issue) => void;
-}
-
 export const IssueDetail = (props: IssueDetailProps) => {
   const { issue } = props;
 
   const handleOnClickEdit = (e: React.MouseEvent) => {
-    props.handleShowForm(e);
+    props.toggleForm(e);
   };
 
   const handleOnClickExit = (e: React.MouseEvent) => {
-    props.handleShowDetail(e);
+    props.toggleDetail(e);
     props.handleChangeSelectedIssue(constants.issueDefault);
   };
 
@@ -57,18 +52,18 @@ export const IssueDetail = (props: IssueDetailProps) => {
       <Wrapper>
         <Title>{issue.title}</Title>
         <Button
-          name="main-btn"
-          value="Edit"
+          name={constants.BTN_PRIMARY}
+          value={constants.BTN_EDIT}
           type="button"
-          handleOnClick={handleOnClickEdit}
+          onClick={handleOnClickEdit}
         />
       </Wrapper>
       <Description>{issue.body}</Description>
       <Button
-        name="exit-btn"
-        value="Exit"
+        name={constants.BTN_BOTTOM}
+        value={constants.BTN_EXIT}
         type="button"
-        handleOnClick={handleOnClickExit}
+        onClick={handleOnClickExit}
       />
     </IssueDetailStyled>
   );

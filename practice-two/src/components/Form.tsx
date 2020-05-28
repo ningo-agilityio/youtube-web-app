@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import * as types from '../buildTypes/buildTypes';
 import * as constants from '../constants/constants';
+import { Issue, FormProps } from '../buildTypes/buildTypes';
+import { lightOrangeColor } from '../theme/color';
+import * as metric from '../theme/metric';
 import { Label } from './Label';
 import { Input } from './Input';
 import { Textarea } from './Textarea';
@@ -11,9 +13,9 @@ import { Button } from './Button';
 export const FormStyled = styled.form`
   width: 50%;
   margin-left: 1rem;
-  padding: 1rem;
+  padding: ${metric.PADDING_3};
   border-radius: 0.5rem;
-  border: 0.1rem solid rgba(236, 103, 37, 0.3);
+  border: 0.1rem solid ${lightOrangeColor};
 `;
 
 export const Wrapper = styled.div`
@@ -23,34 +25,27 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.h3`
-  border-bottom: 0.1rem solid rgba(236, 103, 37, 0.3);
+  border-bottom: 0.1rem solid ${lightOrangeColor};
   margin: 0;
   font-size: 1.5rem;
 `;
 
-interface FormProps {
-  issueList: types.Issue[];
-  selectedIssue: types.Issue;
-  inputRef: React.RefObject<HTMLInputElement>;
-  handleShowForm: (e: React.FormEvent) => void;
-  handleUpdateIssue: (list: types.Issue[]) => void;
-  handleChangeSelectedIssue: (issue: types.Issue) => void;
-}
-
 export const Form = (props: FormProps) => {
   const [input, setInput] = useState(
-    props.selectedIssue.id !== null ? props.selectedIssue.title : ''
+    props.selectedIssue.id ? props.selectedIssue.title : ''
   );
   const [textarea, setTextarea] = useState(
-    props.selectedIssue.id !== null ? props.selectedIssue.body : ''
+    props.selectedIssue.id ? props.selectedIssue.body : ''
   );
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
+  const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value.trim());
   };
 
-  const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value);
+  const handleOnChangeTextarea = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setTextarea(e.target.value.trim());
   };
 
   const clearForm = () => {
@@ -60,7 +55,7 @@ export const Form = (props: FormProps) => {
   };
 
   const handleOnClickCancel = (e: React.MouseEvent) => {
-    props.handleShowForm(e);
+    props.toggleForm(e);
     clearForm();
   };
 
@@ -68,33 +63,25 @@ export const Form = (props: FormProps) => {
     e.preventDefault();
 
     if (input.trim() && textarea.trim()) {
-      const issue: types.Issue = {
+      const issue: Issue = {
         title: input,
         body: textarea,
       };
 
-      if (props.selectedIssue.id !== null ) {
-        const updateList = props.issueList.map((item) =>
-          item.id === props.selectedIssue.id
-            ? {
-                ...item,
-                title: input,
-                body: textarea,
-              }
-            : item
-        );
-
+      if (props.selectedIssue.id) {
         axios
           .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
-          .then(() => {
+          .then((response) => {
+            const updateList = props.issueList.map((item) =>
+              item.id === props.selectedIssue.id ? response.data : item
+            );
             props.handleUpdateIssue(updateList);
           });
-        props.handleShowForm(e);
+        props.toggleForm(e);
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
           props.issueList.unshift(response.data);
-          props.handleUpdateIssue(props.issueList);
-          props.handleShowForm(e);
+          props.toggleForm(e);
         });
       }
       clearForm();
@@ -111,35 +98,34 @@ export const Form = (props: FormProps) => {
     <FormStyled onSubmit={handleOnSubmit}>
       <Title>{nameForm}</Title>
       <Wrapper>
-        <Label value="Title" />
+        <Label value={constants.LABEL_TITLE} />
         <Input
           type="text"
-          inputRef={props.inputRef}
-          placeholder="Title"
+          placeholder={constants.PLACEHOLDER_TITLE}
           value={input}
-          handleOnChange={handleChangeInput}
+          onChange={handleOnChangeInput}
         />
       </Wrapper>
       <Wrapper>
-        <Label value="Description" />
+        <Label value={constants.LABEL_DESC} />
         <Textarea
-          placeholder="Write a comment..."
+          placeholder={constants.PLACEHOLDER_DESC}
           value={textarea}
-          handleOnChange={handleChangeTextarea}
+          onChange={handleOnChangeTextarea}
         />
       </Wrapper>
       <Wrapper>
         <Button
-          name="main-btn"
-          value="Submit"
+          name={constants.BTN_PRIMARY}
+          value={constants.BTN_SUBMIT}
           isEnabled={!isEnabled}
           type="submit"
         />
         <Button
-          name="main-btn"
-          value="Cancel"
+          name={constants.BTN_PRIMARY}
+          value={constants.BTN_CANCEL}
           type="button"
-          handleOnClick={handleOnClickCancel}
+          onClick={handleOnClickCancel}
         />
       </Wrapper>
     </FormStyled>

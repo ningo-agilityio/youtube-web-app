@@ -20,7 +20,7 @@ export const Text = () => (
     <Input
       type="text"
       placeholder="Title"
-      handleOnChange={action('Change title')}
+      onChange={action('Change title')}
     />
 
     <pre>

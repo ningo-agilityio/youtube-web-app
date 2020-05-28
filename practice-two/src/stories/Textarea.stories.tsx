@@ -19,7 +19,7 @@ export const Default = () => (
     <h2>Textarea</h2>
     <Textarea
       placeholder="Write a comment..."
-      handleOnChange={action('Change description')}
+      onChange={action('Change description')}
     />
 
     <pre>

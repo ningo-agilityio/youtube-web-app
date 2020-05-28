@@ -2,7 +2,7 @@ import React from 'react';
 import * as types from '../buildTypes/buildTypes';
 
 interface ContextProps {
-  handleShowDetail: (isShow: boolean) => void;
+  toggleDetail: (isShow: boolean) => void;
   handleUpdateIssue: (list: types.Issue[]) => void;
   handleChangeSelectedIssue: (issue: types.Issue) => void;
 }

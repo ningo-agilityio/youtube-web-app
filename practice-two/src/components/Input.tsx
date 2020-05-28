@@ -1,19 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { InputProps } from '../buildTypes/buildTypes';
+import { grayColor } from '../theme/color';
+import * as metric from '../theme/metric';
 
 const InputStyled = styled.input`
   width: 75%;
-  padding: 0.3rem;
-  border: 0.05rem solid rgba(0, 0, 0, 0.2);
+  padding: ${metric.PADDING_1};
+  border: 0.05rem solid ${grayColor};
 `;
-
-interface InputProps {
-  type: string;
-  placeholder: string;
-  value?: string;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
 
 export const Input = React.memo((props: InputProps) => {
   return (
@@ -22,7 +17,7 @@ export const Input = React.memo((props: InputProps) => {
       ref={props.inputRef}
       placeholder={props.placeholder}
       value={props.value}
-      onChange={props.handleOnChange}
+      onChange={props.onChange}
     />
   );
 });

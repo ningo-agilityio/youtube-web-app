@@ -1,50 +1,54 @@
 import React from 'react';
 import styled from 'styled-components';
+import * as constants from '../constants/constants';
+import { ButtonProps } from '../buildTypes/buildTypes';
+import * as color from '../theme/color';
+import * as metric from '../theme/metric';
 
 const ButtonStyled = styled.button`
   border-radius: 0.25rem;
   max-height: 2rem;
   background: ${(props: ButtonProps) =>
-    props.name === 'main-btn' ? 'rgb(33, 170, 85)' : 'none'};
+    props.name === `${constants.BTN_PRIMARY}` && `${color.successColor}`};
   border: none;
   padding: ${(props: ButtonProps) =>
-    props.name === 'main-btn' ? '0.5rem' : ''};
-  color: #fff;
+    props.name === `${constants.BTN_PRIMARY}` ? `${metric.PADDING_2}` : ''};
+  color: ${color.whiteColor};
   outline: none;
   cursor: pointer;
 
   :hover {
-    opacity: 0.6;
+    opacity: ${metric.OPACITY_2};
   }
 
   :disabled {
-    background: gray;
-    opacity: 1;
+    background: ${color.mutedColor};
+    opacity: ${metric.OPACITY_1};
   }
 
   ${(props: ButtonProps) =>
-    props.name === 'lock-btn' &&
+    props.name === `${constants.BTN_NO_OUTLINE_LIGHT}` &&
     `
-    color: ${props.value === 'Lock' ? 'rgb(236, 73, 37)' : 'gray'};
+    color: ${color.primaryColor};
+    background: none;
   `};
 
   ${(props: ButtonProps) =>
-    props.name === 'exit-btn' &&
+    props.name === `${constants.BTN_NO_OUTLINE_DARK}` &&
     `
-    background: gray;
+    color: ${color.mutedColor};
+    background: none;
+  `};
+
+  ${(props: ButtonProps) =>
+    props.name === `${constants.BTN_BOTTOM}` &&
+    `
+    background: ${color.mutedColor};
     position: absolute;
     bottom: 1rem;
     right: 1rem;
   `};
 `;
-
-interface ButtonProps {
-  name?: string;
-  value: string;
-  isEnabled?: boolean;
-  type: 'button' | 'submit' | 'reset';
-  handleOnClick?: (e: React.MouseEvent) => void;
-}
 
 export const Button = React.memo((props: ButtonProps) => {
   return (
@@ -53,7 +57,7 @@ export const Button = React.memo((props: ButtonProps) => {
       className={props.name}
       type={props.type}
       disabled={props.isEnabled}
-      onClick={props.handleOnClick}
+      onClick={props.onClick}
     >
       {props.value}
     </ButtonStyled>

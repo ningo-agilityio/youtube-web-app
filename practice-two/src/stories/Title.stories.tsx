@@ -24,9 +24,9 @@ export default {
   ],
 };
 
-export const TitleApp = () => (
+export const Primary = () => (
   <>
-    <h2>Title App</h2>
+    <h2>Primary Title</h2>
     <h1 className="main-title">{constants.TITLE}</h1>
     <pre>
       <CodeStyled>&lt;h1&gt;github issues app&lt;/h1&gt;</CodeStyled>
@@ -34,9 +34,9 @@ export const TitleApp = () => (
   </>
 );
 
-export const TitleForm = () => (
+export const Secondary = () => (
   <>
-    <h2>Title Form</h2>
+    <h2>Secondary Title</h2>
     <h3>New Issue</h3>
     <h3>Edit Issue</h3>
 
@@ -49,11 +49,3 @@ export const TitleForm = () => (
     </pre>
   </>
 );
-
-TitleApp.story = {
-  name: 'Title App',
-};
-
-TitleForm.story = {
-  name: 'Title Form',
-};
