@@ -20,7 +20,7 @@ export interface LabelProps {
 export interface ButtonProps {
   name?: string;
   value: string;
-  isEnabled?: boolean;
+  disabled?: boolean;
   locked?: boolean;
   type: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent) => void;
@@ -29,15 +29,15 @@ export interface ButtonProps {
 export interface InputProps {
   type: string;
   placeholder: string;
-  value?: string;
+  defaultValue?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface TextareaProps {
   placeholder: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  defaultValue?: string;
+  onBlur?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export interface IssueItemProps {
@@ -62,6 +62,7 @@ export interface IssueDetailProps {
 export interface FormProps {
   issueList: Issue[];
   selectedIssue: Issue;
+  ref?: React.RefObject<HTMLInputElement>;
   toggleForm: (e: React.FormEvent) => void;
   handleUpdateIssue: (list: Issue[]) => void;
   handleChangeSelectedIssue: (issue: Issue) => void;

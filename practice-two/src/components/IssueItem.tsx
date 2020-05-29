@@ -11,7 +11,7 @@ import { Button } from './Button';
 
 export const IssueItemStyled = styled.li`
   border-bottom: 0.05rem solid ${grayColor};
-  padding: ${metric.PADDING_2} 0;
+  padding: ${metric.PADDING.sm} 0;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -29,9 +29,9 @@ const IssueItem = (props: IssueItemProps) => {
   const valueButton = issue.locked ? constants.BTN_UNLOCK : constants.BTN_LOCK;
 
   const getIssue = (issueItem: Issue) => {
-    axios
-      .get(`${constants.API.url}/${issueItem.number}`)
-      .then(() => context.handleChangeSelectedIssue(issueItem));
+    axios.get(`${constants.API.url}/${issueItem.number}`).then(() => {
+      context.handleChangeSelectedIssue(issueItem);
+    });
   };
 
   const lockIssue = (issueItem: Issue) => {
@@ -52,17 +52,13 @@ const IssueItem = (props: IssueItemProps) => {
   };
 
   const handleChangeStatus = () => {
-    const updateList = issueList.map((item) =>
-      item.id === issue.id
-        ? {
-            ...item,
-            locked: !item.locked,
-          }
-        : item
-    );
-
+    const newList = issueList.slice();
+    const editItem = newList.find((item) => item.id === issue.id);
+    if (editItem) {
+      editItem.locked = !editItem.locked;
+    }
     issue.locked ? unLockIssue(issue) : lockIssue(issue);
-    context.handleUpdateIssue(updateList);
+    context.handleUpdateIssue(newList);
   };
 
   const nameLabel = issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT;
@@ -89,4 +85,8 @@ const IssueItem = (props: IssueItemProps) => {
   );
 };
 
-export default IssueItem;
+const areEqual = (prevProps: IssueItemProps, nextProps: IssueItemProps) => {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+};
+
+export default React.memo(IssueItem, areEqual);

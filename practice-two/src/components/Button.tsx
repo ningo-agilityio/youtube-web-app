@@ -12,18 +12,18 @@ const ButtonStyled = styled.button`
     props.name === `${constants.BTN_PRIMARY}` && `${color.successColor}`};
   border: none;
   padding: ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_PRIMARY}` ? `${metric.PADDING_2}` : ''};
+    props.name === `${constants.BTN_PRIMARY}` ? `${metric.PADDING.sm}` : ''};
   color: ${color.whiteColor};
   outline: none;
   cursor: pointer;
 
   :hover {
-    opacity: ${metric.OPACITY_2};
+    opacity: ${metric.OPACITY.sm};
   }
 
   :disabled {
     background: ${color.mutedColor};
-    opacity: ${metric.OPACITY_1};
+    opacity: ${metric.OPACITY.lg};
   }
 
   ${(props: ButtonProps) =>
@@ -41,7 +41,7 @@ const ButtonStyled = styled.button`
   `};
 
   ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_BOTTOM}` &&
+    props.name === `${constants.BTN_GRAY}` &&
     `
     background: ${color.mutedColor};
     position: absolute;
@@ -56,7 +56,7 @@ export const Button = React.memo((props: ButtonProps) => {
       {...props}
       className={props.name}
       type={props.type}
-      disabled={props.isEnabled}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.value}

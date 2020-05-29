@@ -27,14 +27,14 @@ export const FromGroup = () => (
         <Input
           type="text"
           placeholder="Title"
-          // onBlur={action('Change title')}
+          onBlur={action('Change title')}
         />
       </Wrapper>
       <Wrapper>
         <Label value="Description" />
         <Textarea
           placeholder="Write a comment..."
-          // onBlur={action('Change description')}
+          onBlur={action('Change description')}
         />
       </Wrapper>
       <Wrapper>

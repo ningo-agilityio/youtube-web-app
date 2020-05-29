@@ -20,7 +20,7 @@ export const Text = () => (
     <Input
       type="text"
       placeholder="Title"
-      onChange={action('Change title')}
+      onBlur={action('Change title')}
     />
 
     <pre>

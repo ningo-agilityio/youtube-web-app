@@ -33,6 +33,6 @@ export const BTN_LOCK = 'Lock';
 export const BTN_UNLOCK = 'Unlock';
 export const BTN_PRIMARY = 'btn-primary';
 export const BTN_SECONDARY = 'btn-secondary';
-export const BTN_BOTTOM = 'btn-bottom';
+export const BTN_GRAY = 'btn-gray';
 export const BTN_NO_OUTLINE_LIGHT = 'btn-no-outline-light';
 export const BTN_NO_OUTLINE_DARK = 'btn-no-outline-dark';

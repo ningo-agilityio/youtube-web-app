@@ -6,8 +6,9 @@ import * as metric from '../theme/metric';
 
 const InputStyled = styled.input`
   width: 75%;
-  padding: ${metric.PADDING_1};
+  padding: ${metric.PADDING.xs};
   border: 0.05rem solid ${grayColor};
+  font-size: 1rem;
 `;
 
 export const Input = React.memo((props: InputProps) => {
@@ -16,8 +17,8 @@ export const Input = React.memo((props: InputProps) => {
       type={props.type}
       ref={props.inputRef}
       placeholder={props.placeholder}
-      value={props.value}
-      onChange={props.onChange}
+      defaultValue={props.defaultValue}
+      onBlur={props.onBlur}
     />
   );
 });

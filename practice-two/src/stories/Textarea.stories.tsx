@@ -19,7 +19,7 @@ export const Default = () => (
     <h2>Textarea</h2>
     <Textarea
       placeholder="Write a comment..."
-      onChange={action('Change description')}
+      onBlur={action('Change description')}
     />
 
     <pre>

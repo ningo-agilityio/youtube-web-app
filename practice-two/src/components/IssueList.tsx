@@ -9,13 +9,13 @@ export const IssueListStyled = styled.ul`
   background: ${secondaryColor};
   width: ${(props: IssueListProps) =>
     props.isShowDetail || props.isShowForm ? '50%' : '100%'};
-  padding: ${metric.PADDING_3};
+  padding: ${metric.PADDING.md};
   margin: 0;
   list-style: none;
   overflow: auto;
 `;
 
-export const IssueList = React.memo((props: IssueListProps) => {
+const IssueList = (props: IssueListProps) => {
   const { issueList, isShowDetail } = props;
 
   const renderList = (list: Issue[]) =>
@@ -29,4 +29,10 @@ export const IssueList = React.memo((props: IssueListProps) => {
     ));
 
   return <IssueListStyled {...props}>{renderList(issueList)}</IssueListStyled>;
-});
+};
+
+const areEqual = (prevProps: IssueListProps, nextProps: IssueListProps) => {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+};
+
+export default React.memo(IssueList, areEqual);

@@ -7,11 +7,12 @@ import { IssueDetailProps } from '../buildTypes/buildTypes';
 import { Button } from './Button';
 
 const IssueDetailStyled = styled.div`
-  width: 50%;
-  margin-left: 1rem;
-  padding: ${metric.PADDING_3};
+  width: 100%;
+  height: 100%;
+  padding: ${metric.PADDING.md};
   border-radius: 0.5rem;
   border: 0.1rem solid ${color.lightOrangeColor};
+  box-sizing: border-box;
   position: relative;
 `;
 
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   border-bottom: 0.1rem solid ${color.lightOrangeColor};
   align-content: center;
-  padding: ${metric.PADDING_2} 0;
+  padding: ${metric.PADDING.sm} 0;
 `;
 
 const Title = styled.h3`
@@ -60,7 +61,7 @@ export const IssueDetail = (props: IssueDetailProps) => {
       </Wrapper>
       <Description>{issue.body}</Description>
       <Button
-        name={constants.BTN_BOTTOM}
+        name={constants.BTN_GRAY}
         value={constants.BTN_EXIT}
         type="button"
         onClick={handleOnClickExit}
