@@ -42,11 +42,11 @@ export const Form = (props: FormProps) => {
   );
 
   const handleOnBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
+    setInput(e.target.value.trim());
   };
 
   const handleOnBlurTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value);
+    setTextarea(e.target.value.trim());
   };
 
   const clearForm = () => {
