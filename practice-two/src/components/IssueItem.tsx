@@ -57,9 +57,9 @@ const IssueItem = (props: IssueItemProps) => {
 
     if (editItem) {
       editItem.locked = !editItem.locked;
+      editItem.locked ? lockIssue(editItem) : unLockIssue(editItem);
+      context.handleUpdateIssue(newList);
     }
-    issue.locked ? lockIssue(issue) : unLockIssue(issue);
-    context.handleUpdateIssue(newList);
   };
 
   const nameLabel = issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT;
