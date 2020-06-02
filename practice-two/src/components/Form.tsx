@@ -77,11 +77,12 @@ export const Form = (props: FormProps) => {
             const editItem = list.find(
               (item) => item.id === props.selectedIssue.id
             );
+
             if (editItem) {
               editItem.title = input;
               editItem.body = textarea;
+              props.handleUpdateIssue(list);
             }
-            props.handleUpdateIssue(list);
           });
         props.toggleForm(e);
         clearForm();
@@ -89,6 +90,7 @@ export const Form = (props: FormProps) => {
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
           const list = props.issueList.slice();
+
           list.unshift(response.data);
           props.handleUpdateIssue(list);
           props.toggleForm(e);
