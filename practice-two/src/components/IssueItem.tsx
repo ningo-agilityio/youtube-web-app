@@ -54,10 +54,11 @@ const IssueItem = (props: IssueItemProps) => {
   const handleChangeStatus = () => {
     const newList = issueList.slice();
     const editItem = newList.find((item) => item.id === issue.id);
+
     if (editItem) {
       editItem.locked = !editItem.locked;
     }
-    issue.locked ? unLockIssue(issue) : lockIssue(issue);
+    issue.locked ? lockIssue(issue) : unLockIssue(issue);
     context.handleUpdateIssue(newList);
   };
 
