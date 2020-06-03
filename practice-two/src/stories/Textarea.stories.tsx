@@ -45,7 +45,7 @@ export const Default = () => (
         <td>string</td>
       </tr>
       <tr>
-        <td>handleOnChange</td>
+        <td>handleOnBlur</td>
         <td>Function</td>
       </tr>
     </table>

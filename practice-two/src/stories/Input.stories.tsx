@@ -49,7 +49,7 @@ export const Text = () => (
         <td>string</td>
       </tr>
       <tr>
-        <td>handleOnChange</td>
+        <td>handleOnBlur</td>
         <td>Function</td>
       </tr>
     </table>
