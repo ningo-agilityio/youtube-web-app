@@ -61,7 +61,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    axios.get(`${constants.API.url}`).then((response) => {
+    axios.get(`${constants.API.url}?timestamp=${new Date().getTime()}`).then((response) => {
       setIssueList(response.data);
       setLoading(false);
     });

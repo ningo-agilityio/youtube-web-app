@@ -37,6 +37,7 @@ export interface InputProps {
 export interface TextareaProps {
   placeholder: string;
   defaultValue?: string;
+  textareaRef?: React.RefObject<HTMLTextAreaElement>;
   onBlur?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 

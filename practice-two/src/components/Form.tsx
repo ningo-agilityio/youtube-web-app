@@ -32,27 +32,34 @@ export const Title = styled.h3`
 `;
 
 export const Form = (props: FormProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const defaultInput = props.selectedIssue.id ? props.selectedIssue.title : '';
+  const defaultTextarea = props.selectedIssue.id
+    ? props.selectedIssue.body
+    : '';
 
-  const [input, setInput] = useState(
-    props.selectedIssue.id ? props.selectedIssue.title : ''
-  );
-  const [textarea, setTextarea] = useState(
-    props.selectedIssue.id ? props.selectedIssue.body : ''
-  );
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  // const textarea = defaultTextarea;
 
-  const handleOnBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value.trim());
-  };
+  // const [input, setInput] = useState(
+  //   props.selectedIssue.id ? props.selectedIssue.title : ''
+  // );
+  // const [textarea, setTextarea] = useState(
+  //   props.selectedIssue.id ? props.selectedIssue.body : ''
+  // );
 
-  const handleOnBlurTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value.trim());
-  };
+  // const handleOnBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInput(e.target.value.trim());
+  // };
+
+  // const handleOnBlurTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setTextarea(e.target.value.trim());
+  // };
 
   const clearForm = () => {
     props.handleChangeSelectedIssue(constants.issueDefault);
-    setInput('');
-    setTextarea('');
+    // setInput('');
+    // setTextarea('');
   };
 
   const handleOnClickCancel = (e: React.MouseEvent) => {
@@ -63,48 +70,48 @@ export const Form = (props: FormProps) => {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (input.trim() && textarea.trim()) {
-      const issue: Issue = {
-        title: input,
-        body: textarea,
-      };
+    // if (input.trim() && textarea!.trim()) {
+    //   const issue: Issue = {
+    //     title: input,
+    //     body: textarea,
+    //   };
 
-      if (props.selectedIssue.id) {
-        axios
-          .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
-          .then(() => {
-            const list = props.issueList.slice();
-            const editItem = list.find(
-              (item) => item.id === props.selectedIssue.id
-            );
+    //   if (props.selectedIssue.id) {
+    //     axios
+    //       .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
+    //       .then(() => {
+    //         const list = props.issueList.slice();
+    //         const editItem = list.find(
+    //           (item) => item.id === props.selectedIssue.id
+    //         );
 
-            if (editItem) {
-              editItem.title = input;
-              editItem.body = textarea;
-              props.handleUpdateIssue(list);
-            }
-          });
-        props.toggleForm(e);
-        clearForm();
-        alert('Updated successful!');
-      } else {
-        axios.post(`${constants.API.url}`, issue).then((response) => {
-          const list = props.issueList.slice();
+    //         if (editItem) {
+    //           editItem.title = input;
+    //           editItem.body = textarea;
+    //           props.handleUpdateIssue(list);
+    //         }
+    //         props.toggleForm(e);
+    //         clearForm();
+    //         alert('Updated successful!');
+    //       });
+    //   } else {
+    //     axios.post(`${constants.API.url}`, issue).then((response) => {
+    //       const list = props.issueList.slice();
 
-          list.unshift(response.data);
-          props.handleUpdateIssue(list);
-          props.toggleForm(e);
-          alert('Added successful!');
-        });
-      }
-    }
+    //       list.unshift(response.data);
+    //       props.handleUpdateIssue(list);
+    //       props.toggleForm(e);
+    //       alert('Added successful!');
+    //     });
+    //   }
+    // }
   };
 
   const nameForm = props.selectedIssue.id
     ? constants.TITLE_EDIT_FORM
     : constants.TITLE_ADD_FORM;
 
-  const isEnabled = input.length && textarea.length;
+  // const isEnabled = input.length && textarea.length;
 
   useEffect(() => {
     if (inputRef.current) {
@@ -121,23 +128,24 @@ export const Form = (props: FormProps) => {
           type="text"
           inputRef={inputRef}
           placeholder={constants.PLACEHOLDER_TITLE}
-          defaultValue={input}
-          onBlur={handleOnBlurInput}
+          defaultValue={defaultInput}
+          // onBlur={handleOnBlurInput}
         />
       </Wrapper>
       <Wrapper>
         <Label value={constants.LABEL_DESC} />
         <Textarea
+          textareaRef={textareaRef}
           placeholder={constants.PLACEHOLDER_DESC}
-          defaultValue={textarea}
-          onBlur={handleOnBlurTextarea}
+          defaultValue={defaultTextarea}
+          // onBlur={handleOnBlurTextarea}
         />
       </Wrapper>
       <Wrapper>
         <Button
           name={constants.BTN_PRIMARY}
           value={constants.BTN_SUBMIT}
-          disabled={!isEnabled}
+          // disabled={!isEnabled}
           type="submit"
         />
         <Button
