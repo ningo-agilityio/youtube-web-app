@@ -26,7 +26,7 @@ export const Text = () => (
     <pre>
       <CodeStyled>
         &lt;Input type="text" placeholder="Title" value=""
-        handleOnChange=handleChangeInput /&gt;
+        OnBlur=handleOnBlur /&gt;
       </CodeStyled>
     </pre>
 

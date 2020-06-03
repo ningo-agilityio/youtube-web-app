@@ -25,7 +25,7 @@ export const Default = () => (
     <pre>
       <CodeStyled>
         &lt;Textarea placeholder="Write a comment..." value=""
-        handleOnChange=handleChangeTextarea
+        OnBlur=handleOnBlur
         /&gt;
       </CodeStyled>
     </pre>

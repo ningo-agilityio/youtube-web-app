@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
+import * as constants from '../constants/constants';
 import { FormStyled, Wrapper, Title } from '../components/Form';
 import { Input } from '../components/Input';
 import { Label } from '../components/Label';
@@ -38,9 +39,9 @@ export const FromGroup = () => (
         />
       </Wrapper>
       <Wrapper>
-        <Button name="main-btn" value="Submit" type="submit" />
+        <Button name={constants.BTN_PRIMARY} value="Submit" type="submit" />
         <Button
-          name="main-btn"
+          name={constants.BTN_PRIMARY}
           value="Cancel"
           type="button"
           onClick={action('Cancel add')}

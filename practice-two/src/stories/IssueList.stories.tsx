@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
+import * as constants from '../constants/constants';
 import { IssueItemStyled } from '../components/IssueItem';
 import { Label } from '../components/Label';
 import { Button } from '../components/Button';
@@ -22,12 +23,13 @@ export const UnlockIssue = () => (
     <ul className="itemList">
       <IssueItemStyled id="1">
         <Label
+          name={constants.LABEL_LIGHT}
           locked={false}
           value="Issue one"
           onClick={action('Show detail form')}
         />
         <Button
-          name="lock-btn"
+          name={constants.BTN_NO_OUTLINE_LIGHT}
           value="Lock"
           type="button"
           onClick={action('Close an issue')}
@@ -35,12 +37,13 @@ export const UnlockIssue = () => (
       </IssueItemStyled>
       <IssueItemStyled id="2">
         <Label
+          name={constants.LABEL_LIGHT}
           locked={false}
           value="Issue Two"
           onClick={action('Show detail form')}
         />
         <Button
-          name="lock-btn"
+          name={constants.BTN_NO_OUTLINE_LIGHT}
           value="Lock"
           type="button"
           onClick={action('Close an issue')}
@@ -87,12 +90,13 @@ export const LockedIssue = () => (
     <ul className="itemList">
       <IssueItemStyled id="1">
         <Label
+          name={constants.LABEL_DARK}
           locked={true}
           value="Issue one"
           onClick={action('Show detail form')}
         />
         <Button
-          name="lock-btn"
+          name={constants.BTN_NO_OUTLINE_DARK}
           value="Unlock"
           type="button"
           onClick={action('Reopen an issue')}
@@ -100,12 +104,13 @@ export const LockedIssue = () => (
       </IssueItemStyled>
       <IssueItemStyled id="2">
         <Label
+          name={constants.LABEL_DARK}
           locked={true}
           value="Issue Two"
           onClick={action('Show detail form')}
         />
         <Button
-          name="lock-btn"
+          name={constants.BTN_NO_OUTLINE_DARK}
           value="Unlock"
           type="button"
           onClick={action('Reopen an issue')}
