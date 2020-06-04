@@ -6,7 +6,7 @@ import { FormStyled, Wrapper, Title } from '../components/Form';
 import { Input } from '../components/Input';
 import { Label } from '../components/Label';
 import { Textarea } from '../components/Textarea';
-import { Button } from '../components/Button';
+import Button from '../components/Button';
 
 const CodeStyled = styled.div`
   background: rgba(123, 123, 123, 0.2);
@@ -28,14 +28,12 @@ export const FromGroup = () => (
         <Input
           type="text"
           placeholder="Title"
-          onBlur={action('Change title')}
         />
       </Wrapper>
       <Wrapper>
         <Label value="Description" />
         <Textarea
           placeholder="Write a comment..."
-          onBlur={action('Change description')}
         />
       </Wrapper>
       <Wrapper>

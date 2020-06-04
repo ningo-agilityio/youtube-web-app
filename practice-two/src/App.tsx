@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Issue } from './buildTypes/buildTypes';
@@ -6,7 +6,7 @@ import * as constants from './constants/constants';
 import * as metric from './theme/metric';
 import Context from './contexts/contexts';
 import { Title } from './components/Title';
-import { Button } from './components/Button';
+import Button from './components/Button';
 import { Form } from './components/Form';
 import IssueList from './components/IssueList';
 import { IssueDetail } from './components/IssueDetail';
@@ -36,9 +36,17 @@ const App = () => {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const handleUpdateIssue = (list: Issue[]) => {
-    setIssueList(list);
-  };
+  const handleSaveChange = useCallback((issue: Issue) => {
+    const newList = issueList.slice();
+    const editItem = newList.find((item) => item.id === issue.id);
+    if (editItem) {
+      editItem.title = issue.title;
+      editItem.body = issue.body;
+    } else {
+      newList.unshift(issue);
+    }
+    setIssueList(newList);
+  }, [issueList]);
 
   const handleChangeSelectedIssue = (issue: Issue) => {
     setSelectedIssue(issue);
@@ -60,11 +68,24 @@ const App = () => {
     }
   };
 
+  const valueContext = useMemo(
+    () => ({
+      issueList,
+      isShowDetail,
+      toggleDetail: toggleDetail(true),
+      handleSaveChange,
+      handleChangeSelectedIssue,
+    }),
+    [handleSaveChange, isShowDetail, issueList]
+  );
+
   useEffect(() => {
-    axios.get(`${constants.API.url}?timestamp=${new Date().getTime()}`).then((response) => {
-      setIssueList(response.data);
-      setLoading(false);
-    });
+    axios
+      .get(`${constants.API.url}?timestamp=${new Date().getTime()}`)
+      .then((response) => {
+        setIssueList(response.data);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -77,31 +98,21 @@ const App = () => {
         onClick={handleClickNew}
       />
       <Wrapper>
-        <Context.Provider
-          value={{
-            toggleDetail: toggleDetail(true),
-            handleUpdateIssue,
-            handleChangeSelectedIssue,
-          }}
-        >
+        <Context.Provider value={valueContext}>
           {loading ? (
             <Spinner />
           ) : (
-            <IssueList
-              issueList={issueList}
-              isShowDetail={isShowDetail}
-              isShowForm={isShowForm}
-            />
+            <IssueList selectedIssue={selectedIssue} isShowForm={isShowForm} />
           )}
         </Context.Provider>
+
         {isShowForm && (
           <WrapperForm>
             <Form
-              issueList={issueList}
               selectedIssue={selectedIssue}
               handleChangeSelectedIssue={handleChangeSelectedIssue}
               toggleForm={toggleForm(!isShowForm)}
-              handleUpdateIssue={handleUpdateIssue}
+              handleSaveChange={handleSaveChange}
             />
           </WrapperForm>
         )}

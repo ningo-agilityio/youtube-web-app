@@ -4,11 +4,12 @@ import { IssueListProps, Issue } from '../buildTypes/buildTypes';
 import { secondaryColor } from '../theme/color';
 import * as metric from '../theme/metric';
 import IssueItem from './IssueItem';
+import Context from '../contexts/contexts';
 
 export const IssueListStyled = styled.ul`
   background: ${secondaryColor};
   width: ${(props: IssueListProps) =>
-    props.isShowDetail || props.isShowForm ? '50%' : '100%'};
+    props.selectedIssue.id || props.isShowForm ? '50%' : '100%'};
   padding: ${metric.PADDING.md};
   margin: 0;
   list-style: none;
@@ -16,19 +17,16 @@ export const IssueListStyled = styled.ul`
 `;
 
 const IssueList = (props: IssueListProps) => {
-  const { issueList, isShowDetail } = props;
+  const context = React.useContext(Context);
 
   const renderList = (list: Issue[]) =>
-    list.map((item) => (
-      <IssueItem
-        key={item.id!.toString()}
-        issue={item}
-        issueList={list}
-        isShowDetail={isShowDetail}
-      />
-    ));
+    list.map((item) => <IssueItem key={item.id!.toString()} issue={item} />);
 
-  return <IssueListStyled {...props}>{renderList(issueList)}</IssueListStyled>;
+  return (
+    <IssueListStyled {...props}>
+      {renderList(context.issueList)}
+    </IssueListStyled>
+  );
 };
 
 const areEqual = (prevProps: IssueListProps, nextProps: IssueListProps) => {

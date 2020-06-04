@@ -17,16 +17,12 @@ export default {
 export const Default = () => (
   <>
     <h2>Textarea</h2>
-    <Textarea
-      placeholder="Write a comment..."
-      onBlur={action('Change description')}
-    />
+    <Textarea placeholder="Write a comment..." />
 
     <pre>
       <CodeStyled>
-        &lt;Textarea placeholder="Write a comment..." value=""
-        OnBlur=handleOnBlur
-        /&gt;
+        &lt;Textarea ref=textareaRef placeholder="Write a comment..."
+        defaultValue="" /&gt;
       </CodeStyled>
     </pre>
 
@@ -41,12 +37,12 @@ export const Default = () => (
         <td>string</td>
       </tr>
       <tr>
-        <td>value</td>
+        <td>defaultValue</td>
         <td>string</td>
       </tr>
       <tr>
-        <td>handleOnBlur</td>
-        <td>Function</td>
+        <td>inputRef</td>
+        <td>React.RefObject</td>
       </tr>
     </table>
   </>

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
 import * as constants from '../constants/constants';
-import { Button } from '../components/Button';
+import Button from '../components/Button';
 import '../App.css';
 
 export default {

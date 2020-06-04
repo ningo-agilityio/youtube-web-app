@@ -15,10 +15,8 @@ export const Textarea = React.memo((props: TextareaProps) => {
   return (
     <TextareaStyled
       ref={props.textareaRef}
-      key={props.defaultValue}
       placeholder={props.placeholder}
       defaultValue={props.defaultValue}
-      onBlur={props.onBlur}
     />
   );
 });

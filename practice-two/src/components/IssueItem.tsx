@@ -7,7 +7,7 @@ import { grayColor } from '../theme/color';
 import * as metric from '../theme/metric';
 import Context from '../contexts/contexts';
 import { Label } from './Label';
-import { Button } from './Button';
+import Button from './Button';
 
 export const IssueItemStyled = styled.li`
   border-bottom: 0.05rem solid ${grayColor};
@@ -22,7 +22,7 @@ export const IssueItemStyled = styled.li`
 `;
 
 const IssueItem = (props: IssueItemProps) => {
-  const { issue, issueList, isShowDetail } = props;
+  const { issue } = props;
 
   const context = React.useContext(Context);
 
@@ -48,17 +48,14 @@ const IssueItem = (props: IssueItemProps) => {
 
   const handleOnClickTitle = (issueItem: Issue) => () => {
     getIssue(issueItem);
-    context.toggleDetail(!isShowDetail);
+    context.toggleDetail(!context.isShowDetail);
   };
 
   const handleChangeStatus = () => {
-    const newList = issueList.slice();
-    const editItem = newList.find((item) => item.id === issue.id);
-
-    if (editItem) {
-      editItem.locked = !editItem.locked;
-      editItem.locked ? lockIssue(editItem) : unLockIssue(editItem);
-      context.handleUpdateIssue(newList);
+    if (issue) {
+      !issue.locked ? lockIssue(issue) : unLockIssue(issue);
+      issue.locked = !issue.locked;
+      context.handleSaveChange(issue);
     }
   };
 

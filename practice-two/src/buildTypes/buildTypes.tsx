@@ -31,25 +31,20 @@ export interface InputProps {
   placeholder: string;
   defaultValue?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
-  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface TextareaProps {
   placeholder: string;
   defaultValue?: string;
   textareaRef?: React.RefObject<HTMLTextAreaElement>;
-  onBlur?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export interface IssueItemProps {
   issue: Issue;
-  issueList: Issue[];
-  isShowDetail: boolean;
 }
 
 export interface IssueListProps {
-  issueList: Issue[];
-  isShowDetail: boolean;
+  selectedIssue: Issue;
   isShowForm: boolean;
 }
 
@@ -61,10 +56,8 @@ export interface IssueDetailProps {
 }
 
 export interface FormProps {
-  issueList: Issue[];
   selectedIssue: Issue;
-  ref?: React.RefObject<HTMLInputElement>;
   toggleForm: (e: React.FormEvent) => void;
-  handleUpdateIssue: (list: Issue[]) => void;
+  handleSaveChange: (issue: Issue) => void;
   handleChangeSelectedIssue: (issue: Issue) => void;
 }

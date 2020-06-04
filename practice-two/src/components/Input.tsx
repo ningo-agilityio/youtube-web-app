@@ -18,7 +18,6 @@ export const Input = React.memo((props: InputProps) => {
       ref={props.inputRef}
       placeholder={props.placeholder}
       defaultValue={props.defaultValue}
-      onBlur={props.onBlur}
     />
   );
 });

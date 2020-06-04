@@ -4,7 +4,7 @@ import * as constants from '../constants/constants';
 import * as metric from '../theme/metric';
 import * as color from '../theme/color';
 import { IssueDetailProps } from '../buildTypes/buildTypes';
-import { Button } from './Button';
+import Button from './Button';
 
 const IssueDetailStyled = styled.div`
   width: 100%;

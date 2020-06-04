@@ -8,11 +8,13 @@ import * as metric from '../theme/metric';
 const ButtonStyled = styled.button`
   border-radius: 0.25rem;
   max-height: 2rem;
-  background: ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_PRIMARY}` && `${color.successColor}`};
+  background: ${(props) =>
+    props.className === `${constants.BTN_PRIMARY}` && `${color.successColor}`};
   border: none;
-  padding: ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_PRIMARY}` ? `${metric.PADDING.sm}` : ''};
+  padding: ${(props) =>
+    props.className === `${constants.BTN_PRIMARY}`
+      ? `${metric.PADDING.sm}`
+      : ''};
   color: ${color.whiteColor};
   outline: none;
   cursor: pointer;
@@ -26,22 +28,22 @@ const ButtonStyled = styled.button`
     opacity: ${metric.OPACITY.lg};
   }
 
-  ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_NO_OUTLINE_LIGHT}` &&
+  ${(props) =>
+    props.className === `${constants.BTN_NO_OUTLINE_LIGHT}` &&
     `
     color: ${color.primaryColor};
     background: none;
   `};
 
-  ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_NO_OUTLINE_DARK}` &&
+  ${(props) =>
+    props.className === `${constants.BTN_NO_OUTLINE_DARK}` &&
     `
     color: ${color.mutedColor};
     background: none;
   `};
 
-  ${(props: ButtonProps) =>
-    props.name === `${constants.BTN_GRAY}` &&
+  ${(props) =>
+    props.className === `${constants.BTN_GRAY}` &&
     `
     background: ${color.mutedColor};
     position: absolute;
@@ -50,10 +52,9 @@ const ButtonStyled = styled.button`
   `};
 `;
 
-export const Button = React.memo((props: ButtonProps) => {
+const Button = React.memo((props: ButtonProps) => {
   return (
     <ButtonStyled
-      {...props}
       className={props.name}
       type={props.type}
       disabled={props.disabled}
@@ -63,3 +64,13 @@ export const Button = React.memo((props: ButtonProps) => {
     </ButtonStyled>
   );
 });
+
+// Button.defaultProps = {
+//   name: 'button',
+//   value: 'Button',
+//   locked: false,
+//   type: 'button',
+//   onClick: () => {},
+// };
+
+export default Button;

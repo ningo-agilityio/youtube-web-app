@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 import * as constants from '../constants/constants';
 import { IssueItemStyled } from '../components/IssueItem';
 import { Label } from '../components/Label';
-import { Button } from '../components/Button';
+import Button from '../components/Button';
 import '../App.css';
 
 const CodeStyled = styled.div`
