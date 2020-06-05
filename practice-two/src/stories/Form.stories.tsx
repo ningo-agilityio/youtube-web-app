@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
+import * as constants from '../constants/constants';
 import { FormStyled, Wrapper, Title } from '../components/Form';
-import { Input } from '../components/Input';
-import { Label } from '../components/Label';
-import { Textarea } from '../components/Textarea';
-import { Button } from '../components/Button';
+import Input from '../components/Input';
+import Label from '../components/Label';
+import Textarea from '../components/Textarea';
+import Button from '../components/Button';
 
 const CodeStyled = styled.div`
   background: rgba(123, 123, 123, 0.2);
@@ -27,20 +28,18 @@ export const FromGroup = () => (
         <Input
           type="text"
           placeholder="Title"
-          onBlur={action('Change title')}
         />
       </Wrapper>
       <Wrapper>
         <Label value="Description" />
         <Textarea
           placeholder="Write a comment..."
-          onBlur={action('Change description')}
         />
       </Wrapper>
       <Wrapper>
-        <Button name="main-btn" value="Submit" type="submit" />
+        <Button name={constants.BTN_PRIMARY} value="Submit" type="submit" />
         <Button
-          name="main-btn"
+          name={constants.BTN_PRIMARY}
           value="Cancel"
           type="button"
           onClick={action('Cancel add')}

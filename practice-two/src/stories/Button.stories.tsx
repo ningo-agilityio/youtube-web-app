@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
-import { Button } from '../components/Button';
+import * as constants from '../constants/constants';
+import Button from '../components/Button';
 import '../App.css';
 
 export default {
@@ -25,21 +26,21 @@ export const Primary = () => (
   <>
     <h2>Primary Button</h2>
     <Button
-      name="main-btn"
+      name={constants.BTN_PRIMARY}
       value="New Issue"
       type="button"
       onClick={action('Create new issue')}
     />
     <span> </span>
     <Button
-      name="main-btn"
+      name={constants.BTN_PRIMARY}
       value="Edit"
       type="button"
       onClick={action('Edit an issue')}
     />
     <span> </span>
     <Button
-      name="main-btn"
+      name={constants.BTN_PRIMARY}
       value="Submit"
       type="submit"
       onClick={action('Submit form')}
@@ -89,7 +90,7 @@ export const Secondary = () => (
     <h2>Secondary Button</h2>
     <Wrapper>
       <Button
-        name="exit-btn"
+        name={constants.BTN_GRAY}
         value="Exit"
         type="button"
         onClick={action('Exit detail form')}
@@ -133,14 +134,14 @@ export const NoOutline = () => (
   <>
     <h2>No Outline Button</h2>
     <Button
-      name="lock-btn"
+      name={constants.BTN_NO_OUTLINE_LIGHT}
       value="Lock"
       type="button"
       onClick={action('Lock an issue')}
     />
     <span> </span>
     <Button
-      name="lock-btn"
+      name={constants.BTN_NO_OUTLINE_DARK}
       value="Unlock"
       type="button"
       onClick={action('Unlock an issue')}

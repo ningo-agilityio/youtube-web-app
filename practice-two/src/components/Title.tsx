@@ -9,6 +9,10 @@ const TitledStyled = styled.h1`
   text-transform: uppercase;
 `;
 
-export const Title = React.memo((props: TitleProps) => {
+const Title = (props: TitleProps) => {
   return <TitledStyled>{props.value}</TitledStyled>;
-});
+};
+
+Title.defaultProps = { value: 'github issues app' };
+
+export default React.memo(Title);

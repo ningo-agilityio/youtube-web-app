@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
-import { Textarea } from '../components/Textarea';
+import Textarea from '../components/Textarea';
 
 const CodeStyled = styled.div`
   background: rgba(123, 123, 123, 0.2);
@@ -17,16 +17,12 @@ export default {
 export const Default = () => (
   <>
     <h2>Textarea</h2>
-    <Textarea
-      placeholder="Write a comment..."
-      onBlur={action('Change description')}
-    />
+    <Textarea placeholder="Write a comment..." />
 
     <pre>
       <CodeStyled>
-        &lt;Textarea placeholder="Write a comment..." value=""
-        handleOnChange=handleChangeTextarea
-        /&gt;
+        &lt;Textarea ref=textareaRef placeholder="Write a comment..."
+        defaultValue="" /&gt;
       </CodeStyled>
     </pre>
 
@@ -41,12 +37,12 @@ export const Default = () => (
         <td>string</td>
       </tr>
       <tr>
-        <td>value</td>
+        <td>defaultValue</td>
         <td>string</td>
       </tr>
       <tr>
-        <td>handleOnChange</td>
-        <td>Function</td>
+        <td>inputRef</td>
+        <td>React.RefObject</td>
       </tr>
     </table>
   </>

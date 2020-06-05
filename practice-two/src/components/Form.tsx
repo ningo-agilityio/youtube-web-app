@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import * as constants from '../constants/constants';
 import { Issue, FormProps } from '../buildTypes/buildTypes';
 import { lightOrangeColor } from '../theme/color';
 import * as metric from '../theme/metric';
-import { Label } from './Label';
-import { Input } from './Input';
-import { Textarea } from './Textarea';
-import { Button } from './Button';
+import Label from './Label';
+import Input from './Input';
+import Textarea from './Textarea';
+import Button from './Button';
 
 export const FormStyled = styled.form`
   width: 100%;
@@ -33,77 +33,52 @@ export const Title = styled.h3`
 
 export const Form = (props: FormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const [input, setInput] = useState(
-    props.selectedIssue.id ? props.selectedIssue.title : ''
-  );
-  const [textarea, setTextarea] = useState(
-    props.selectedIssue.id ? props.selectedIssue.body : ''
-  );
-
-  const handleOnBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value.trim());
-  };
-
-  const handleOnBlurTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value.trim());
-  };
-
-  const clearForm = () => {
-    props.handleChangeSelectedIssue(constants.issueDefault);
-    setInput('');
-    setTextarea('');
-  };
-
+  // When click Cancel then close Form and change selected issue to default
   const handleOnClickCancel = (e: React.MouseEvent) => {
     props.toggleForm(e);
-    clearForm();
+    props.handleChangeSelectedIssue(constants.issueDefault);
   };
 
+  // handle submit an issue
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (input.trim() && textarea.trim()) {
+    if (inputRef.current?.value.trim() && textareaRef.current?.value.trim()) {
       const issue: Issue = {
-        title: input,
-        body: textarea,
+        title: inputRef.current?.value,
+        body: textareaRef.current?.value,
       };
 
+      // if selected issue is true then handle edit issue
       if (props.selectedIssue.id) {
         axios
           .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
-          .then(() => {
-            const list = props.issueList.slice();
-            const editItem = list.find(
-              (item) => item.id === props.selectedIssue.id
-            );
-            if (editItem) {
-              editItem.title = input;
-              editItem.body = textarea;
-            }
-            props.handleUpdateIssue(list);
+          .then((response) => {
+            props.toggleForm(e);
+            props.handleChangeSelectedIssue(constants.issueDefault);
+            props.handleSaveChange(response.data);
+            alert('Updated successful');
           });
-        props.toggleForm(e);
-        clearForm();
-        alert('Updated successful!');
+      
+      // If selected issue is null then handle add new an issue
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
-          const list = props.issueList.slice();
-          list.unshift(response.data);
-          props.handleUpdateIssue(list);
           props.toggleForm(e);
+          props.handleSaveChange(response.data);
           alert('Added successful!');
         });
       }
     }
   };
 
+  // set title name of form
   const nameForm = props.selectedIssue.id
     ? constants.TITLE_EDIT_FORM
     : constants.TITLE_ADD_FORM;
 
-  const isEnabled = input.length && textarea.length;
-
+  // set focus at input filed in first time render
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -119,23 +94,21 @@ export const Form = (props: FormProps) => {
           type="text"
           inputRef={inputRef}
           placeholder={constants.PLACEHOLDER_TITLE}
-          defaultValue={input}
-          onBlur={handleOnBlurInput}
+          defaultValue={props.selectedIssue.title || ''}
         />
       </Wrapper>
       <Wrapper>
         <Label value={constants.LABEL_DESC} />
         <Textarea
+          textareaRef={textareaRef}
           placeholder={constants.PLACEHOLDER_DESC}
-          defaultValue={textarea}
-          onBlur={handleOnBlurTextarea}
+          defaultValue={props.selectedIssue.body || ''}
         />
       </Wrapper>
       <Wrapper>
         <Button
           name={constants.BTN_PRIMARY}
           value={constants.BTN_SUBMIT}
-          disabled={!isEnabled}
           type="submit"
         />
         <Button
@@ -147,4 +120,11 @@ export const Form = (props: FormProps) => {
       </Wrapper>
     </FormStyled>
   );
+};
+
+Form.defaultProps = {
+  selectedIssue: {},
+  toggleForm: () => {},
+  handleSaveChange: () => {},
+  handleChangeSelectedIssue: () => {},
 };

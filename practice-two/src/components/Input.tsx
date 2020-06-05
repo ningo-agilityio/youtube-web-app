@@ -11,14 +11,22 @@ const InputStyled = styled.input`
   font-size: 1rem;
 `;
 
-export const Input = React.memo((props: InputProps) => {
+const Input = (props: InputProps) => {
   return (
     <InputStyled
       type={props.type}
       ref={props.inputRef}
       placeholder={props.placeholder}
       defaultValue={props.defaultValue}
-      onBlur={props.onBlur}
     />
   );
-});
+};
+
+Input.defaultProps = {
+  type: 'text',
+  placeholder: 'Title',
+  defaultValue: '',
+  inputRef: null,
+};
+
+export default React.memo(Input);

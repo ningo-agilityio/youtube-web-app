@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
-import { Input } from '../components/Input';
+import Input from '../components/Input';
 
 const CodeStyled = styled.div`
   background: rgba(123, 123, 123, 0.2);
@@ -17,16 +17,12 @@ export default {
 export const Text = () => (
   <>
     <h2>Text Input</h2>
-    <Input
-      type="text"
-      placeholder="Title"
-      onBlur={action('Change title')}
-    />
+    <Input type="text" placeholder="Title" />
 
     <pre>
       <CodeStyled>
-        &lt;Input type="text" placeholder="Title" value=""
-        handleOnChange=handleChangeInput /&gt;
+        &lt;Input type="text" ref=inputRef placeholder="Title" defaultValue=""
+        /&gt;
       </CodeStyled>
     </pre>
 
@@ -45,12 +41,12 @@ export const Text = () => (
         <td>string</td>
       </tr>
       <tr>
-        <td>value</td>
+        <td>defaultValue</td>
         <td>string</td>
       </tr>
       <tr>
-        <td>handleOnChange</td>
-        <td>Function</td>
+        <td>inputRef</td>
+        <td>React.RefObject</td>
       </tr>
     </table>
   </>
