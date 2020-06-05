@@ -52,25 +52,24 @@ const ButtonStyled = styled.button`
   `};
 `;
 
-const Button = React.memo((props: ButtonProps) => {
+const Button = (props: ButtonProps) => {
   return (
     <ButtonStyled
       className={props.name}
       type={props.type}
-      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.value}
     </ButtonStyled>
   );
-});
+};
 
-// Button.defaultProps = {
-//   name: 'button',
-//   value: 'Button',
-//   locked: false,
-//   type: 'button',
-//   onClick: () => {},
-// };
+Button.defaultProps = {
+  name: 'btn-primary',
+  value: 'Button',
+  locked: false,
+  type: 'button',
+  onClick: () => {},
+};
 
-export default Button;
+export default React.memo(Button);

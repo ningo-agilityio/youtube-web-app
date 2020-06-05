@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
 import * as constants from '../constants/constants';
 import { FormStyled, Wrapper, Title } from '../components/Form';
-import { Input } from '../components/Input';
-import { Label } from '../components/Label';
-import { Textarea } from '../components/Textarea';
+import Input from '../components/Input';
+import Label from '../components/Label';
+import Textarea from '../components/Textarea';
 import Button from '../components/Button';
 
 const CodeStyled = styled.div`

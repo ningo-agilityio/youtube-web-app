@@ -22,10 +22,19 @@ const LabelStyled = styled.label`
   }
 `;
 
-export const Label = React.memo((props: LabelProps) => {
+const Label = (props: LabelProps) => {
   return (
     <LabelStyled className={props.name} onClick={props.onClick}>
       {props.value}
     </LabelStyled>
   );
-});
+};
+
+Label.defaultProps = {
+  name: 'label-light',
+  value: 'Issue',
+  locked: false,
+  onClick: () => {},
+};
+
+export default React.memo(Label);

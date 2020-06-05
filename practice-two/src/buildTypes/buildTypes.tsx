@@ -20,7 +20,6 @@ export interface LabelProps {
 export interface ButtonProps {
   name?: string;
   value: string;
-  disabled?: boolean;
   locked?: boolean;
   type: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent) => void;

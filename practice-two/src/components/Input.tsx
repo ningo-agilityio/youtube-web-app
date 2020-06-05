@@ -11,7 +11,7 @@ const InputStyled = styled.input`
   font-size: 1rem;
 `;
 
-export const Input = React.memo((props: InputProps) => {
+const Input = (props: InputProps) => {
   return (
     <InputStyled
       type={props.type}
@@ -20,4 +20,13 @@ export const Input = React.memo((props: InputProps) => {
       defaultValue={props.defaultValue}
     />
   );
-});
+};
+
+Input.defaultProps = {
+  type: 'text',
+  placeholder: 'Title',
+  defaultValue: '',
+  inputRef: null,
+};
+
+export default React.memo(Input);

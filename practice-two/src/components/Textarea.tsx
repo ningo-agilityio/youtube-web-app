@@ -11,7 +11,7 @@ const TextareaStyled = styled.textarea`
   border: 0.05rem solid ${grayColor};
 `;
 
-export const Textarea = React.memo((props: TextareaProps) => {
+const Textarea = (props: TextareaProps) => {
   return (
     <TextareaStyled
       ref={props.textareaRef}
@@ -19,4 +19,12 @@ export const Textarea = React.memo((props: TextareaProps) => {
       defaultValue={props.defaultValue}
     />
   );
-});
+};
+
+Textarea.defaultProps = {
+  placeholder: 'Write a comment...',
+  defaultValue: '',
+  textareaRef: null,
+};
+
+export default React.memo(Textarea);

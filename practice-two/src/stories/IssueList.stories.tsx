@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { action } from '@storybook/addon-actions';
 import * as constants from '../constants/constants';
 import { IssueItemStyled } from '../components/IssueItem';
-import { Label } from '../components/Label';
+import Label from '../components/Label';
 import Button from '../components/Button';
 import '../App.css';
 
@@ -53,8 +53,7 @@ export const UnlockIssue = () => (
 
     <pre>
       <CodeStyled>
-        &lt;IssueItem key= item.id issue=item issueList=listItem
-        isShowDetail=handleIsShowDetail /&gt;
+        &lt;IssueList selectedIssue=selectedIssue isShowForm=false /&gt;
       </CodeStyled>
     </pre>
 
@@ -65,20 +64,12 @@ export const UnlockIssue = () => (
         <th>Type</th>
       </tr>
       <tr>
-        <td>key</td>
-        <td>string</td>
-      </tr>
-      <tr>
-        <td>issue</td>
+        <td>selectedIssue</td>
         <td>object</td>
       </tr>
       <tr>
-        <td>issueList</td>
-        <td>Array&lt;object&gt;</td>
-      </tr>
-      <tr>
-        <td>isShowDetail</td>
-        <td>Function</td>
+        <td>isShowForm</td>
+        <td>boolean</td>
       </tr>
     </table>
   </>
@@ -120,8 +111,7 @@ export const LockedIssue = () => (
 
     <pre>
       <CodeStyled>
-        &lt;IssueItem key= item.id issue=item issueList=listItem
-        isShowDetail=handleIsShowDetail /&gt;
+        &lt;IssueList selectedIssue=selectedIssue isShowForm=false /&gt;
       </CodeStyled>
     </pre>
 
@@ -132,20 +122,12 @@ export const LockedIssue = () => (
         <th>Type</th>
       </tr>
       <tr>
-        <td>key</td>
-        <td>string</td>
-      </tr>
-      <tr>
-        <td>issue</td>
+        <td>selectedIssue</td>
         <td>object</td>
       </tr>
       <tr>
-        <td>issueList</td>
-        <td>Array&lt;object&gt;</td>
-      </tr>
-      <tr>
-        <td>isShowDetail</td>
-        <td>Function</td>
+        <td>isShowForm</td>
+        <td>boolean</td>
       </tr>
     </table>
   </>

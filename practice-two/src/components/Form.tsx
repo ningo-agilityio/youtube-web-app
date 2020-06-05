@@ -5,9 +5,9 @@ import * as constants from '../constants/constants';
 import { Issue, FormProps } from '../buildTypes/buildTypes';
 import { lightOrangeColor } from '../theme/color';
 import * as metric from '../theme/metric';
-import { Label } from './Label';
-import { Input } from './Input';
-import { Textarea } from './Textarea';
+import Label from './Label';
+import Input from './Input';
+import Textarea from './Textarea';
 import Button from './Button';
 
 export const FormStyled = styled.form`
@@ -35,11 +35,13 @@ export const Form = (props: FormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // When click Cancel then close Form and change selected issue to default
   const handleOnClickCancel = (e: React.MouseEvent) => {
     props.toggleForm(e);
     props.handleChangeSelectedIssue(constants.issueDefault);
   };
 
+  // handle submit an issue
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -49,6 +51,7 @@ export const Form = (props: FormProps) => {
         body: textareaRef.current?.value,
       };
 
+      // if selected issue is true then handle edit issue
       if (props.selectedIssue.id) {
         axios
           .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
@@ -58,6 +61,8 @@ export const Form = (props: FormProps) => {
             props.handleSaveChange(response.data);
             alert('Updated successful');
           });
+      
+      // If selected issue is null then handle add new an issue
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
           props.toggleForm(e);
@@ -68,10 +73,12 @@ export const Form = (props: FormProps) => {
     }
   };
 
+  // set title name of form
   const nameForm = props.selectedIssue.id
     ? constants.TITLE_EDIT_FORM
     : constants.TITLE_ADD_FORM;
 
+  // set focus at input filed in first time render
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -113,4 +120,11 @@ export const Form = (props: FormProps) => {
       </Wrapper>
     </FormStyled>
   );
+};
+
+Form.defaultProps = {
+  selectedIssue: {},
+  toggleForm: () => {},
+  handleSaveChange: () => {},
+  handleChangeSelectedIssue: () => {},
 };
