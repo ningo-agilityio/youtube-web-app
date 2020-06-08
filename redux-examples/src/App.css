@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+code {
+  background: rgba(123, 123, 123, 0.2);
+  padding: 1rem;
+  overflow: scroll;
+}
+
+.itemList {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background: rgba(236, 103, 37, 0.1);
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+}
+
+.main-title {
+  font-size: 2rem;
+  color: rgb(236, 103, 37);
+  text-transform: uppercase;
+}

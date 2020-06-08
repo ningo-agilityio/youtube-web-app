@@ -1,44 +1,82 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# REACT/PRACTICE-TWO
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+- This document provides the requirements, technical stack and estimate detail features for Practice two apply React Typescript (Context + Hook)
 
-### `npm start`
+## Timeline
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- 5 days (20/05/2020 - 26/05/2020)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Team size
 
-### `npm test`
+- 1 Developer
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Target
 
-### `npm run build`
+- Get familiar and understand advanced flow (context/hook) in React
+- Apply styled-component and storybook
+- Apply axios to hit api
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tech stack
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- React latest version (Context + Hook)
+- TypeScript
+- Styled component + Storybook
+- Configure eslint
+- Axios to hit api
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Requirements
 
-### `npm run eject`
+- Create GitHub issues app with features:
+  - List issues for a repository
+  - Get a single issue
+  - Create an issue
+  - Edit an issue
+  - Lock an issue
+  - Unlock an issue
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Development environment
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Ubuntu v18.04 (Operating system)
+- Visual Studio Code v1.40.2 (Text editor)
+- GitLab (Save and management source code)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## How to run?
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Clone repository:
+  ```
+  git@gitlab.asoft-python.com:g-ngantong/react-training.git
+  ```
+- At the directory root, run:
+  ```
+  cd practice-two
+  ```
+- Install dependencies:
+  ```
+  npm install
+  ```
+- To run in development mode:
+  ```
+  npm start
+  ```
+- To run storybook:
+  ```
+    npm run storybook
+  ```
 
-## Learn More
+## Folder Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+|--practice-two
+  |--public
+  |--src
+  |--.eslintrc
+  |--.gitignore
+  |--.prettierrc
+  |--package-lock.json
+  |--package.json
+  |--tsconfig.json
+  |--tslint.json
+  |--README.md
+```
