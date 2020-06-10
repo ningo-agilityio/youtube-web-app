@@ -26,9 +26,6 @@ const IssueItem = (props: IssueItemProps) => {
 
   const context = React.useContext(Context);
 
-  // set value of button
-  const valueButton = issue.locked ? constants.BTN_UNLOCK : constants.BTN_LOCK;
-
   // get an issue from api change selected issue
   const getIssue = (issueItem: Issue) => {
     axios.get(`${constants.API.url}/${issueItem.number}`).then(() => {
@@ -65,25 +62,21 @@ const IssueItem = (props: IssueItemProps) => {
     }
   };
 
-  // set style name title issue when lock and unlock 
-  const nameLabel = issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT;
-
-  // set style name button when lock an unlock
-  const nameBtn = issue.locked
-    ? constants.BTN_NO_OUTLINE_DARK
-    : constants.BTN_NO_OUTLINE_LIGHT;
-
   return (
     <IssueItemStyled id={issue.id!.toString()}>
       <Label
-        name={nameLabel}
+        name={issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT}
         locked={issue.locked}
         value={issue.title}
         onClick={handleOnClickTitle(issue)}
       />
       <Button
-        name={nameBtn}
-        value={valueButton}
+        name={
+          issue.locked
+            ? constants.BTN_NO_OUTLINE_DARK
+            : constants.BTN_NO_OUTLINE_LIGHT
+        }
+        value={issue.locked ? constants.BTN_UNLOCK : constants.BTN_LOCK}
         type="button"
         onClick={handleChangeStatus}
       />

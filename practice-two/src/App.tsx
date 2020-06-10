@@ -131,12 +131,14 @@ const App = () => {
 
         {isShowForm && (
           <WrapperForm>
-            <Form
-              selectedIssue={selectedIssue}
-              handleChangeSelectedIssue={handleChangeSelectedIssue}
-              toggleForm={toggleForm(!isShowForm)}
-              handleSaveChange={handleSaveChange}
-            />
+            <ErrorBoundary>
+              <Form
+                selectedIssue={selectedIssue}
+                handleChangeSelectedIssue={handleChangeSelectedIssue}
+                toggleForm={toggleForm(!isShowForm)}
+                handleSaveChange={handleSaveChange}
+              />
+            </ErrorBoundary>
           </WrapperForm>
         )}
 

@@ -61,8 +61,8 @@ export const Form = (props: FormProps) => {
             props.handleSaveChange(response.data);
             alert('Updated successful');
           });
-      
-      // If selected issue is null then handle add new an issue
+
+        // If selected issue is null then handle add new an issue
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
           props.toggleForm(e);
@@ -73,11 +73,6 @@ export const Form = (props: FormProps) => {
     }
   };
 
-  // set title name of form
-  const nameForm = props.selectedIssue.id
-    ? constants.TITLE_EDIT_FORM
-    : constants.TITLE_ADD_FORM;
-
   // set focus at input filed in first time render
   useEffect(() => {
     if (inputRef.current) {
@@ -87,7 +82,11 @@ export const Form = (props: FormProps) => {
 
   return (
     <FormStyled onSubmit={handleOnSubmit}>
-      <Title>{nameForm}</Title>
+      <Title>
+        {props.selectedIssue.id
+          ? constants.TITLE_EDIT_FORM
+          : constants.TITLE_ADD_FORM}
+      </Title>
       <Wrapper>
         <Label value={constants.LABEL_TITLE} />
         <Input
