@@ -1,10 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import * as constants from '../constants/constants';
 import * as metric from '../theme/metric';
 import * as color from '../theme/color';
 import { IssueDetailProps } from '../buildTypes/buildTypes';
 import Button from './Button';
+import { toggleDetail, toggleForm } from '../actions';
 
 const IssueDetailStyled = styled.div`
   width: 100%;
@@ -38,15 +40,19 @@ const Description = styled.p`
 
 const IssueDetail = (props: IssueDetailProps) => {
   const { issue } = props;
+  const dispatch = useDispatch();
 
   // Open edit form when click edit button
   const handleOnClickEdit = (e: React.MouseEvent) => {
-    props.toggleForm(e);
+    dispatch(toggleDetail());
+    dispatch(toggleForm());
+    // props.toggleForm(e);
   };
 
   // Close detail box and change selected issue when click exit button
   const handleOnClickExit = (e: React.MouseEvent) => {
-    props.toggleDetail(e);
+    dispatch(toggleDetail());
+    // props.toggleDetail(e);
     props.handleChangeSelectedIssue(constants.issueDefault);
   };
 

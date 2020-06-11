@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
 import * as constants from '../constants/constants';
@@ -8,6 +9,7 @@ import * as metric from '../theme/metric';
 import Context from '../contexts/contexts';
 import Label from './Label';
 import Button from './Button';
+import { editIssue, toggleDetail } from '../actions';
 
 export const IssueItemStyled = styled.li`
   border-bottom: 0.05rem solid ${grayColor};
@@ -23,6 +25,7 @@ export const IssueItemStyled = styled.li`
 
 const IssueItem = (props: IssueItemProps) => {
   const { issue } = props;
+  const dispatch = useDispatch();
 
   const context = React.useContext(Context);
 
@@ -40,32 +43,39 @@ const IssueItem = (props: IssueItemProps) => {
   const lockIssue = (issueItem: Issue) => {
     axios
       .put(`${constants.API.url}/${issueItem.number}/lock`, { locked: true })
-      .then((response) => response);
+      .then(() => {
+        const newIssue = { ...issueItem };
+        newIssue.locked = !newIssue.locked;
+        dispatch(editIssue(newIssue));
+      });
   };
 
   // unlock an issue
   const unLockIssue = (issueItem: Issue) => {
-    axios
-      .delete(`${constants.API.url}/${issueItem.number}/lock`)
-      .then((response) => response);
+    axios.delete(`${constants.API.url}/${issueItem.number}/lock`).then(() => {
+      const newIssue = { ...issueItem };
+      newIssue.locked = !newIssue.locked;
+      dispatch(editIssue(newIssue));
+    });
   };
 
   // when click on issue then show info of issue in detail form
   const handleOnClickTitle = (issueItem: Issue) => () => {
     getIssue(issueItem);
-    context.toggleDetail(!context.isShowDetail);
+    dispatch(toggleDetail());
   };
 
   // toggle lock status
   const handleChangeStatus = () => {
     if (issue) {
       !issue.locked ? lockIssue(issue) : unLockIssue(issue);
-      issue.locked = !issue.locked;
-      context.handleSaveChange(issue);
+      // issue.locked = !issue.locked;
+      // dispatch(editIssue(issue));
+      // context.handleSaveChange(issue);
     }
   };
 
-  // set style name title issue when lock and unlock 
+  // set style name title issue when lock and unlock
   const nameLabel = issue.locked ? constants.LABEL_DARK : constants.LABEL_LIGHT;
 
   // set style name button when lock an unlock

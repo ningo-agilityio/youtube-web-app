@@ -5,6 +5,12 @@ export const API = {
   token: process.env.REACT_APP_TOKEN,
 };
 
+export const initFetchDataState = {
+  pending: false,
+  issueList: [],
+  error: null
+};
+
 export const issueDefault = {
   id: null,
   number: null,
@@ -36,3 +42,11 @@ export const BTN_SECONDARY = 'btn-secondary';
 export const BTN_GRAY = 'btn-gray';
 export const BTN_NO_OUTLINE_LIGHT = 'btn-no-outline-light';
 export const BTN_NO_OUTLINE_DARK = 'btn-no-outline-dark';
+
+export const ADD_ISSUE = 'ADD_ISSUE';
+export const EDIT_ISSUE = 'EDIT_ISSUE';
+export const TOGGLE_FORM = 'TOGGLE_FORM';
+export const TOGGLE_DETAIL = 'TOGGLE_DETAIL';
+export const FETCH_DATA_PENDING = 'FETCH_DATA_PENDING';
+export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
+export const FETCH_DATA_ERROR = 'FETCH_DATA_ERROR';

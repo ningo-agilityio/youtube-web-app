@@ -50,7 +50,7 @@
   ```
 - At the directory root, run:
   ```
-  cd practice-two
+  cd redux-examples
   ```
 - Install dependencies:
   ```

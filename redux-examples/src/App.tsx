@@ -6,9 +6,10 @@ import React, {
   lazy,
   Suspense,
 } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Issue } from './buildTypes/buildTypes';
+import { Issue, RootState } from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
 import * as color from './theme/color';
 import * as metric from './theme/metric';
@@ -18,6 +19,7 @@ import Button from './components/Button';
 import { Form } from './components/Form';
 import IssueDetail from './components/IssueDetail';
 import ErrorBoundary from './components/ErrorBoundary';
+import { toggleForm, fetchDataSuccess, fetchDataError } from './actions';
 import './configs/api';
 
 const AppStyled = styled.div`
@@ -44,15 +46,23 @@ const SpinnerStyled = styled.div`
 const IssueList = lazy(() => import('./components/IssueList'));
 
 const App = () => {
+  const dispatch = useDispatch();
   const [selectedIssue, setSelectedIssue] = useState<Issue>(
     constants.issueDefault
   );
-  const [isShowForm, setIsShowForm] = useState(false);
-  const [isShowDetail, setIsShowDetail] = useState(false);
   const [dataRequest, setDataRequest] = useState({
     loading: true,
     issueList: constants.listDefault,
   });
+
+  const isShowForm = useSelector((state: RootState) => state.toggleForm);
+  const isShowDetail = useSelector((state: RootState) => state.toggleDetail);
+  const fetchData = useSelector(
+    (state: RootState) => state.fetchData.issueList
+  );
+  // const issueList = useSelector((state: RootState ) => state.issueList);
+  // console.log('list', issueList);
+  console.log('fetch', fetchData);
 
   // handle update list of issue after change data
   const handleSaveChange = useCallback(
@@ -75,16 +85,11 @@ const App = () => {
     setSelectedIssue(issue);
   };
 
-  // handle toggle form
-  const toggleForm = (isShow: boolean) => () => {
-    setIsShowDetail(false);
-    setIsShowForm(isShow);
-  };
-
-  // handle toggle detail box
-  const toggleDetail = (isShow: boolean) => () => {
-    setIsShowForm(false);
-    setIsShowDetail(isShow);
+  // handle open form when click new issue button
+  const handleOnClickNew = () => {
+    if (!isShowDetail) {
+      dispatch(toggleForm());
+    }
   };
 
   // set value of context
@@ -92,7 +97,6 @@ const App = () => {
     () => ({
       isShowDetail,
       issueList: dataRequest.issueList,
-      toggleDetail: toggleDetail(true),
       handleSaveChange,
       handleChangeSelectedIssue,
     }),
@@ -105,7 +109,11 @@ const App = () => {
       .get(`${constants.API.url}?timestamp=${new Date().getTime()}`)
       .then((response) => {
         setDataRequest({ loading: false, issueList: response.data });
+        // dispatch(fetchDataSuccess(response.data));
       });
+    // .catch((error) => {
+    //   dispatch(fetchDataError(error));
+    // });
   }, []);
 
   return (
@@ -115,7 +123,7 @@ const App = () => {
         name={constants.BTN_PRIMARY}
         value={constants.BTN_NEW}
         type="button"
-        onClick={toggleForm(true)}
+        onClick={handleOnClickNew}
       />
       <Wrapper>
         <Context.Provider value={valueContext}>
@@ -134,7 +142,6 @@ const App = () => {
             <Form
               selectedIssue={selectedIssue}
               handleChangeSelectedIssue={handleChangeSelectedIssue}
-              toggleForm={toggleForm(!isShowForm)}
               handleSaveChange={handleSaveChange}
             />
           </WrapperForm>
@@ -146,8 +153,6 @@ const App = () => {
               <IssueDetail
                 issue={selectedIssue}
                 handleChangeSelectedIssue={handleChangeSelectedIssue}
-                toggleForm={toggleForm(!isShowForm)}
-                toggleDetail={toggleDetail(false)}
               />
             </ErrorBoundary>
           </WrapperForm>

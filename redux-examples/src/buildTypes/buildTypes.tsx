@@ -6,6 +6,36 @@ export interface Issue {
   locked?: boolean;
 }
 
+export interface IssueAction {
+  type: string;
+  issue: Issue;
+}
+
+export interface ToggleAction {
+  type: string;
+  isShow: boolean;
+}
+
+export interface FetchDataAction {
+  type: string;
+  pending: boolean;
+  issueList: Issue[];
+  error: Error;
+}
+
+export interface FetchDataState {
+  pending: boolean,
+  issueList: Issue[],
+  error: Error | null,
+}
+
+export interface RootState {
+  issueList: Issue[];
+  toggleForm: boolean;
+  toggleDetail: boolean;
+  fetchData: FetchDataState;
+}
+
 export interface TitleProps {
   value: string;
 }
@@ -49,14 +79,11 @@ export interface IssueListProps {
 
 export interface IssueDetailProps {
   issue: Issue;
-  toggleForm: (e: React.MouseEvent) => void;
-  toggleDetail: (e: React.MouseEvent) => void;
   handleChangeSelectedIssue: (newIssue: Issue) => void;
 }
 
 export interface FormProps {
   selectedIssue: Issue;
-  toggleForm: (e: React.FormEvent) => void;
   handleSaveChange: (issue: Issue) => void;
   handleChangeSelectedIssue: (issue: Issue) => void;
 }
