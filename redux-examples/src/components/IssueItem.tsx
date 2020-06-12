@@ -69,9 +69,6 @@ const IssueItem = (props: IssueItemProps) => {
   const handleChangeStatus = () => {
     if (issue) {
       !issue.locked ? lockIssue(issue) : unLockIssue(issue);
-      // issue.locked = !issue.locked;
-      // dispatch(editIssue(issue));
-      // context.handleSaveChange(issue);
     }
   };
 

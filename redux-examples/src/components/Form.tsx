@@ -62,7 +62,6 @@ export const Form = (props: FormProps) => {
             dispatch(toggleForm());
             props.handleChangeSelectedIssue(constants.issueDefault);
             dispatch(editIssue(response.data));
-            // props.handleSaveChange(response.data);
             alert('Updated successful');
           });
 
@@ -71,7 +70,6 @@ export const Form = (props: FormProps) => {
         axios.post(`${constants.API.url}`, issue).then((response) => {
           dispatch(toggleForm());
           dispatch(addIssue(response.data));
-          // props.handleSaveChange(response.data);
           alert('Added successful!');
         });
       }

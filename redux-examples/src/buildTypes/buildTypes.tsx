@@ -6,34 +6,29 @@ export interface Issue {
   locked?: boolean;
 }
 
-export interface IssueAction {
-  type: string;
-  issue: Issue;
-}
-
 export interface ToggleAction {
   type: string;
   isShow: boolean;
 }
 
-export interface FetchDataAction {
+export interface handleIssueListAction {
   type: string;
   pending: boolean;
+  issue: Issue;
   issueList: Issue[];
   error: Error;
 }
 
-export interface FetchDataState {
-  pending: boolean,
-  issueList: Issue[],
-  error: Error | null,
+export interface handleIssueListState {
+  pending: boolean;
+  issueList: Issue[];
+  error: Error | null;
 }
 
 export interface RootState {
-  issueList: Issue[];
   toggleForm: boolean;
   toggleDetail: boolean;
-  fetchData: FetchDataState;
+  handleIssueList: handleIssueListState;
 }
 
 export interface TitleProps {

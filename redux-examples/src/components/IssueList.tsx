@@ -18,7 +18,6 @@ export const IssueListStyled = styled.ul`
 
 const IssueList = (props: IssueListProps) => {
   const context = React.useContext(Context);
-  console.log('list into', context.issueList);
 
   return (
     <IssueListStyled {...props}>

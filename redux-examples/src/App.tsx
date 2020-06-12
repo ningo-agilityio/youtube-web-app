@@ -1,11 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  lazy,
-  Suspense,
-} from 'react';
+import Reactotron from 'reactotron-react-js';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -19,7 +13,10 @@ import Button from './components/Button';
 import { Form } from './components/Form';
 import IssueDetail from './components/IssueDetail';
 import ErrorBoundary from './components/ErrorBoundary';
-import { toggleForm, fetchDataSuccess, fetchDataError } from './actions';
+import {
+  toggleForm,
+  fetchDataSuccess,
+} from './actions';
 import './configs/api';
 
 const AppStyled = styled.div`
@@ -50,34 +47,11 @@ const App = () => {
   const [selectedIssue, setSelectedIssue] = useState<Issue>(
     constants.issueDefault
   );
-  const [dataRequest, setDataRequest] = useState({
-    loading: true,
-    issueList: constants.listDefault,
-  });
 
   const isShowForm = useSelector((state: RootState) => state.toggleForm);
   const isShowDetail = useSelector((state: RootState) => state.toggleDetail);
-  const fetchData = useSelector(
-    (state: RootState) => state.fetchData.issueList
-  );
-  // const issueList = useSelector((state: RootState ) => state.issueList);
-  // console.log('list', issueList);
-  console.log('fetch', fetchData);
-
-  // handle update list of issue after change data
-  const handleSaveChange = useCallback(
-    (issue: Issue) => {
-      const newList = dataRequest.issueList.slice();
-      const editItem = newList.find((item) => item.id === issue.id);
-      if (editItem) {
-        editItem.title = issue.title;
-        editItem.body = issue.body;
-      } else {
-        newList.unshift(issue);
-      }
-      setDataRequest({ loading: false, issueList: newList });
-    },
-    [dataRequest.issueList]
+  const issueList = useSelector(
+    (state: RootState) => state.handleIssueList.issueList
   );
 
   // handle update selected issue
@@ -96,11 +70,10 @@ const App = () => {
   const valueContext = useMemo(
     () => ({
       isShowDetail,
-      issueList: dataRequest.issueList,
-      handleSaveChange,
+      issueList,
       handleChangeSelectedIssue,
     }),
-    [isShowDetail, dataRequest.issueList, handleSaveChange]
+    [isShowDetail, issueList]
   );
 
   // get data from api
@@ -108,13 +81,11 @@ const App = () => {
     axios
       .get(`${constants.API.url}?timestamp=${new Date().getTime()}`)
       .then((response) => {
-        setDataRequest({ loading: false, issueList: response.data });
-        // dispatch(fetchDataSuccess(response.data));
+        dispatch(fetchDataSuccess(response.data));
       });
-    // .catch((error) => {
-    //   dispatch(fetchDataError(error));
-    // });
-  }, []);
+  }, [dispatch]);
+
+  // Reactotron.log('hello rendering world');
 
   return (
     <AppStyled>
@@ -128,12 +99,7 @@ const App = () => {
       <Wrapper>
         <Context.Provider value={valueContext}>
           <Suspense fallback={<SpinnerStyled>Loading...</SpinnerStyled>}>
-            {!dataRequest.loading && (
-              <IssueList
-                selectedIssue={selectedIssue}
-                isShowForm={isShowForm}
-              />
-            )}
+            <IssueList selectedIssue={selectedIssue} isShowForm={isShowForm} />
           </Suspense>
         </Context.Provider>
 
@@ -142,7 +108,6 @@ const App = () => {
             <Form
               selectedIssue={selectedIssue}
               handleChangeSelectedIssue={handleChangeSelectedIssue}
-              handleSaveChange={handleSaveChange}
             />
           </WrapperForm>
         )}
