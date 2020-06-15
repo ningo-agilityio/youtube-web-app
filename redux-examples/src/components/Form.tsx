@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
 import * as constants from '../constants/constants';
@@ -9,6 +10,7 @@ import Label from './Label';
 import Input from './Input';
 import Textarea from './Textarea';
 import Button from './Button';
+import { addIssue, editIssue, toggleForm } from '../actions';
 
 export const FormStyled = styled.form`
   width: 100%;
@@ -34,10 +36,11 @@ export const Title = styled.h3`
 export const Form = (props: FormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const dispatch = useDispatch();
 
   // When click Cancel then close Form and change selected issue to default
   const handleOnClickCancel = (e: React.MouseEvent) => {
-    props.toggleForm(e);
+    dispatch(toggleForm());
     props.handleChangeSelectedIssue(constants.issueDefault);
   };
 
@@ -56,22 +59,27 @@ export const Form = (props: FormProps) => {
         axios
           .patch(`${constants.API.url}/${props.selectedIssue.number}`, issue)
           .then((response) => {
-            props.toggleForm(e);
+            dispatch(toggleForm());
             props.handleChangeSelectedIssue(constants.issueDefault);
-            props.handleSaveChange(response.data);
+            dispatch(editIssue(response.data));
             alert('Updated successful');
           });
 
         // If selected issue is null then handle add new an issue
       } else {
         axios.post(`${constants.API.url}`, issue).then((response) => {
-          props.toggleForm(e);
-          props.handleSaveChange(response.data);
+          dispatch(toggleForm());
+          dispatch(addIssue(response.data));
           alert('Added successful!');
         });
       }
     }
   };
+
+  // set title name of form
+  const nameForm = props.selectedIssue.id
+    ? constants.TITLE_EDIT_FORM
+    : constants.TITLE_ADD_FORM;
 
   // set focus at input filed in first time render
   useEffect(() => {
@@ -82,11 +90,7 @@ export const Form = (props: FormProps) => {
 
   return (
     <FormStyled onSubmit={handleOnSubmit}>
-      <Title>
-        {props.selectedIssue.id
-          ? constants.TITLE_EDIT_FORM
-          : constants.TITLE_ADD_FORM}
-      </Title>
+      <Title>{nameForm}</Title>
       <Wrapper>
         <Label value={constants.LABEL_TITLE} />
         <Input

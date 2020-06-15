@@ -1,14 +1,9 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  lazy,
-  Suspense,
-} from 'react';
+import Reactotron from 'reactotron-react-js';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Issue } from './buildTypes/buildTypes';
+import { Issue, RootState } from './buildTypes/buildTypes';
 import * as constants from './constants/constants';
 import * as color from './theme/color';
 import * as metric from './theme/metric';
@@ -18,6 +13,10 @@ import Button from './components/Button';
 import { Form } from './components/Form';
 import IssueDetail from './components/IssueDetail';
 import ErrorBoundary from './components/ErrorBoundary';
+import {
+  toggleForm,
+  fetchDataSuccess,
+} from './actions';
 import './configs/api';
 
 const AppStyled = styled.div`
@@ -44,30 +43,15 @@ const SpinnerStyled = styled.div`
 const IssueList = lazy(() => import('./components/IssueList'));
 
 const App = () => {
+  const dispatch = useDispatch();
   const [selectedIssue, setSelectedIssue] = useState<Issue>(
     constants.issueDefault
   );
-  const [isShowForm, setIsShowForm] = useState(false);
-  const [isShowDetail, setIsShowDetail] = useState(false);
-  const [dataRequest, setDataRequest] = useState({
-    loading: true,
-    issueList: constants.listDefault,
-  });
 
-  // handle update list of issue after change data
-  const handleSaveChange = useCallback(
-    (issue: Issue) => {
-      const newList = dataRequest.issueList.slice();
-      const editItem = newList.find((item) => item.id === issue.id);
-      if (editItem) {
-        editItem.title = issue.title;
-        editItem.body = issue.body;
-      } else {
-        newList.unshift(issue);
-      }
-      setDataRequest({ loading: false, issueList: newList });
-    },
-    [dataRequest.issueList]
+  const isShowForm = useSelector((state: RootState) => state.toggleForm);
+  const isShowDetail = useSelector((state: RootState) => state.toggleDetail);
+  const issueList = useSelector(
+    (state: RootState) => state.handleIssueList.issueList
   );
 
   // handle update selected issue
@@ -75,28 +59,21 @@ const App = () => {
     setSelectedIssue(issue);
   };
 
-  // handle toggle form
-  const toggleForm = (isShow: boolean) => () => {
-    setIsShowDetail(false);
-    setIsShowForm(isShow);
-  };
-
-  // handle toggle detail box
-  const toggleDetail = (isShow: boolean) => () => {
-    setIsShowForm(false);
-    setIsShowDetail(isShow);
+  // handle open form when click new issue button
+  const handleOnClickNew = () => {
+    if (!isShowDetail) {
+      dispatch(toggleForm());
+    }
   };
 
   // set value of context
   const valueContext = useMemo(
     () => ({
       isShowDetail,
-      issueList: dataRequest.issueList,
-      toggleDetail: toggleDetail(true),
-      handleSaveChange,
+      issueList,
       handleChangeSelectedIssue,
     }),
-    [isShowDetail, dataRequest.issueList, handleSaveChange]
+    [isShowDetail, issueList]
   );
 
   // get data from api
@@ -104,9 +81,11 @@ const App = () => {
     axios
       .get(`${constants.API.url}?timestamp=${new Date().getTime()}`)
       .then((response) => {
-        setDataRequest({ loading: false, issueList: response.data });
+        dispatch(fetchDataSuccess(response.data));
       });
-  }, []);
+  }, [dispatch]);
+
+  // Reactotron.log('hello rendering world');
 
   return (
     <AppStyled>
@@ -115,30 +94,21 @@ const App = () => {
         name={constants.BTN_PRIMARY}
         value={constants.BTN_NEW}
         type="button"
-        onClick={toggleForm(true)}
+        onClick={handleOnClickNew}
       />
       <Wrapper>
         <Context.Provider value={valueContext}>
           <Suspense fallback={<SpinnerStyled>Loading...</SpinnerStyled>}>
-            {!dataRequest.loading && (
-              <IssueList
-                selectedIssue={selectedIssue}
-                isShowForm={isShowForm}
-              />
-            )}
+            <IssueList selectedIssue={selectedIssue} isShowForm={isShowForm} />
           </Suspense>
         </Context.Provider>
 
         {isShowForm && (
           <WrapperForm>
-            <ErrorBoundary>
-              <Form
-                selectedIssue={selectedIssue}
-                handleChangeSelectedIssue={handleChangeSelectedIssue}
-                toggleForm={toggleForm(!isShowForm)}
-                handleSaveChange={handleSaveChange}
-              />
-            </ErrorBoundary>
+            <Form
+              selectedIssue={selectedIssue}
+              handleChangeSelectedIssue={handleChangeSelectedIssue}
+            />
           </WrapperForm>
         )}
 
@@ -148,8 +118,6 @@ const App = () => {
               <IssueDetail
                 issue={selectedIssue}
                 handleChangeSelectedIssue={handleChangeSelectedIssue}
-                toggleForm={toggleForm(!isShowForm)}
-                toggleDetail={toggleDetail(false)}
               />
             </ErrorBoundary>
           </WrapperForm>
