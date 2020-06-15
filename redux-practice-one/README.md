@@ -63,6 +63,7 @@
 |--redux-practice-one
   |--public
   |--src
+  |--.editorconfig
   |--.eslintrc
   |--.gitignore
   |--.prettierrc
