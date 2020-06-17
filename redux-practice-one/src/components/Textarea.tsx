@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InputProps } from 'buildTypes';
+import { TextareaProps } from 'buildTypes';
 import { colors } from 'theme/color';
 
-const InputStyled = styled.input`
+const TextareaStyled = styled.textarea`
   width: 100%;
+  min-height: 10rem;
   padding: 1rem;
   margin: 1rem 0;
-  font-size: 0.9rem;
   border: 0.05rem solid ${colors.GRAY};
   border-radius: 0.2rem;
   display: block;
@@ -19,22 +19,20 @@ const InputStyled = styled.input`
   }
 `;
 
-const Input = (props: InputProps) => {
+const Textarea = (props: TextareaProps) => {
   return (
-    <InputStyled
-      type={props.type}
-      ref={props.inputRef}
+    <TextareaStyled
+      ref={props.textareaRef}
       placeholder={props.placeholder}
       defaultValue={props.defaultValue}
     />
   );
 };
 
-Input.defaultProps = {
-  type: 'text',
-  placeholder: 'Title',
+Textarea.defaultProps = {
+  placeholder: 'Description...',
   defaultValue: '',
-  inputRef: null,
+  textareaRef: null,
 };
 
-export default React.memo(Input);
+export default React.memo(Textarea);

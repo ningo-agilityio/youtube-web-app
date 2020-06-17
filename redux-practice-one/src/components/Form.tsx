@@ -6,7 +6,9 @@ import { colors } from 'theme/color';
 import { useDispatch } from 'react-redux';
 import { toggleForm } from 'actions';
 import logo from 'assets/sub-logo.png';
+import api from 'apis';
 import Input from './Input';
+import Textarea from './Textarea';
 import Button from './Button';
 
 const FormStyled = styled.form`
@@ -37,10 +39,18 @@ const Wrapper = styled.div`
 `;
 
 export const Form = (props: FormProps) => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descRef = useRef<HTMLTextAreaElement>(null);
   const dispatch = useDispatch();
-  const handleOnSubmit = () => {};
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // if (
+    //   titleRef.current?.value.trim() === ACCOUNT.email &&
+    //   descRef.current?.value.trim() === ACCOUNT.password
+    // ) {
+    // }
+  };
   const handleOnClickCancel = () => {
     dispatch(toggleForm());
   };
@@ -48,22 +58,20 @@ export const Form = (props: FormProps) => {
   return (
     <FormStyled onSubmit={handleOnSubmit}>
       <Logo src={logo} alt="Sub Logo" />
-      <TitleForm>Sign in</TitleForm>
-      <p>to continue to YouTube</p>
+      <TitleForm>Upload video</TitleForm>
       <Input
-        type="email"
-        inputRef={emailRef}
-        placeholder="Email..."
+        type="text"
+        inputRef={titleRef}
+        placeholder="Title..."
         defaultValue=""
       />
-      <Input
-        type="password"
-        inputRef={passRef}
-        placeholder="Password..."
+      <Textarea
+        textareaRef={descRef}
+        placeholder="Description..."
         defaultValue=""
       />
       <Wrapper>
-        <Button name={BTN.SECONDARY} value="log in" type="submit" />
+        <Button name={BTN.SECONDARY} value="submit" type="submit" />
         <Button
           name={BTN.SECONDARY}
           value="cancel"

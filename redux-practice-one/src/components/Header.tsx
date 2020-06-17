@@ -11,7 +11,7 @@ import Button from './Button';
 const HeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 1.5rem 0;
+  padding: 1.5rem;
   background: ${colors.WHITE};
 `;
 
@@ -43,7 +43,7 @@ export const Header = (props: HeaderProps) => {
       </Wrapper>
       <Button
         name={BTN.PRIMARY}
-        value="sign in"
+        value="upload"
         type="button"
         onClick={handleOnClick}
       />

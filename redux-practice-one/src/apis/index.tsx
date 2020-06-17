@@ -3,7 +3,7 @@ import { API } from 'constants/index';
 
 // define the api
 const api = create({
-  baseURL: API.url,
+  baseURL: API.URL,
 });
 
 export default api;

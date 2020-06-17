@@ -82,6 +82,7 @@ const App = () => {
       .get(`${constants.API.url}?timestamp=${new Date().getTime()}`)
       .then((response) => {
         dispatch(fetchDataSuccess(response.data));
+        console.log(response.data);
       });
   }, [dispatch]);
 

@@ -1,20 +1,22 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import styled from 'styled-components';
 import { RootState } from 'buildTypes';
+import { API } from 'constants/index';
+import { colors } from 'theme/color';
+import { fetchDataSuccess } from 'actions';
 import { Header } from 'components/Header';
 import { Form } from 'components/Form';
+import { VideoList } from 'components/VideoList';
 import './App.css';
-import { colors } from 'theme/color';
 
-const AppStyled = styled.div`
-  padding: 0 1.5rem;
-`;
+const AppStyled = styled.div``;
 
 const WrapperForm = styled.div`
   position: fixed;
   z-index: 1;
-  background-color: rgba(250, 250, 250, 0.7);
+  background-color: rgba(250, 250, 250, 0.8);
   width: 100%;
   height: 100%;
   top: 0;
@@ -22,15 +24,29 @@ const WrapperForm = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
 `;
 
 const App = () => {
+  const dispatch = useDispatch();
   const isShowForm = useSelector((state: RootState) => state.toggleForm);
+  const videoList = useSelector(
+    (state: RootState) => state.handleVideoList.videoList
+  );
+
+  useEffect(() => {
+    axios
+      .get(
+        `${API.URL}search?key=${API.KEY}&channelId=${API.ID_CHANNEL}&${API.URL_PARAMS}&${API.MAX_RESULTS}`
+      )
+      .then((response) => {
+        dispatch(fetchDataSuccess(response.data.items));
+      });
+  }, [dispatch]);
 
   return (
     <AppStyled>
       <Header />
+      <VideoList videoList={videoList} />
       {isShowForm && (
         <WrapperForm>
           <Form />

@@ -12,7 +12,7 @@ const ButtonStyled = styled.button`
     props.className === `${constants.BTN_PRIMARY}` && `${color.successColor}`};
   border: none;
   padding: ${(props) =>
-    props.className === `${constants.BTN_PRIMARY}`
+    props.className === `${constants.BTN_PRIMARY}` 
       ? `${metric.PADDING.sm}`
       : ''};
   color: ${color.whiteColor};
