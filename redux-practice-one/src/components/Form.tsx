@@ -6,7 +6,6 @@ import { colors } from 'theme/color';
 import { useDispatch } from 'react-redux';
 import { toggleForm } from 'actions';
 import logo from 'assets/sub-logo.png';
-import api from 'apis';
 import Input from './Input';
 import Textarea from './Textarea';
 import Button from './Button';
@@ -41,6 +40,7 @@ const Wrapper = styled.div`
 export const Form = (props: FormProps) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
+  const pathRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,10 +55,13 @@ export const Form = (props: FormProps) => {
     dispatch(toggleForm());
   };
 
+
+
   return (
     <FormStyled onSubmit={handleOnSubmit}>
       <Logo src={logo} alt="Sub Logo" />
       <TitleForm>Upload video</TitleForm>
+      <input type="file" accept="video/*" ref={pathRef} />
       <Input
         type="text"
         inputRef={titleRef}

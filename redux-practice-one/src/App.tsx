@@ -9,6 +9,7 @@ import { fetchDataSuccess } from 'actions';
 import { Header } from 'components/Header';
 import { Form } from 'components/Form';
 import { VideoList } from 'components/VideoList';
+import { CommentList } from 'components/CommentList';
 import './App.css';
 
 const AppStyled = styled.div``;
@@ -16,7 +17,7 @@ const AppStyled = styled.div``;
 const WrapperForm = styled.div`
   position: fixed;
   z-index: 1;
-  background-color: rgba(250, 250, 250, 0.8);
+  background-color: ${colors.SILVER};
   width: 100%;
   height: 100%;
   top: 0;
@@ -32,6 +33,9 @@ const App = () => {
   const videoList = useSelector(
     (state: RootState) => state.handleVideoList.videoList
   );
+
+  const commentList = useSelector((state: RootState) => state.commentList);
+  const selectedVideo = useSelector((state: RootState) => state.selectedVideo);
 
   useEffect(() => {
     axios
@@ -50,6 +54,12 @@ const App = () => {
       {isShowForm && (
         <WrapperForm>
           <Form />
+        </WrapperForm>
+      )}
+
+      {selectedVideo.id.videoId && (
+        <WrapperForm>
+          <CommentList commentList={commentList} />
         </WrapperForm>
       )}
     </AppStyled>

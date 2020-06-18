@@ -34,6 +34,10 @@ export interface VideoListProps {
   isShowForm?: boolean;
 }
 
+export interface CommentListProps {
+  commentList: Comment[];
+}
+
 export interface ToggleAction {
   type: string;
   isShow: boolean;
@@ -56,6 +60,8 @@ export interface HandleVideoListAction {
 export interface RootState {
   toggleForm: boolean;
   handleVideoList: HandleVideoListState;
+  selectedVideo: Video;
+  commentList: Comment[];
 }
 
 export interface Video {
@@ -73,7 +79,25 @@ export interface Video {
   };
 }
 
+export interface Comment {
+  snippet: {
+    topLevelComment: {
+      id: string;
+      snippet: {
+        textOriginal: string;
+        authorDisplayName: string;
+        authorProfileImageUrl: string;
+      }
+    }
+  }
+}
+
 export interface SelectedVideoAction {
   type: string;
   video: Video;
+}
+
+export interface CommentListAction {
+  type: string;
+  commentList: Comment[];
 }

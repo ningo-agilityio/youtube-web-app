@@ -1,4 +1,4 @@
-import { Video } from 'buildTypes';
+import { Video, Comment } from 'buildTypes';
 import { ACTION } from 'constants/index';
 
 export const toggleForm = () => ({
@@ -37,4 +37,9 @@ export const deleteVideo = (video: Video) => ({
 export const selectedVideo = (video: Video) => ({
   type: ACTION.SELECTED_VIDEO,
   video,
+});
+
+export const fetchDataComment = (commentList: Comment[]) => ({
+  type: ACTION.FETCH_DATA_COMMENT,
+  commentList,
 });

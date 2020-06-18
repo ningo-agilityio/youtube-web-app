@@ -1,12 +1,10 @@
 export const API = {
   URL: 'https://www.googleapis.com/youtube/v3/',
-  KEY: 'AIzaSyD_aSsu01KOQGhKLTa6QBfp-a7OG7SAr4Q',
-  ID_CHANNEL: 'UCWu91J5KWEj1bQhCBuGeJxw',
-  // VIDEOS_URL:
-  //   'videos?part=snippet,statistics&chart=mostPopular&key=AIzaSyBa2DGCYWqDFDihKuwgEEa1ztfgWTwI4O0&regionCode=vn',
-  // CLIENT_ID:
-  //   '573746775859-s6pug3gjv9tch0vae2gvjjdlkr4mdkmf.apps.googleusercontent.com',
-  URL_PARAMS: 'part=snippet,id&order=date&fields=items',
+  KEY: 'AIzaSyBogS86rxllvIzWciwD3eXNO_s8r9y0LzM',
+  ID_CHANNEL: 'UCuhAUMLzJxlP1W7mEk0_6lA',
+  CLIENT_ID:
+    '1051706527491-g4gklvsde8s3fcgsd3vhhlc5vkokargu.apps.googleusercontent.com',
+  URL_PARAMS: 'part=snippet,id&order=date',
   MAX_RESULTS: 'maxResults=10',
 };
 
@@ -19,6 +17,7 @@ export const ACTION = {
   EDIT_VIDEO: 'EDIT_VIDEO',
   DELETE_VIDEO: 'DELETE_VIDEO',
   SELECTED_VIDEO: 'SELECTED_VIDEO',
+  FETCH_DATA_COMMENT: 'FETCH_DATA__COMMENT',
 };
 
 export const BTN = {
