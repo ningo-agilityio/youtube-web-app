@@ -6,18 +6,18 @@ export const handleVideoList = (
   action: HandleVideoListAction
 ) => {
   switch (action.type) {
-    case ACTION.FETCH_DATA_PENDING:
+    case ACTION.FETCH_VIDEO_PENDING:
       return {
         ...state,
         pending: true,
       };
-    case ACTION.FETCH_DATA_SUCCESS:
+    case ACTION.FETCH_VIDEO_SUCCESS:
       return {
         ...state,
         pending: false,
         videoList: action.videoList,
       };
-    case ACTION.FETCH_DATA_ERROR:
+    case ACTION.FETCH_VIDEO_ERROR:
       return {
         ...state,
         pending: false,
@@ -28,14 +28,6 @@ export const handleVideoList = (
         ...state,
         pending: false,
         videoList: [...state.videoList, action.video],
-      };
-    case ACTION.EDIT_VIDEO:
-      return {
-        ...state,
-        pending: false,
-        videoList: state.videoList.map((video) =>
-          video.id === action.video.id ? action.video : video
-        ),
       };
     default:
       return state;

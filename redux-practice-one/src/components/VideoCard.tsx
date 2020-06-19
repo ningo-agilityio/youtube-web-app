@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { VideoCardProps } from 'buildTypes';
 import { BTN, API } from 'constants/index';
-import { selectedVideo, fetchDataComment } from 'actions';
+import { selectedVideo, fetchCommentSuccess } from 'actions';
 import Button from './Button';
 
 const VideoCardStyled = styled.li`
   max-width: 20rem;
-  min-height: 17rem;
+  min-height: 17.5rem;
   margin: 2rem 0.5rem;
   cursor: pointer;
   position: relative;
@@ -24,12 +24,8 @@ const Title = styled.h4`
 const WrapperBottom = styled.div`
   position: absolute;
   bottom: 0;
+  text-align:right;
   min-width: 20rem;
-`;
-
-const WrapperFlex = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 export const VideoCard = (props: VideoCardProps) => {
@@ -43,30 +39,21 @@ export const VideoCard = (props: VideoCardProps) => {
         `${API.URL}commentThreads?&part=snippet&key=${API.KEY}&videoId=${video.id.videoId}&${API.MAX_RESULTS}`
       )
       .then((response) => {
-        dispatch(fetchDataComment(response.data.items));
+        dispatch(fetchCommentSuccess(response.data.items));
       });
   };
-  const handleOnClickDelete = () => {};
 
   return (
     <VideoCardStyled>
       <Thumbnail src={video.snippet.thumbnails.medium.url} />
       <Title>{video.snippet.title}</Title>
       <WrapperBottom>
-        <WrapperFlex>
-          <Button
-            name={BTN.SECONDARY}
-            value="view comments"
-            type="button"
-            onClick={handleOnClickView}
-          />
-          <Button
-            name={BTN.SECONDARY}
-            value="delete"
-            type="button"
-            onClick={handleOnClickDelete}
-          />
-        </WrapperFlex>
+        <Button
+          name={BTN.SECONDARY}
+          value="view comments"
+          type="button"
+          onClick={handleOnClickView}
+        />
       </WrapperBottom>
     </VideoCardStyled>
   );

@@ -6,7 +6,7 @@ export const commentList = (
   action: CommentListAction,
 ) => {
   switch (action.type) {
-    case ACTION.FETCH_DATA_COMMENT:
+    case ACTION.FETCH_COMMENT_SUCCESS:
       return action.commentList;
     default:
       return state;

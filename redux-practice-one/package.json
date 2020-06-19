@@ -6,6 +6,8 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/gapi": "0.0.39",
+    "@types/gapi.auth2": "0.0.52",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.36",
@@ -14,6 +16,7 @@
     "@types/redux-logger": "^3.0.8",
     "apisauce": "^1.1.1",
     "axios": "^0.19.2",
+    "gapi-script": "^1.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -47,6 +50,8 @@
     ]
   },
   "devDependencies": {
+    "@types/gapi.client": "^1.0.3",
+    "@types/gapi.client.script": "^1.0.1",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "3.2.0",
     "@typescript-eslint/parser": "3.2.0",
@@ -64,6 +69,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-hooks": "4.0.4",
+    "gapi-client": "0.0.3",
     "prettier": "2.0.5",
     "prettier-eslint": "11.0.0",
     "prettier-eslint-cli": "5.0.0"

@@ -1,3 +1,5 @@
+import { ApiResponse } from 'apisauce';
+
 export interface InputProps {
   type: string;
   placeholder: string;
@@ -52,7 +54,7 @@ export interface HandleVideoListState {
 export interface HandleVideoListAction {
   type: string;
   pending: boolean;
-  video: Video;
+  video?: Video;
   videoList: Video[];
   error: Error;
 }
@@ -87,9 +89,9 @@ export interface Comment {
         textOriginal: string;
         authorDisplayName: string;
         authorProfileImageUrl: string;
-      }
-    }
-  }
+      };
+    };
+  };
 }
 
 export interface SelectedVideoAction {

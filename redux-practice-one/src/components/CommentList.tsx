@@ -15,15 +15,13 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  display:flex;
-  justify-content: space-between;
+  text-align: right;
 `;
 
 const CommentListStyled = styled.ul`
   background: ${colors.WHITE};
-  min-width: 25rem;
-  max-width: 70vh;
-  max-height: 80vh;
+  max-width: 40vw;
+  max-height: 70vh;
   box-sizing: border-box;
   list-style: none;
   overflow: scroll;
@@ -52,7 +50,6 @@ export const CommentList = (props: CommentListProps) => {
   const handleOnClickExit = () => {
     dispatch(selectedVideo(initVideo));
   };
-  const handleOnClickAdd = () => {};
 
   return (
     <Container>
@@ -73,12 +70,6 @@ export const CommentList = (props: CommentListProps) => {
         ))}
       </CommentListStyled>
       <Wrapper>
-        <Button
-          name={BTN.SECONDARY}
-          value="add comment"
-          type="button"
-          onClick={handleOnClickAdd}
-        />
         <Button
           name={BTN.SECONDARY}
           value="exit"

@@ -15,11 +15,6 @@ const HeaderStyled = styled.div`
   background: ${colors.WHITE};
 `;
 
-const Title = styled.h1`
-  color: ${colors.PRIMARY};
-  margin: 0 0 0 0.3rem;
-`;
-
 const Logo = styled.img`
   width: 18%;
   cursor: pointer;
@@ -39,7 +34,6 @@ export const Header = (props: HeaderProps) => {
     <HeaderStyled>
       <Wrapper>
         <Logo src={logo} alt="Main Logo" />
-        <Title>YouTube</Title>
       </Wrapper>
       <Button
         name={BTN.PRIMARY}
