@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const DRIVE_UPLOAD_URL = 'https://www.googleapis.com/upload/drive/v2/files/';
+const DRIVE_UPLOAD_URL = 'https://www.googleapis.com/upload/youtube/v3/videos';
 
 
 /**
@@ -98,6 +98,7 @@ RetryHandler.prototype.getRandomInt_ = function (min, max) {
  * @param {function} [options.onComplete] Callback for when upload is complete
  * @param {function} [options.onProgress] Callback for status for the in-progress upload
  * @param {function} [options.onError] Callback if upload fails
+ * @param {string} [options.baseUrl] api url to upload
  */
 export const MediaUploader = function (options) {
   const noop = function () {};
@@ -137,6 +138,10 @@ MediaUploader.prototype.upload = function () {
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.setRequestHeader('X-Upload-Content-Length', this.file.size);
   xhr.setRequestHeader('X-Upload-Content-Type', this.contentType);
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+  xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  xhr.setRequestHeader('Access-Control-Max-Age', 'G3600');
+  xhr.setRequestHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type,Access-Control-Allow-Headers, Access-Control-Allow-Origin, X-Requested-With, Accept, Origin, Observe');
 
   xhr.onload = function (e) {
     if (e.target.status < 400) {
@@ -296,7 +301,7 @@ MediaUploader.prototype.buildQuery_ = function (params) {
  */
 // eslint-disable-next-line no-underscore-dangle
 MediaUploader.prototype.buildUrl_ = function (id, params, baseUrl) {
-  const url = baseUrl || DRIVE_UPLOAD_URL;
+  let url = baseUrl || DRIVE_UPLOAD_URL;
   if (id) {
     url += id;
   }

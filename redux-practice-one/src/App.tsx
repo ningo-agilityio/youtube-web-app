@@ -9,9 +9,6 @@ import { Header } from 'components/Header';
 import { Form } from 'components/Form';
 import { VideoList } from 'components/VideoList';
 import { CommentList } from 'components/CommentList';
-// eslint-disable-next-line import/extensions
-import { MediaUploader } from 'youtube/mediaUpload.js';
-// import './'
 
 import './App.css';
 
@@ -55,36 +52,13 @@ const App = () => {
     //   (response) => {
     //     console.log('response', response);
 
-    //     const metadata = {
-    //       snippet: {
-    //         title: 'test',
-    //         description: 'des',
-    //         tags: '',
-    //         categoryId: '',
-    //       },
-    //       status: {
-    //         privacyStatus: '',
-    //       },
-    //     };
 
-    // const uploader = new MediaUploader({
-    //   baseUrl: 'https://www.googleapis.com/upload/youtube/v3/videos',
-    //   file: file,
-    //   token: this.accessToken,
-    //   metadata: metadata,
-    //   params: {
-    //     part: Object.keys(metadata).join(','),
-    //   },
-    //   onError: () => {},
-    //   onProgress: () => {},
-    //   onComplete: () => {
-    //     console.log('uploaded');
-    //   }
-    // });
+
+    
     //   }
     // );
-
-    dispatch(fetchVideoPending());
+    // dispatch(fetchVideoPending());
+    
   }, [dispatch]);
 
   return (

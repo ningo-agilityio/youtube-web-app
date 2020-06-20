@@ -10,6 +10,9 @@ import Input from './Input';
 import Textarea from './Textarea';
 import Button from './Button';
 
+// eslint-disable-next-line import/extensions
+import { MediaUploader } from 'youtube/mediaUpload.js';
+
 const FormStyled = styled.form`
   background: ${colors.WHITE};
   min-width: 25rem;
@@ -42,7 +45,8 @@ export const Form = (props: FormProps) => {
   const descRef = useRef<HTMLTextAreaElement>(null);
   const pathRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleOnSubmit = (e: any) => {
     e.preventDefault();
 
     // if (
@@ -50,6 +54,53 @@ export const Form = (props: FormProps) => {
     //   descRef.current?.value.trim() === ACCOUNT.password
     // ) {
     // }
+
+    let file:any  = []
+
+    if (pathRef && pathRef.current) {
+      file = pathRef.current.files
+    }
+
+    const CLIENT_ID = '573746775859-s6pug3gjv9tch0vae2gvjjdlkr4mdkmf.apps.googleusercontent.com'
+    const API_KEY = 'AIzaSyARbna02GAVO_QTAW_8GQ_yYDcDbqM2hIw'
+    const SCOPE = 'https://www.googleapis.com/auth/youtube'
+    gapi.load('client:auth2', () => {
+      gapi.auth.authorize({
+        client_id: CLIENT_ID,
+        scope: [SCOPE],
+        immediate: false
+      }, (response) => {
+        const ACCESS_TOKEN = response.access_token
+        const metadata = {
+          snippet: {
+            title: 'Test video',
+            description: 'Test desc',
+            tags: '',
+            categoryId: '',
+          },
+          status: {
+            privacyStatus: '',
+          },
+        };
+
+        const uploader = new MediaUploader({
+          baseUrl: `https://www.googleapis.com/upload/youtube/v3/videos`,
+          file: file[0],
+          token: ACCESS_TOKEN,
+          metadata: metadata,
+          params: {
+            part: Object.keys(metadata).join(','),
+          },
+          onError: () => {},
+          onProgress: () => {},
+          onComplete: (response: any) => {
+            console.log('uploaded', response);
+          }
+        });
+
+        uploader.upload();
+      });
+    });
   };
   const handleOnClickCancel = () => {
     dispatch(toggleForm());
@@ -74,7 +125,12 @@ export const Form = (props: FormProps) => {
         defaultValue=""
       />
       <Wrapper>
-        <Button name={BTN.SECONDARY} value="submit" type="submit" />
+        <Button 
+          name={BTN.SECONDARY} 
+          value="submit" 
+          type="submit" 
+          onClick={handleOnSubmit} 
+        />
         <Button
           name={BTN.SECONDARY}
           value="cancel"
